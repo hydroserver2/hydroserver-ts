@@ -1,5 +1,5 @@
 {
-  "name": "hydroserver-ts",
+  "name": "@hydroserver/core",
   "version": "0.1.0",
   "description": "",
   "main": "index.js",

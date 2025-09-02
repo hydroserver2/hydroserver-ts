@@ -1,1 +1,1 @@
-# hydroserver-ts
+# HydroServer TypeScript Client
