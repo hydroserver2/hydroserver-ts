@@ -1,4 +1,4 @@
-import { apiMethods } from '@/api/apiMethods'
+import { apiMethods } from '@/services/apiMethods'
 import {
   Unit,
   Thing,
@@ -21,8 +21,9 @@ import {
 } from '@/models/dataSource'
 import { getCSRFToken } from './getCSRFToken'
 
-export const BASE_URL = `${import.meta.env.VITE_APP_PROXY_BASE_URL}/api`
-
+export const BASE_URL = `${
+  import.meta.env.DEV ? 'http://127.0.0.1:8000' : ''
+}/api`
 export const AUTH_BASE = `${BASE_URL}/auth`
 export const ACCOUNT_BASE = `${AUTH_BASE}/browser/account`
 export const SESSION_BASE = `${AUTH_BASE}/browser/session`
@@ -40,6 +41,13 @@ const OP_BASE = `${BASE_URL}/data/observed-properties`
 const PL_BASE = `${BASE_URL}/data/processing-levels`
 const RQ_BASE = `${BASE_URL}/data/result-qualifiers`
 const UNIT_BASE = `${BASE_URL}/data/units`
+
+type DatastreamFilterKey =
+  | 'unit_id'
+  | 'sensor_id'
+  | 'observed_property_id'
+  | 'processing_level_id'
+  | 'result_qualifier_id'
 
 export const getObservationsEndpoint = (
   id: string,
@@ -101,7 +109,6 @@ const providerRedirect = (
 }
 
 export const api = {
-  fetchAuthMethods: async () => apiMethods.fetch(`${AUTH_BASE}/methods`),
   fetchSession: async () => apiMethods.fetch(`${SESSION_BASE}`),
   login: async (email: string, password: string) =>
     apiMethods.post(`${SESSION_BASE}`, { email, password }),
@@ -178,19 +185,26 @@ export const api = {
     apiMethods.delete(`${WORKSPACES_BASE}/${id}/collaborators`, { email }),
 
   fetchApiKeys: async (workspaceId: string) =>
-    apiMethods.paginatedFetch(`${WORKSPACES_BASE}/${workspaceId}/api-keys`),
+    apiMethods.paginatedFetch(
+      `${WORKSPACES_BASE}/${workspaceId}/api-keys?expand_related=true`
+    ),
   fetchApiKey: async (workspaceId: string, apiKeyId: string) =>
-    apiMethods.fetch(`${WORKSPACES_BASE}/${workspaceId}/api-keys/${apiKeyId}`),
+    apiMethods.fetch(
+      `${WORKSPACES_BASE}/${workspaceId}/api-keys/${apiKeyId}?expand_related=true`
+    ),
   createApiKey: async (apiKey: ApiKey) =>
-    apiMethods.post(`${WORKSPACES_BASE}/${apiKey.workspaceId}/api-keys`, {
-      name: apiKey.name,
-      description: apiKey.description,
-      isActive: true,
-      roleId: apiKey.role!.id,
-    }),
+    apiMethods.post(
+      `${WORKSPACES_BASE}/${apiKey.workspaceId}/api-keys?expand_related=true`,
+      {
+        name: apiKey.name,
+        description: apiKey.description,
+        isActive: true,
+        roleId: apiKey.role!.id,
+      }
+    ),
   updateApiKey: async (newKey: ApiKey, oldKey?: ApiKey) =>
     apiMethods.patch(
-      `${WORKSPACES_BASE}/${newKey.workspaceId}/api-keys/${newKey.id}`,
+      `${WORKSPACES_BASE}/${newKey.workspaceId}/api-keys/${newKey.id}?expand_related=true`,
       {
         name: newKey.name,
         description: newKey.description,
@@ -207,7 +221,9 @@ export const api = {
         : oldKey
     ),
   regenerateApiKey: async (id: string, apiKeyId: string) =>
-    apiMethods.put(`${WORKSPACES_BASE}/${id}/api-keys/${apiKeyId}/regenerate`),
+    apiMethods.put(
+      `${WORKSPACES_BASE}/${id}/api-keys/${apiKeyId}/regenerate?expand_related=true`
+    ),
   deleteApiKey: async (id: string, apiKeyId: string) =>
     apiMethods.delete(`${WORKSPACES_BASE}/${id}/api-keys/${apiKeyId}`),
 
@@ -250,8 +266,6 @@ export const api = {
   fetchThings: async () => apiMethods.paginatedFetch(`${THINGS_BASE}`),
   fetchThingsForWorkspace: async (id: string) =>
     apiMethods.paginatedFetch(`${THINGS_BASE}?workspace_id=${id}`),
-  fetchPrimaryOwnedThings: async () =>
-    apiMethods.paginatedFetch(`${THINGS_BASE}?primary_owned_only=true`),
   fetchOwnedThings: async () =>
     apiMethods.paginatedFetch(`${THINGS_BASE}?owned_only=true`),
   fetchThing: async (id: string) => apiMethods.fetch(`${THINGS_BASE}/${id}`),
@@ -305,14 +319,31 @@ export const api = {
 
   createDatastream: async (datastream: Datastream) =>
     apiMethods.post(DS_BASE, datastream),
-  fetchDatastreams: async () => apiMethods.paginatedFetch(`${DS_BASE}`),
+  fetchDatastreams: async (
+    filters?: Partial<Record<DatastreamFilterKey, string>>
+  ) => {
+    const parts: string[] = []
+    if (filters) {
+      for (const [key, val] of Object.entries(filters)) {
+        parts.push(`${encodeURIComponent(key)}=${encodeURIComponent(val)}`)
+      }
+    }
+    const query = parts.length ? `?${parts.join('&')}` : ''
+    return apiMethods.paginatedFetch(`${DS_BASE}${query}`)
+  },
   fetchDatastreamsForThing: async (thingId: string) =>
     apiMethods.paginatedFetch(`${DS_BASE}?thing_id=${thingId}`),
+  fetchExpandedDatastreamsForThing: async (thingId: string) =>
+    apiMethods.paginatedFetch(
+      `${DS_BASE}?thing_id=${thingId}&expand_related=true`
+    ),
+  fetchDatastreamsForDataSource: async (id: string) =>
+    apiMethods.paginatedFetch(`${DS_BASE}?data_source_id=${id}`),
   fetchDatastream: async (id: string) => apiMethods.fetch(`${DS_BASE}/${id}`),
+  fetchDatastreamExpanded: async (id: string) =>
+    apiMethods.fetch(`${DS_BASE}/${id}?expand_related=true`),
   fetchUsersDatastreams: async () =>
     apiMethods.paginatedFetch(`${DS_BASE}?exclude_unowned=true`),
-  fetchPrimaryOwnedDatastreams: async () =>
-    apiMethods.paginatedFetch(`${DS_BASE}?primary_owned_only=true`),
   updateDatastream: async (
     newDS: Datastream,
     oldDS: Datastream | null = null
@@ -351,8 +382,7 @@ export const api = {
 
   createSensor: async (sensor: Sensor) => apiMethods.post(SENSOR_BASE, sensor),
   fetchSensors: async () => apiMethods.paginatedFetch(`${SENSOR_BASE}`),
-  fetchSensor: async (id: string) =>
-    apiMethods.paginatedFetch(`${SENSOR_BASE}/${id}`),
+  fetchSensor: async (id: string) => apiMethods.fetch(`${SENSOR_BASE}/${id}`),
   fetchWorkspaceSensors: async (id: string) =>
     apiMethods.paginatedFetch(`${SENSOR_BASE}?workspace_id=${id}`),
   updateSensor: async (newSensor: Sensor, oldSensor: Sensor | null = null) =>
@@ -432,7 +462,15 @@ export const api = {
     ),
 
   fetchObservations: async (endpoint: string) => apiMethods.fetch(endpoint),
+  deleteObservationsForDatastream: async (datastreamId: string) =>
+    apiMethods.post(`${DS_BASE}/${datastreamId}/observations/bulk-delete`, {
+      phenomenonTimeStart: null,
+      phenomenonTimeEnd: null,
+    }),
 
+  fetchUserTypes: async () => apiMethods.fetch(`${ACCOUNT_BASE}/user-types`),
+  fetchOrganizationTypes: async () =>
+    apiMethods.fetch(`${ACCOUNT_BASE}/organization-types`),
   fetchSiteTypes: async () => apiMethods.fetch(`${THINGS_BASE}/site-types`),
   fetchSamplingFeatureTypes: async () =>
     apiMethods.paginatedFetch(`${THINGS_BASE}/sampling-feature-types`),
