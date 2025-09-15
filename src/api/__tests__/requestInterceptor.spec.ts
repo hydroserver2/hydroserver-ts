@@ -1,4 +1,4 @@
-import { requestInterceptor } from '@/api/requestInterceptor'
+import { requestInterceptor } from '../requestInterceptor'
 import { describe, it, expect } from 'vitest'
 
 describe('requestInterceptor', () => {

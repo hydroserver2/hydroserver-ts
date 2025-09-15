@@ -1,4 +1,4 @@
-import { apiMethods } from '@/services/apiMethods'
+import { apiMethods } from './apiMethods'
 import {
   Unit,
   Thing,
@@ -13,17 +13,19 @@ import {
   User,
   Workspace,
   ApiKey,
-} from '@/types'
-import { DataSource } from '@/models'
-import {
-  convertDataSourceToPostObject,
-  OrchestrationSystem,
-} from '@/models/dataSource'
+} from './../types'
+// import { DataSource } from '@models'
+// import {
+//   convertDataSourceToPostObject,
+//   OrchestrationSystem,
+// } from '@models/dataSource'
 import { getCSRFToken } from './getCSRFToken'
 
-export const BASE_URL = `${
-  import.meta.env.DEV ? 'http://127.0.0.1:8000' : ''
-}/api`
+// export const BASE_URL = `${
+//   import.meta.env.DEV ? 'http://127.0.0.1:8000' : ''
+// }/api`
+export const BASE_URL = 'http://127.0.0.1:8000/api'
+
 export const AUTH_BASE = `${BASE_URL}/auth`
 export const ACCOUNT_BASE = `${AUTH_BASE}/browser/account`
 export const SESSION_BASE = `${AUTH_BASE}/browser/session`
@@ -337,8 +339,8 @@ export const api = {
     apiMethods.paginatedFetch(
       `${DS_BASE}?thing_id=${thingId}&expand_related=true`
     ),
-  fetchDatastreamsForDataSource: async (id: string) =>
-    apiMethods.paginatedFetch(`${DS_BASE}?data_source_id=${id}`),
+  // fetchDatastreamsForDataSource: async (id: string) =>
+  //   apiMethods.paginatedFetch(`${DS_BASE}?data_source_id=${id}`),
   fetchDatastream: async (id: string) => apiMethods.fetch(`${DS_BASE}/${id}`),
   fetchDatastreamExpanded: async (id: string) =>
     apiMethods.fetch(`${DS_BASE}/${id}?expand_related=true`),
@@ -406,25 +408,25 @@ export const api = {
   deleteResultQualifier: async (id: string) =>
     apiMethods.delete(`${RQ_BASE}/${id}`),
 
-  createOrchestrationSystem: async (system: OrchestrationSystem) =>
-    apiMethods.post(ETL_SYSTEMS_BASE, system),
+  // createOrchestrationSystem: async (system: OrchestrationSystem) =>
+  //   apiMethods.post(ETL_SYSTEMS_BASE, system),
   fetchOrchestrationSystems: async () =>
     apiMethods.paginatedFetch(ETL_SYSTEMS_BASE),
   fetchWorkspaceOrchestrationSystems: async (id: string) =>
     apiMethods.paginatedFetch(`${ETL_SYSTEMS_BASE}?workspace_id=${id}`),
   fetchOrchestrationSystem: async (id: string) =>
     apiMethods.fetch(`${ETL_SYSTEMS_BASE}/${id}`),
-  updateOrchestrationSystem: async (id: string, system: OrchestrationSystem) =>
-    apiMethods.patch(`${ETL_SYSTEMS_BASE}/${id}`, system),
+  // updateOrchestrationSystem: async (id: string, system: OrchestrationSystem) =>
+  //   apiMethods.patch(`${ETL_SYSTEMS_BASE}/${id}`, system),
   deleteOrchestrationSystem: async (id: string) =>
     apiMethods.delete(`${ETL_SYSTEMS_BASE}/${id}`),
 
-  createDataSource: async (dataSource: DataSource) => {
-    return apiMethods.post(
-      `${DATA_SOURCES_BASE}?expand_related=true`,
-      convertDataSourceToPostObject(dataSource)
-    )
-  },
+  // createDataSource: async (dataSource: DataSource) => {
+  //   return apiMethods.post(
+  //     `${DATA_SOURCES_BASE}?expand_related=true`,
+  //     convertDataSourceToPostObject(dataSource)
+  //   )
+  // },
   fetchDataSources: async () =>
     apiMethods.paginatedFetch(`${DATA_SOURCES_BASE}?expand_related=true`),
   fetchWorkspaceDataSources: async (id: string) =>
@@ -433,16 +435,16 @@ export const api = {
     ),
   fetchDataSource: async (id: string) =>
     apiMethods.fetch(`${DATA_SOURCES_BASE}/${id}?expand_related=true`),
-  updateDataSource: async (newS: DataSource) =>
-    apiMethods.patch(
-      `${DATA_SOURCES_BASE}/${newS.id}?expand_related=true`,
-      convertDataSourceToPostObject(newS)
-    ),
-  updateDataSourcePartial: async (newS: DataSource) =>
-    apiMethods.patch(
-      `${DATA_SOURCES_BASE}/${newS.id}?expand_related=true`,
-      newS
-    ),
+  // updateDataSource: async (newS: DataSource) =>
+  //   apiMethods.patch(
+  //     `${DATA_SOURCES_BASE}/${newS.id}?expand_related=true`,
+  //     convertDataSourceToPostObject(newS)
+  //   ),
+  // updateDataSourcePartial: async (newS: DataSource) =>
+  //   apiMethods.patch(
+  //     `${DATA_SOURCES_BASE}/${newS.id}?expand_related=true`,
+  //     newS
+  //   ),
   deleteDataSource: async (id: string) =>
     apiMethods.delete(`${DATA_SOURCES_BASE}/${id}`),
 

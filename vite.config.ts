@@ -1,41 +1,24 @@
-/// <reference types="vitest" />
-
-import { defineConfig } from "vite";
-import { resolve } from "path";
+import { defineConfig } from 'vite'
+import dts from 'vite-plugin-dts'
 
 export default defineConfig({
-  server: {
-    host: "127.0.0.1",
-    port: 5173,
-  },
-  resolve: {
-    extensions: [".js", ".json", ".vue", ".less", ".scss", ".ts"],
-    alias: {
-      "@": resolve(__dirname, "src"),
-    },
-  },
   build: {
-    manifest: true,
-  },
-  test: {
-    globals: true,
-    environmentMatchGlobs: [["src/components/**", "jsdom"]],
-    server: {
-      deps: {
-        inline: ["vuetify"],
-      },
+    lib: {
+      entry: 'src/index.ts',
+      name: '@hydroserver-client',
+      fileName: '@hydroserver-client',
+      formats: ['es', 'umd'],
     },
-    environment: "jsdom",
-    coverage: {
-      exclude: [],
-      thresholds: {
-        lines: 80,
-        statements: 80,
-        functions: 80,
-        branches: 80,
-      },
-      provider: "v8",
-      reporter: ["text", "json", "html"],
+    sourcemap: true,
+    rollupOptions: {
+      external: [], // add externals to keep them out of your bundle if needed
     },
   },
-});
+  plugins: [
+    dts({
+      entryRoot: 'src',
+      outDir: 'dist',
+      copyDtsFiles: true,
+    }),
+  ],
+})

@@ -1,6 +1,6 @@
-import { apiMethods } from '@/api/apiMethods'
-import type { HydroServer } from '@/api/HydroServer'
-import { HydroServerCollection } from '@/api/collections/base'
+import { apiMethods } from '../apiMethods'
+import type { HydroServer } from '../HydroServer'
+import { HydroServerCollection } from '../collections/base'
 
 export abstract class HydroServerBaseService<TModel> {
   protected _client: HydroServer

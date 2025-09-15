@@ -1,4 +1,4 @@
-import { UserService, SessionService } from '@/api/services'
+import { UserService, SessionService } from './services'
 
 export type AuthTuple = [string, string]
 

@@ -1,5 +1,5 @@
 import { beforeEach, afterEach, describe, it, expect, vi } from 'vitest'
-import { responseInterceptor } from '@/api/responseInterceptor'
+import { responseInterceptor } from '../responseInterceptor'
 
 const originalConsoleError = console.error
 

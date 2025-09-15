@@ -1,4 +1,4 @@
-import type { HydroServer } from '@/api/HydroServer'
+import type { HydroServer } from '../HydroServer'
 import type { HydroServerBaseService } from '../services/base'
 
 /**

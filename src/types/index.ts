@@ -1,4 +1,4 @@
-// import { DataSource } from '@/api/models'
+// import { DataSource } from 'src/models'
 
 export type DataPoint = {
   date: Date

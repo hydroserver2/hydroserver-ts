@@ -1,6 +1,6 @@
-import { requestInterceptor } from '@/api/requestInterceptor'
-import { responseInterceptor } from '@/api/responseInterceptor'
-import { createPatchObject } from '@/api/createPatchObject'
+import { requestInterceptor } from './requestInterceptor'
+import { responseInterceptor } from './responseInterceptor'
+import { createPatchObject } from './createPatchObject'
 import pLimit from 'p-limit'
 
 const limit = pLimit(10)

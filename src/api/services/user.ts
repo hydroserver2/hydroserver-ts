@@ -1,11 +1,11 @@
-import type { HydroServer } from '@/api/HydroServer'
+import type { HydroServer } from '../HydroServer'
 import {
   PermissionAction,
   PermissionResource,
   type Permission,
   type Workspace,
   type User as AppUser,
-} from '@/types' // adjust path to where you keep the shared types
+} from '../../types'
 
 export type ActionInput =
   | PermissionAction

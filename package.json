@@ -1,13 +1,18 @@
 {
   "name": "@hydroserver/client",
-  "version": "0.1.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.0.1",
+  "description": "HydroServer TypeScript client",
+  "type": "module",
+  "main": "dist/@hydroserver-client.umd.cjs",
+  "module": "dist/@hydroserver-client.es.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc && vite build",
-    "preview": "vite preview",
     "test": "vitest",
+    "driver": "tsx driver/index.ts",
     "coverage": "vitest run --coverage --environment jsdom",
     "generate:types:auth": "openapi-typescript openapi/auth/schema.json --output src/models/auth-types.ts",
     "generate:types:data": "openapi-typescript openapi/data/schema.json --output src/models/data-types.ts",
@@ -24,16 +29,17 @@
     "url": "https://github.com/hydroserver2/hydroserver-ts/issues"
   },
   "homepage": "https://github.com/hydroserver2/hydroserver-ts#readme",
+  "dependencies": {
+    "cross-fetch": "^4.1.0",
+    "p-limit": "^6.2.0"
+  },
   "devDependencies": {
     "@types/node": "^24.1.0",
-    "cross-fetch": "^4.1.0",
     "openapi-typescript": "^7.8.0",
     "typescript": "^5.8.3",
     "vite": "^7.0.5",
     "vite-plugin-dts": "^4.5.4",
-    "vitest": "^3.2.4"
-  },
-  "dependencies": {
-    "p-limit": "^6.2.0"
+    "vitest": "^3.2.4",
+    "tsx": "^4.16.2"
   }
 }

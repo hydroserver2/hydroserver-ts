@@ -1,6 +1,5 @@
-import type { HydroServer } from '@/api/HydroServer'
-import { api } from '@/api/api'
-import { apiMethods } from '@/api/apiMethods'
+import type { HydroServer } from '../HydroServer'
+import { apiMethods } from '../apiMethods'
 
 export type SessionSnapshot = {
   isAuthenticated: boolean

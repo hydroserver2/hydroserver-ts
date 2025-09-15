@@ -1,4 +1,4 @@
-import type { HydroServerBaseService } from '@/api/services/base'
+import type { HydroServerBaseService } from '../services/base'
 
 export class HydroServerCollection<TItem> {
   items: TItem[] = []
