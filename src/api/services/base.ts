@@ -2,6 +2,14 @@ import { apiMethods } from '../apiMethods'
 import type { HydroServer } from '../HydroServer'
 import { HydroServerCollection } from '../collections/base'
 
+export type BaseListParams = {
+  page?: number
+  pageSize?: number
+  orderBy?: string[]
+  expandRelated?: boolean
+  fetchAll?: boolean
+}
+
 export abstract class HydroServerBaseService<TModel> {
   protected _client: HydroServer
   protected _route: string
@@ -19,26 +27,18 @@ export abstract class HydroServerBaseService<TModel> {
     return body ?? {}
   }
 
-  async list(
-    parameters: {
-      page?: number
-      pageSize?: number
-      orderBy?: string[]
-      fetchAll?: boolean
-      [key: string]: unknown
-    } = {}
+  async list<P extends BaseListParams = BaseListParams>(
+    parameters: P = {} as P
   ): Promise<HydroServerCollection<TModel>> {
-    const { fetchAll, ...query } = parameters
-    const base = this.dataUrl()
-    const url = withQuery(base, query)
+    const { fetchAll, ...rawQuery } = parameters
+    const query = normalizeParams(rawQuery as Record<string, unknown>)
+    const url = withQuery(this._route, query)
 
     if (fetchAll) {
-      // Uses your apiMethods.paginatedFetch which reads pagination headers for us.
       const allItems = await apiMethods.paginatedFetch(url)
       return new HydroServerCollection<TModel>({
         service: this,
         items: (allItems as unknown[]).map((item) => this.deserialize(item)),
-        // When fetching all, we collapse to a single logical page.
         filters: removeKeys(query, ['page', 'pageSize', 'orderBy']),
         orderBy: (query.orderBy as string[]) ?? undefined,
         page: 1,
@@ -48,14 +48,12 @@ export abstract class HydroServerBaseService<TModel> {
       })
     }
 
-    // First page only. responseInterceptor returns parsed JSON (no headers).
     const items = await apiMethods.fetch(url)
     return new HydroServerCollection<TModel>({
       service: this,
       items: (items as unknown[]).map((item) => this.deserialize(item)),
       filters: removeKeys(query, ['page', 'pageSize', 'orderBy']),
       orderBy: (query.orderBy as string[]) ?? undefined,
-      // No header access here; leave pagination metadata undefined.
       page: undefined,
       pageSize: undefined,
       totalPages: undefined,
@@ -64,13 +62,13 @@ export abstract class HydroServerBaseService<TModel> {
   }
 
   async get(id: string): Promise<TModel> {
-    const url = `${this.dataUrl()}/${encodeURIComponent(id)}`
+    const url = `${this._route}/${encodeURIComponent(id)}`
     const json = await apiMethods.fetch(url)
     return this.deserialize(json)
   }
 
   async create(body: unknown): Promise<TModel> {
-    const url = this.dataUrl()
+    const url = this._route
     const json = await apiMethods.post(url, body)
     return this.deserialize(json)
   }
@@ -80,7 +78,7 @@ export abstract class HydroServerBaseService<TModel> {
     body: unknown,
     originalBody?: unknown
   ): Promise<TModel> {
-    const url = `${this.dataUrl()}/${encodeURIComponent(id)}`
+    const url = `${this._route}/${encodeURIComponent(id)}`
     const json = await apiMethods.patch(
       url,
       this.serialize(body),
@@ -90,13 +88,8 @@ export abstract class HydroServerBaseService<TModel> {
   }
 
   async delete(id: string): Promise<void> {
-    const url = `${this.dataUrl()}/${encodeURIComponent(id)}`
+    const url = `${this._route}/${encodeURIComponent(id)}`
     await apiMethods.delete(url)
-  }
-
-  protected dataUrl(): string {
-    // HydroServer.baseRoute is something like `${host}/api/data`
-    return `${this._client.baseRoute}/${this._route}`
   }
 }
 
@@ -126,4 +119,24 @@ function removeKeys<T extends Record<string, unknown>>(
     if (!keys.includes(key)) output[key] = value
   }
   return output as T
+}
+
+const CAMEL_RE = /[A-Z]/g
+const camelToSnake = (s: string) =>
+  s.includes('_') ? s : s.replace(CAMEL_RE, (c) => `_${c.toLowerCase()}`)
+
+function normalizeParams(
+  params: Record<string, unknown>
+): Record<string, unknown> {
+  const map: Record<string, string> = {
+    pageSize: 'page_size',
+    orderBy: 'order_by',
+  }
+  const out: Record<string, unknown> = {}
+  for (const [k, v] of Object.entries(params)) {
+    if (v === undefined) continue
+    const key = map[k] ?? camelToSnake(k)
+    out[key] = Array.isArray(v) ? v.join(',') : v
+  }
+  return out
 }
