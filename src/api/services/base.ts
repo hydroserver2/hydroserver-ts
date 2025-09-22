@@ -1,6 +1,8 @@
 import { apiMethods } from '../apiMethods'
 import type { HydroServer } from '../HydroServer'
 import { HydroServerCollection } from '../collections/base'
+import type { ListResult, ItemResult, VoidResult, Meta } from '../result'
+import { ApiError } from '../responseInterceptor'
 
 export type BaseListParams = {
   page?: number
@@ -19,6 +21,8 @@ export abstract class HydroServerBaseService<TModel> {
     this._route = route
   }
 
+  /** Override in child to map raw JSON into a model instance. */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected deserialize(data: unknown): TModel {
     return data as TModel
   }
@@ -28,84 +32,281 @@ export abstract class HydroServerBaseService<TModel> {
   }
 
   async list<P extends BaseListParams = BaseListParams>(
-    parameters: P = {} as P
-  ): Promise<HydroServerCollection<TModel>> {
-    const { fetchAll, ...rawQuery } = parameters
-    const query = normalizeParams(rawQuery as Record<string, unknown>)
-    const url = withQuery(this._route, query)
+    params: P = {} as P
+  ): Promise<ListResult<TModel>> {
+    const { fetchAll, ...query } = params
+    const serverQuery = normalizeParams(query as Record<string, unknown>)
+    const url = withQuery(this._route, serverQuery)
+    const startedAt = performance.now()
 
-    if (fetchAll) {
-      const allItems = await apiMethods.paginatedFetch(url)
-      return new HydroServerCollection<TModel>({
+    try {
+      if (fetchAll) {
+        const json = await apiMethods.paginatedFetch(url)
+        const items = (json as unknown[]).map((it) => this.deserialize(it))
+        const collection = new HydroServerCollection<TModel>({
+          service: this,
+          items,
+          filters: removeKeys(serverQuery, ['page', 'page_size', 'order_by']),
+          orderBy: toStringArray(serverQuery['order_by']),
+          page: 1,
+          pageSize: items.length,
+          totalPages: 1,
+          totalCount: items.length,
+        })
+
+        return {
+          kind: 'list',
+          ok: true,
+          status: 200,
+          message: 'OK',
+          items: collection.items, // same array reference
+          collection,
+          meta: makeMeta(
+            'GET',
+            url,
+            startedAt,
+            performance.now() - startedAt,
+            0
+          ),
+        }
+      }
+
+      // Single page (no headers available via apiMethods.fetch)
+      const json = await apiMethods.fetch(url)
+      const items = (json as unknown[]).map((it) => this.deserialize(it))
+      const collection = new HydroServerCollection<TModel>({
         service: this,
-        items: (allItems as unknown[]).map((item) => this.deserialize(item)),
-        filters: removeKeys(query, ['page', 'pageSize', 'orderBy']),
-        orderBy: (query.orderBy as string[]) ?? undefined,
-        page: 1,
-        pageSize: allItems.length,
-        totalPages: 1,
-        totalCount: allItems.length,
+        items,
+        filters: removeKeys(serverQuery, ['page', 'page_size', 'order_by']),
+        orderBy: toStringArray(serverQuery['order_by']),
+        // pagination unknown without headers; leave undefined
       })
+
+      return {
+        kind: 'list',
+        ok: true,
+        status: 200,
+        message: 'OK',
+        items: collection.items,
+        collection,
+        meta: makeMeta('GET', url, startedAt, performance.now() - startedAt, 0),
+      }
+    } catch (err) {
+      return listErr('GET', url, startedAt, err)
     }
-
-    const items = await apiMethods.fetch(url)
-    return new HydroServerCollection<TModel>({
-      service: this,
-      items: (items as unknown[]).map((item) => this.deserialize(item)),
-      filters: removeKeys(query, ['page', 'pageSize', 'orderBy']),
-      orderBy: (query.orderBy as string[]) ?? undefined,
-      page: undefined,
-      pageSize: undefined,
-      totalPages: undefined,
-      totalCount: undefined,
-    })
   }
 
-  async get(id: string): Promise<TModel> {
+  /* ------------------------------ GET ------------------------------ */
+
+  async get(id: string): Promise<ItemResult<TModel>> {
     const url = `${this._route}/${encodeURIComponent(id)}`
-    const json = await apiMethods.fetch(url)
-    return this.deserialize(json)
+    const startedAt = performance.now()
+    try {
+      const json = await apiMethods.fetch(url)
+      const item = this.deserialize(json)
+      return {
+        kind: 'item',
+        ok: true,
+        status: 200,
+        message: 'OK',
+        item,
+        meta: makeMeta('GET', url, startedAt, performance.now() - startedAt, 0),
+      }
+    } catch (err) {
+      return itemErr('GET', url, startedAt, err)
+    }
   }
 
-  async create(body: unknown): Promise<TModel> {
+  /* ------------------------------ CREATE ------------------------------ */
+
+  async create(body: unknown): Promise<ItemResult<TModel>> {
     const url = this._route
-    const json = await apiMethods.post(url, body)
-    return this.deserialize(json)
+    const startedAt = performance.now()
+    try {
+      const json = await apiMethods.post(url, this.serialize(body))
+      const item = this.deserialize(json)
+      return {
+        kind: 'item',
+        ok: true,
+        status: 200,
+        message: 'Created',
+        item,
+        meta: makeMeta(
+          'POST',
+          url,
+          startedAt,
+          performance.now() - startedAt,
+          0
+        ),
+      }
+    } catch (err) {
+      return itemErr('POST', url, startedAt, err)
+    }
   }
+
+  /* ------------------------------ UPDATE ------------------------------ */
 
   async update(
     id: string,
     body: unknown,
     originalBody?: unknown
-  ): Promise<TModel> {
+  ): Promise<ItemResult<TModel>> {
     const url = `${this._route}/${encodeURIComponent(id)}`
-    const json = await apiMethods.patch(
-      url,
-      this.serialize(body),
-      originalBody ?? null
-    )
-    return this.deserialize(json)
+    const startedAt = performance.now()
+    try {
+      const json = await apiMethods.patch(
+        url,
+        this.serialize(body),
+        originalBody ?? null
+      )
+      const item = this.deserialize(json)
+      return {
+        kind: 'item',
+        ok: true,
+        status: 200,
+        message: 'Updated',
+        item,
+        meta: makeMeta(
+          'PATCH',
+          url,
+          startedAt,
+          performance.now() - startedAt,
+          0
+        ),
+      }
+    } catch (err) {
+      return itemErr('PATCH', url, startedAt, err)
+    }
   }
 
-  async delete(id: string): Promise<void> {
+  /* ------------------------------ DELETE ------------------------------ */
+
+  async delete(id: string): Promise<VoidResult> {
     const url = `${this._route}/${encodeURIComponent(id)}`
-    await apiMethods.delete(url)
+    const startedAt = performance.now()
+    try {
+      await apiMethods.delete(url)
+      return {
+        kind: 'none',
+        ok: true,
+        status: 200,
+        message: 'Deleted',
+        meta: makeMeta(
+          'DELETE',
+          url,
+          startedAt,
+          performance.now() - startedAt,
+          0
+        ),
+      }
+    } catch (err) {
+      return voidErr('DELETE', url, startedAt, err)
+    }
+  }
+
+  /* ------------------------------ SUGAR ------------------------------ */
+
+  async listItems<P extends BaseListParams = BaseListParams>(params?: P) {
+    const res = await this.list(params as P)
+    return res.ok ? res.items : []
+  }
+
+  async listAllItems<P extends BaseListParams = BaseListParams>(params?: P) {
+    return this.listItems({ ...(params as any), fetchAll: true })
   }
 }
 
-/** Build a URL with query parameters. Arrays are comma-joined. null => "null". */
+/* ---------------------------- helpers ---------------------------- */
+
+function makeMeta(
+  method: string,
+  url: string,
+  startedAt: number,
+  durationMs: number,
+  retryCount: number,
+  extra?: Partial<Meta>
+): Meta {
+  return {
+    request: { method, url, startedAt, durationMs, retryCount },
+    ...extra,
+  }
+}
+
+function listErr(
+  method: string,
+  url: string,
+  startedAt: number,
+  apiError: unknown
+): ListResult<any> {
+  const err = apiError as Partial<ApiError>
+  return {
+    kind: 'list',
+    ok: false,
+    items: [],
+    collection: null,
+    status: typeof err.status === 'number' ? err.status : 0,
+    message: err.message ?? 'Request failed',
+    meta: makeMeta(method, url, startedAt, performance.now() - startedAt, 0),
+  }
+}
+
+function itemErr(
+  method: string,
+  url: string,
+  startedAt: number,
+  apiError: unknown
+): ItemResult<any> {
+  const err = apiError as Partial<ApiError>
+  return {
+    kind: 'item',
+    ok: false,
+    status: typeof err.status === 'number' ? err.status : 0,
+    message: err.message ?? 'Request failed',
+    meta: makeMeta(method, url, startedAt, performance.now() - startedAt, 0),
+  }
+}
+
+function voidErr(
+  method: string,
+  url: string,
+  startedAt: number,
+  apiError: unknown
+): VoidResult {
+  const err = apiError as Partial<ApiError>
+  return {
+    kind: 'none',
+    ok: false,
+    status: typeof err.status === 'number' ? err.status : 0,
+    message: err.message ?? 'Request failed',
+    meta: makeMeta(method, url, startedAt, performance.now() - startedAt, 0),
+  }
+}
+
+/** Convert camelCase keys to snake_case for query params the API expects. */
+function normalizeParams(
+  params: Record<string, unknown>
+): Record<string, unknown> {
+  const out: Record<string, unknown> = {}
+  for (const [k, v] of Object.entries(params)) {
+    if (v === undefined) continue
+    const key =
+      k === 'pageSize'
+        ? 'page_size'
+        : k === 'orderBy'
+        ? 'order_by'
+        : camelToSnake(k)
+    out[key] = Array.isArray(v) ? v.join(',') : v
+  }
+  return out
+}
+
+/** Build a URL with query parameters. */
 function withQuery(base: string, params?: Record<string, unknown>): string {
   if (!params || Object.keys(params).length === 0) return base
   const url = new URL(base, globalThis.location?.origin ?? undefined)
   for (const [key, value] of Object.entries(params)) {
     if (value === undefined) continue
-    if (value === null) {
-      url.searchParams.set(key, 'null')
-    } else if (Array.isArray(value)) {
-      url.searchParams.set(key, value.map((v) => String(v)).join(','))
-    } else {
-      url.searchParams.set(key, String(value))
-    }
+    url.searchParams.set(key, String(value))
   }
   return url.toString()
 }
@@ -121,22 +322,12 @@ function removeKeys<T extends Record<string, unknown>>(
   return output as T
 }
 
-const CAMEL_RE = /[A-Z]/g
-const camelToSnake = (s: string) =>
-  s.includes('_') ? s : s.replace(CAMEL_RE, (c) => `_${c.toLowerCase()}`)
+function toStringArray(v: unknown): string[] | undefined {
+  if (typeof v === 'string') return v.split(',').filter(Boolean)
+  if (Array.isArray(v)) return v.map(String)
+  return undefined
+}
 
-function normalizeParams(
-  params: Record<string, unknown>
-): Record<string, unknown> {
-  const map: Record<string, string> = {
-    pageSize: 'page_size',
-    orderBy: 'order_by',
-  }
-  const out: Record<string, unknown> = {}
-  for (const [k, v] of Object.entries(params)) {
-    if (v === undefined) continue
-    const key = map[k] ?? camelToSnake(k)
-    out[key] = Array.isArray(v) ? v.join(',') : v
-  }
-  return out
+function camelToSnake(s: string): string {
+  return s.replace(/[A-Z]/g, (m) => `_${m.toLowerCase()}`)
 }

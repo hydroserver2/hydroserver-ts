@@ -1,88 +1,72 @@
-import type { HydroServerBaseService } from '../services/base'
+import type { HydroServerBaseService, BaseListParams } from '../services/base'
 
-export class HydroServerCollection<TItem> {
-  items: TItem[] = []
-  filters?: Record<string, unknown>
-  orderBy?: string[]
-  page?: number | null
-  pageSize?: number | null
-  totalPages?: number | null
-  totalCount?: number | null
+type FetchResponse = { json: unknown; headers: Headers }
 
-  protected serviceInstance?: HydroServerBaseService<TItem>
+export class HydroServerCollection<TModel> {
+  readonly items: TModel[]
+  readonly filters?: Record<string, unknown>
+  readonly orderBy?: string[]
+  readonly page?: number
+  readonly pageSize?: number
+  readonly totalPages?: number
+  readonly totalCount?: number
 
-  constructor(parameters: {
-    service?: HydroServerBaseService<TItem>
-    items?: TItem[]
+  private _service: HydroServerBaseService<TModel>
+
+  constructor(opts: {
+    service: HydroServerBaseService<TModel>
+    items?: TModel[]
+    response?: FetchResponse
     filters?: Record<string, unknown>
     orderBy?: string[]
-    page?: number | null
-    pageSize?: number | null
-    totalPages?: number | null
-    totalCount?: number | null
+    page?: number
+    pageSize?: number
+    totalPages?: number
+    totalCount?: number
   }) {
-    Object.assign(this, parameters)
-    this.items = parameters.items ?? []
-    this.serviceInstance = parameters.service
+    this._service = opts.service
+
+    this.items = opts.items ?? []
+    this.filters = opts.filters
+    this.orderBy = opts.orderBy
+
+    const h = opts.response?.headers
+    this.page = opts.page ?? (h ? intOrNull(h.get('X-Page')) : undefined)
+    this.pageSize =
+      opts.pageSize ?? (h ? intOrNull(h.get('X-Page-Size')) : undefined)
+    this.totalPages =
+      opts.totalPages ?? (h ? intOrNull(h.get('X-Total-Pages')) : undefined)
+    this.totalCount =
+      opts.totalCount ?? (h ? intOrNull(h.get('X-Total-Count')) : undefined)
   }
 
-  get service(): HydroServerBaseService<TItem> | undefined {
-    return this.serviceInstance
+  get service(): HydroServerBaseService<TModel> {
+    return this._service
   }
 
-  async nextPage(): Promise<HydroServerCollection<TItem>> {
-    if (!this.serviceInstance)
-      throw new Error('Pagination not enabled for this collection.')
-    const currentPage = this.page ?? 1
-    const size = this.pageSize ?? 100
-    return this.serviceInstance.list({
+  async nextPage() {
+    if (!this.page || !this.pageSize) return null
+    return this._service.list({
       ...(this.filters ?? {}),
-      page: currentPage + 1,
-      pageSize: size,
       orderBy: this.orderBy,
-    })
+      page: this.page + 1,
+      pageSize: this.pageSize,
+    } as BaseListParams)
   }
 
-  async previousPage(): Promise<HydroServerCollection<TItem> | null> {
-    if (!this.serviceInstance)
-      throw new Error('Pagination not enabled for this collection.')
-    const currentPage = this.page ?? 1
-    if (currentPage <= 1) return null
-    const size = this.pageSize ?? 100
-    return this.serviceInstance.list({
+  async previousPage() {
+    if (!this.page || this.page <= 1 || !this.pageSize) return null
+    return this._service.list({
       ...(this.filters ?? {}),
-      page: currentPage - 1,
-      pageSize: size,
       orderBy: this.orderBy,
-    })
+      page: this.page - 1,
+      pageSize: this.pageSize,
+    } as BaseListParams)
   }
+}
 
-  async fetchAll(): Promise<HydroServerCollection<TItem>> {
-    if (!this.serviceInstance)
-      throw new Error('Pagination not enabled for this collection.')
-
-    const first = this
-    const allItems: TItem[] = [...first.items]
-
-    // Simple loop: keep asking nextPage() until empty or until page stops advancing.
-    let next = await this.nextPage()
-    while (next.items.length) {
-      allItems.push(...next.items)
-      // advance
-      // if next.page is undefined, we cannot advance safely; break
-      if (next.page == null) break
-      next = await next.nextPage()
-    }
-
-    return new HydroServerCollection<TItem>({
-      service: this.serviceInstance,
-      items: allItems,
-      filters: first.filters,
-      orderBy: first.orderBy,
-      page: 1,
-      pageSize: allItems.length,
-      totalPages: 1,
-      totalCount: allItems.length,
-    })
-  }
+function intOrNull(v: string | null): number | undefined {
+  if (!v) return undefined
+  const n = Number(v)
+  return Number.isFinite(n) ? n : undefined
 }

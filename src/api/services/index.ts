@@ -14,5 +14,5 @@ export { HydroServerBaseService } from './base'
 // export { default as DataSourceService } from './dataSources'
 // export { default as DataArchiveService } from './dataArchive'
 
-export { UserService } from './user'
-export { SessionService } from './session'
+export { UserService } from './user.service'
+export { SessionService } from './session.service'

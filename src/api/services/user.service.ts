@@ -4,8 +4,9 @@ import {
   PermissionResource,
   type Permission,
   type Workspace,
-  type User as AppUser,
+  type User,
 } from '../../types'
+import { apiMethods } from '../apiMethods'
 
 export type ActionInput =
   | PermissionAction
@@ -17,7 +18,7 @@ export type ResourceInput =
   | string
 
 /** Minimal shape of the session user we rely on */
-type SessionUser = Partial<Pick<AppUser, 'email' | 'accountType'>> &
+type SessionUser = Partial<Pick<User, 'email' | 'accountType'>> &
   Record<string, unknown>
 
 export class UserService {
@@ -27,6 +28,22 @@ export class UserService {
   constructor(client: HydroServer) {
     this._client = client
     this.accountBase = `${this._client.authBase}/browser/account`
+  }
+
+  async get() {
+    return await apiMethods.fetch(this.accountBase)
+  }
+
+  async create(user: User) {
+    return await apiMethods.post(this.accountBase, user)
+  }
+
+  async update(user: User, oldUser?: User) {
+    return apiMethods.patch(this.accountBase, user, oldUser)
+  }
+
+  async delete() {
+    return apiMethods.delete(this.accountBase)
   }
 
   async can(
@@ -44,7 +61,7 @@ export class UserService {
 
     if (!workspace) return false
 
-    const sessionUser = this.getSessionUser()
+    const sessionUser = await this.get()
 
     if (isAdmin(sessionUser)) return true
     if (isOwner(sessionUser, workspace)) return true
@@ -60,16 +77,23 @@ export class UserService {
     return allowed
   }
 
-  private getSessionUser(): SessionUser | null {
-    // Your HydroServer stores the server-returned account object in `hs.session.user`.
-    // We only rely on `email` and optional `accountType`.
-    const u = this._client.userFromSession?.() // optional helper (see note below)
-    if (u && typeof u === 'object') return u as SessionUser
+  async sendVerificationEmail(email: string) {
+    return apiMethods.put(`${this.accountBase}/email/verify`, { email })
+  }
 
-    // If you don't add `userFromSession()`, fall back to accessing hs.session.user directly:
-    // return (this.client as any).session?.user ?? null;
+  async verifyEmailWithCode(key: string) {
+    return apiMethods.post(`${this.accountBase}/email/verify`, { key })
+  }
 
-    return null
+  async requestPasswordReset(email: string) {
+    return apiMethods.post(`${this.accountBase}/password/request`, { email })
+  }
+
+  async resetPassword(key: string, password: string) {
+    return apiMethods.post(`${this.accountBase}/password/reset`, {
+      key,
+      password,
+    })
   }
 }
 

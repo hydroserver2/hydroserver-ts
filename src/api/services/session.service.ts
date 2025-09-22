@@ -1,11 +1,21 @@
+import { User } from '../../types'
 import type { HydroServer } from '../HydroServer'
 import { apiMethods } from '../apiMethods'
+import Storage from '../../utils/storage'
+
+export interface Provider {
+  id: string
+  name: string
+  iconLink: string | null
+  signupEnabled: boolean
+  connectEnabled: boolean
+}
 
 export type SessionSnapshot = {
   isAuthenticated: boolean
   expiresAt: string | null
   flows: Array<{ id: string; providers?: string[] }>
-  oAuthProviders: string[]
+  oAuthProviders: Provider[]
   signupEnabled: boolean
 }
 
@@ -17,11 +27,7 @@ const DEFAULT_SESSION_SNAPSHOT: SessionSnapshot = {
   signupEnabled: false,
 }
 
-type SessionEvents =
-  | 'session:changed'
-  | 'session:expired'
-  | 'session:login'
-  | 'session:logout'
+export const emailStorage = new Storage<string>('hydroserver:unverifiedEmail')
 
 export class SessionService {
   readonly sessionBase: string
@@ -41,14 +47,49 @@ export class SessionService {
   get expiresAt(): string | null {
     return this.snapshot.expiresAt
   }
+  /**
+   * Determines if signing up on the website is available at all.
+   * Some organizations will want an admin signing up for their users
+   * to be the only way to create an account.
+   *
+   * Not to be confused with `oAuthProviders.signupEnabled` that tells us if
+   * that particular OAuth service can be used to create an account.
+   */
+  get signupEnabled() {
+    return this.snapshot.signupEnabled
+  }
+  /**
+   * An array of OAuth providers that the user can use to authenticate.
+   * In some cases, such as with HydroShare, this allows connecting to the provider
+   * for data archival instead of direct authentication.
+   *
+   * This array determines which login with OAuth buttons are available on the login and signup pages.
+   */
+  get oAuthProviders() {
+    return this.snapshot.oAuthProviders || []
+  }
   get flows(): Array<{ id: string; providers?: string[] }> {
     return this.snapshot.flows
   }
-  get oAuthProviders(): string[] {
-    return this.snapshot.oAuthProviders
+  get flowIds() {
+    return this.flows.map((f) => f.id)
   }
-  get signupEnabled(): boolean {
-    return this.snapshot.signupEnabled
+  get inEmailVerificationFlow(): boolean {
+    return this.flowIds.includes('verify_email')
+  }
+  get inProviderSignupFlow(): boolean {
+    return this.flowIds.includes('provider_signup')
+  }
+  /**
+   * Persist the state of unverified email since it won't be saved in the db
+   * during the verify_email flow. Used for
+   * re-emailing the verification code to the user upon request.
+   */
+  get unverifiedEmail() {
+    return emailStorage.get() || ''
+  }
+  set unverifiedEmail(email: string) {
+    emailStorage.set(email)
   }
 
   async initialize(): Promise<void> {
@@ -61,6 +102,11 @@ export class SessionService {
       email,
       password,
     })
+    this._setSession(apiResponse)
+  }
+
+  async signup(user: User) {
+    const apiResponse = await apiMethods.post(this._client.authBase, user)
     this._setSession(apiResponse)
   }
 

@@ -1,4 +1,7 @@
+import type { User } from '../types'
 import { UserService, SessionService } from './services'
+import { apiMethods } from './apiMethods'
+import { WorkspaceService } from './services/workspace.service'
 
 export type AuthTuple = [string, string]
 
@@ -12,7 +15,7 @@ export class HydroServer {
   readonly authBase: string
   readonly providerBase: string
 
-  // private _workspaces?: WorkspaceService
+  private _workspaces?: WorkspaceService
   // private _roles?: RoleService
   // private _things?: ThingService
   // private _observedProperties?: ObservedPropertyService
@@ -45,6 +48,11 @@ export class HydroServer {
     return client
   }
 
+  async providerSignup(user: User) {
+    const apiResponse = await apiMethods.post(this.providerBase, user)
+    this.session._setSession(apiResponse)
+  }
+
   private listeners: Record<string, Array<(...args: any[]) => void>> = {}
 
   public on(eventName: string, callback: (...args: any[]) => void): void {
@@ -57,9 +65,9 @@ export class HydroServer {
     }
   }
 
-  // get workspaces(): WorkspaceService {
-  //   return (this._workspaces ??= new WorkspaceService(this))
-  // }
+  get workspaces(): WorkspaceService {
+    return (this._workspaces ??= new WorkspaceService(this))
+  }
   // get roles(): RoleService {
   //   return (this._roles ??= new RoleService(this))
   // }

@@ -1,5 +1,4 @@
 import type { HydroServer } from '../HydroServer'
-import type { HydroServerBaseService } from '../services/base'
 
 /**
  * - Holds client and service references
@@ -7,83 +6,83 @@ import type { HydroServerBaseService } from '../services/base'
  * - save / refresh / delete methods delegate to the service
  */
 export abstract class HydroServerBaseModel<
-  TSelf extends { id?: string } = any
+  TServerData extends { id: string },
+  TService = unknown
 > {
-  id?: string
+  abstract id: string
 
   protected _client: HydroServer
-  protected _service?: HydroServerBaseService<any>
-  protected _serverData: Record<string, unknown> = {}
+  protected _service!: TService
+  protected _serverData: Partial<TServerData> = {}
 
-  protected static editableFields: ReadonlySet<string> = new Set()
-
-  constructor(parameters: {
+  constructor(opts: {
     client: HydroServer
-    service?: HydroServerBaseService<any>
-    data: Partial<TSelf>
+    service?: TService
+    serverData?: TServerData
   }) {
-    const { client, service, data } = parameters
-    this._client = client
-    this._service = service
-    Object.assign(this, data)
-    this._serverData = { ...(data as object) }
+    this._client = opts.client
+    if (opts.service) (this as any)._service = opts.service
+    if (opts.serverData) this.hydrate(opts.serverData)
   }
 
-  static getRoute(): string {
-    throw new Error('Route not defined')
+  protected hydrate(serverData: TServerData): void {
+    Object.assign(this as any, serverData)
+    this._serverData = { ...serverData }
+  }
+
+  protected editableFields(): (keyof TServerData)[] {
+    return Object.keys(this._serverData) as (keyof TServerData)[]
   }
 
   get client(): HydroServer {
     return this._client
   }
-
-  get service(): HydroServerBaseService<any> | undefined {
+  get service(): TService {
     return this._service
   }
 
-  get unsavedChanges(): Record<string, unknown> {
-    const editableFields =
-      (this.constructor as typeof HydroServerBaseModel).editableFields ??
-      HydroServerBaseModel.editableFields
-
-    const differences: Record<string, unknown> = {}
-    for (const key of editableFields) {
-      const currentValue = (this as any)[key]
-      const originalValue = this._serverData[key]
-      const isDifferent =
-        JSON.stringify(currentValue) !== JSON.stringify(originalValue)
-      if (isDifferent) differences[key] = currentValue
+  get unsavedChanges(): Partial<TServerData> {
+    const out: Partial<TServerData> = {}
+    for (const key of this.editableFields()) {
+      const curr = (this as any)[key]
+      const prev = (this._serverData as any)[key]
+      if (!shallowEqual(curr, prev)) (out as any)[key] = curr
     }
-    return differences
+    return out
   }
 
-  async save(): Promise<void> {
-    if (!this._service) throw new Error('Saving not enabled for this object.')
+  async save(patch?: Partial<TServerData>): Promise<this> {
+    if (!(this as any)._service)
+      throw new Error('Saving not enabled for this object.')
     if (!this.id) throw new Error('Data cannot be saved: id is not set.')
-
-    const changes = this.unsavedChanges
-    if (Object.keys(changes).length === 0) return
-
-    const updated = await this._service.update(this.id, changes)
-    Object.assign(this, updated)
-    this._serverData = { ...(updated as object) }
+    const body = patch ?? this.unsavedChanges
+    const updated = await (this._service as any).update(
+      this.id,
+      body,
+      this._serverData
+    )
+    this.hydrate(updated as TServerData)
+    return this
   }
 
-  async refresh(): Promise<void> {
-    if (!this._service)
+  async refresh(): Promise<this> {
+    if (!(this as any)._service)
       throw new Error('Refreshing not enabled for this object.')
-    if (!this.id) throw new Error('Cannot refresh data without a valid id.')
-
-    const latest = await this._service.get(this.id)
-    Object.assign(this, latest)
-    this._serverData = { ...(latest as object) }
+    if (!this.id) throw new Error('Cannot refresh without a valid id.')
+    const fresh = await (this._service as any).get(this.id)
+    this.hydrate(fresh as TServerData)
+    return this
   }
 
   async delete(): Promise<void> {
-    if (!this._service) throw new Error('Deleting not enabled for this object.')
-    if (!this.id) throw new Error('Cannot delete data without a valid id.')
-
-    await this._service.delete(this.id)
-    this.id = undefined
+    if (!(this as any)._service)
+      throw new Error('Deleting not enabled for this object.')
+    if (!this.id) throw new Error('Cannot delete without a valid id.')
+    await (this._service as any).delete(this.id)
   }
+}
+
+function shallowEqual(a: unknown, b: unknown): boolean {
+  if (Object(a) !== a || Object(b) !== b) return a === b
+  return a === b
 }
