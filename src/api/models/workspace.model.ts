@@ -62,40 +62,40 @@ export class WorkspaceModel
     return this.client.workspaces.cancelOwnershipTransfer(this.id)
   }
 
-  // things(params: Record<string, unknown> = {}) {
-  //   return this.client.things.list({ workspaceId: this.id, ...params })
-  // }
-  // observedProperties(params: Record<string, unknown> = {}) {
-  //   return this.client.observedProperties.list({
-  //     workspaceId: this.id,
-  //     ...params,
-  //   })
-  // }
-  // units(params: Record<string, unknown> = {}) {
-  //   return this.client.units.list({ workspaceId: this.id, ...params })
-  // }
-  // processingLevels(params: Record<string, unknown> = {}) {
-  //   return this.client.processingLevels.list({
-  //     workspaceId: this.id,
-  //     ...params,
-  //   })
-  // }
-  // sensors(params: Record<string, unknown> = {}) {
-  //   return this.client.sensors.list({ workspaceId: this.id, ...params })
-  // }
-  // datastreams(params: Record<string, unknown> = {}) {
-  //   return this.client.datastreams.list({ workspaceId: this.id, ...params })
-  // }
-  // orchestrationSystems(params: Record<string, unknown> = {}) {
-  //   return this.client.orchestrationSystems.list({
-  //     workspaceId: this.id,
-  //     ...params,
-  //   })
-  // }
-  // dataSources(params: Record<string, unknown> = {}) {
-  //   return this.client.dataSources.list({ workspaceId: this.id, ...params })
-  // }
-  // dataArchives(params: Record<string, unknown> = {}) {
-  //   return this.client.dataArchives.list({ workspaceId: this.id, ...params })
-  // }
+  things(params: Record<string, unknown> = {}) {
+    return this.client.things.list({ workspaceId: this.id, ...params })
+  }
+  observedProperties(params: Record<string, unknown> = {}) {
+    return this.client.observedProperties.list({
+      workspaceId: this.id,
+      ...params,
+    })
+  }
+  units(params: Record<string, unknown> = {}) {
+    return this.client.units.list({ workspaceId: this.id, ...params })
+  }
+  processingLevels(params: Record<string, unknown> = {}) {
+    return this.client.processingLevels.list({
+      workspaceId: this.id,
+      ...params,
+    })
+  }
+  sensors(params: Record<string, unknown> = {}) {
+    return this.client.sensors.list({ workspaceId: this.id, ...params })
+  }
+  datastreams(params: Record<string, unknown> = {}) {
+    return this.client.datastreams.list({ workspaceId: this.id, ...params })
+  }
+  orchestrationSystems(params: Record<string, unknown> = {}) {
+    return this.client.orchestrationSystems.list({
+      workspaceId: this.id,
+      ...params,
+    })
+  }
+  dataSources(params: Record<string, unknown> = {}) {
+    return this.client.dataSources.list({ workspaceId: this.id, ...params })
+  }
+  dataArchives(params: Record<string, unknown> = {}) {
+    return this.client.dataArchives.list({ workspaceId: this.id, ...params })
+  }
 }
