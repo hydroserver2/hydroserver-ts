@@ -42,7 +42,7 @@ export abstract class HydroServerBaseService<TModel> {
     try {
       if (fetchAll) {
         const json = await apiMethods.paginatedFetch(url)
-        const items = (json as unknown[]).map((it) => this.deserialize(it))
+        const items = json.data.map((it: P) => this.deserialize(it))
         const collection = new HydroServerCollection<TModel>({
           service: this,
           items,
@@ -57,8 +57,8 @@ export abstract class HydroServerBaseService<TModel> {
         return {
           kind: 'list',
           ok: true,
-          status: 200,
-          message: 'OK',
+          status: json.status,
+          message: json.message,
           items: collection.items, // same array reference
           collection,
           meta: makeMeta(
@@ -73,7 +73,7 @@ export abstract class HydroServerBaseService<TModel> {
 
       // Single page (no headers available via apiMethods.fetch)
       const json = await apiMethods.fetch(url)
-      const items = (json as unknown[]).map((it) => this.deserialize(it))
+      const items = json.data.map((it: P) => this.deserialize(it))
       const collection = new HydroServerCollection<TModel>({
         service: this,
         items,
@@ -85,8 +85,8 @@ export abstract class HydroServerBaseService<TModel> {
       return {
         kind: 'list',
         ok: true,
-        status: 200,
-        message: 'OK',
+        status: json.status,
+        message: json.message,
         items: collection.items,
         collection,
         meta: makeMeta('GET', url, startedAt, performance.now() - startedAt, 0),
@@ -107,8 +107,8 @@ export abstract class HydroServerBaseService<TModel> {
       return {
         kind: 'item',
         ok: true,
-        status: 200,
-        message: 'OK',
+        status: json.status,
+        message: json.message,
         item,
         meta: makeMeta('GET', url, startedAt, performance.now() - startedAt, 0),
       }
