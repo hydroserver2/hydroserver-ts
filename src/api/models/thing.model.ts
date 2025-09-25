@@ -1,69 +1,29 @@
-import type {
-  Thing,
-  Tag,
-  HydroShareArchive,
-  PostHydroShareArchive,
-} from '../../types'
 import type { HydroServer } from '../HydroServer'
 import type { ThingService } from '../services/thing.service'
 import { HydroServerBaseModel } from './base'
+import { ThingContract, DataArchiveContract } from '../../generated/contracts'
 
 /**
  * Rich Thing instance with instance methods that delegate to ThingService.
- * Fields are taken directly from your shared `Thing` type.
  */
-export class ThingModel
-  extends HydroServerBaseModel<Thing, ThingService>
-  implements Thing
-{
-  declare id: string
-  declare workspaceId: string
-  declare name: string
-  declare location: Thing['location']
-  declare tags: Tag[]
-  declare hydroShareArchive?: HydroShareArchive | null
-  declare siteType: string
-  declare samplingFeatureCode: string
-  declare isPrivate: boolean
-  declare description: string
-  declare samplingFeatureType: string
-  declare dataDisclaimer: string
+export class ThingModel extends HydroServerBaseModel<
+  ThingContract.SummaryResponse,
+  ThingService
+> {
+  static writableKeys =
+    ThingContract.writableKeys as readonly (keyof ThingContract.PatchBody)[]
 
-  constructor(client: HydroServer, service: ThingService, serverData: Thing) {
+  constructor(
+    client: HydroServer,
+    service: ThingService,
+    serverData: ThingContract.SummaryResponse
+  ) {
     super({ client, service, serverData })
   }
 
-  protected override hydrate(serverData: Thing): void {
-    // Copy over the server fields (already camelCase)
-    this.id = serverData.id
-    this.workspaceId = serverData.workspaceId
-    this.name = serverData.name
-    this.location = serverData.location
-    this.tags = serverData.tags ?? []
-    this.hydroShareArchive = serverData.hydroShareArchive ?? null
-    this.siteType = serverData.siteType
-    this.samplingFeatureCode = serverData.samplingFeatureCode
-    this.isPrivate = serverData.isPrivate
-    this.description = serverData.description
-    this.samplingFeatureType = serverData.samplingFeatureType
-    this.dataDisclaimer = serverData.dataDisclaimer
-
-    // Track snapshot to compute unsaved changes later
+  protected override hydrate(serverData: ThingContract.SummaryResponse): void {
+    Object.assign(this, serverData)
     this._serverData = { ...serverData }
-  }
-
-  /** Which fields can be saved via PATCH diff. */
-  protected override editableFields(): (keyof Thing)[] {
-    return [
-      'name',
-      'description',
-      'isPrivate',
-      'siteType',
-      'samplingFeatureCode',
-      'samplingFeatureType',
-      'dataDisclaimer',
-      'location',
-    ]
   }
 
   /* -------------------- Sub-resources: Tags -------------------- */
@@ -71,13 +31,13 @@ export class ThingModel
   listTags() {
     return this.service.listTags(this.id)
   }
-  createTag(tag: Tag) {
+  createTag(tag: Parameters<ThingService['createTag']>[1]) {
     return this.service.createTag(this.id, tag)
   }
-  updateTag(tag: Tag) {
+  updateTag(tag: Parameters<ThingService['updateTag']>[1]) {
     return this.service.updateTag(this.id, tag)
   }
-  deleteTag(tag: Tag) {
+  deleteTag(tag: Parameters<ThingService['deleteTag']>[1]) {
     return this.service.deleteTag(this.id, tag)
   }
 
@@ -95,10 +55,13 @@ export class ThingModel
 
   /* --------------- Sub-resources: HydroShare Archive ----------- */
 
-  createHydroShareArchive(archive: PostHydroShareArchive) {
+  createHydroShareArchive(archive: DataArchiveContract.PostBody) {
     return this.service.createHydroShareArchive(this.id, archive)
   }
-  updateHydroShareArchive(archive: HydroShareArchive, old?: HydroShareArchive) {
+  updateHydroShareArchive(
+    archive: DataArchiveContract.PatchBody,
+    old?: DataArchiveContract.PatchBody
+  ) {
     return this.service.updateHydroShareArchive(this.id, archive, old)
   }
   getHydroShareArchive() {
@@ -129,3 +92,10 @@ export class ThingModel
     return this.client.datastreams.list({ thingId: this.id, ...params })
   }
 }
+
+/**
+ * Declaration merging: makes all fields from ThingContract.SummaryResponse
+ * visible on ThingModel instances without requiring `implements` or per-field
+ * `declare` members.
+ */
+export interface ThingModel extends ThingContract.SummaryResponse {}
