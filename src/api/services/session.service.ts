@@ -2,6 +2,7 @@ import { User } from '../../types'
 import type { HydroServer } from '../HydroServer'
 import { apiMethods } from '../apiMethods'
 import Storage from '../../utils/storage'
+import { getCSRFToken } from '../getCSRFToken'
 
 export interface Provider {
   id: string
@@ -31,6 +32,7 @@ export const emailStorage = new Storage<string>('hydroserver:unverifiedEmail')
 
 export class SessionService {
   readonly sessionBase: string
+  readonly providerBase: string
 
   private _client: HydroServer
   private snapshot: SessionSnapshot = { ...DEFAULT_SESSION_SNAPSHOT }
@@ -39,6 +41,7 @@ export class SessionService {
   constructor(client: HydroServer) {
     this._client = client
     this.sessionBase = `${this._client.authBase}/browser/session`
+    this.providerBase = `${this._client.authBase}/browser/provider`
   }
 
   get isAuthenticated(): boolean {
@@ -93,21 +96,21 @@ export class SessionService {
   }
 
   async initialize(): Promise<void> {
-    const sessionResponse = await apiMethods.fetch(this.sessionBase)
-    this._setSession(sessionResponse)
+    const res = await apiMethods.fetch(this.sessionBase)
+    this._setSession(res.data)
   }
 
   async login(email: string, password: string) {
-    const apiResponse = await apiMethods.post(this.sessionBase, {
+    const res = await apiMethods.post(this.sessionBase, {
       email,
       password,
     })
-    this._setSession(apiResponse)
+    this._setSession(res.data)
   }
 
   async signup(user: User) {
-    const apiResponse = await apiMethods.post(this._client.authBase, user)
-    this._setSession(apiResponse)
+    const res = await apiMethods.post(this._client.authBase, user)
+    this._setSession(res.data)
   }
 
   private _loggingOut = false
@@ -122,8 +125,8 @@ export class SessionService {
           }
         }
       }
-      const response = await apiMethods.delete(this.sessionBase)
-      this._setSession(response)
+      const res = await apiMethods.delete(this.sessionBase)
+      this._setSession(res.data)
     } catch (error) {
       console.error('Error logging out.', error)
     } finally {
@@ -173,5 +176,49 @@ export class SessionService {
     window.removeEventListener('focus', handler)
     document.removeEventListener('visibilitychange', handler)
     this.autoRefreshEnabled = false
+  }
+
+  /**
+   * Initiates a synchronous form submission to redirect the user for OAuth login in a Django AllAuth
+   * environment. This allows the server to return a 302 redirect that the browser will follow,
+   * preserving session cookies and enabling AllAuth to handle the full OAuth handshake.
+   *
+   * @param {string} provider - The ID of the OAuth provider (e.g. "google", "hydroshare").
+   * @param {string} callbackUrl - The URL to which the user is redirected after the OAuth flow completes.
+   * @param {string} process - Enum: "login" or "connect" The process to be executed when the user successfully authenticates.
+   *                           When set to login, the user will be logged into the account to which the provider account is connected,
+   *                           or if no such account exists, a signup will occur. If set to connect, the provider account will
+   *                           be connected to the list of provider accounts for the currently authenticated user.
+   */
+  providerRedirect = (
+    provider: string,
+    callbackUrl: string,
+    process: string
+  ) => {
+    const data: Record<string, string> = {
+      provider: provider,
+      callback_url: callbackUrl,
+      process: process,
+    }
+    const csrfToken = getCSRFToken()
+    const form = document.createElement('form')
+    form.method = 'POST'
+    form.action = `${this.providerBase}/redirect`
+    if (csrfToken) {
+      const csrfInput = document.createElement('input')
+      csrfInput.type = 'hidden'
+      csrfInput.name = 'csrfmiddlewaretoken'
+      csrfInput.value = csrfToken
+      form.appendChild(csrfInput)
+    }
+    for (const key in data) {
+      const input = document.createElement('input')
+      input.type = 'hidden'
+      input.name = key
+      input.value = data[key]
+      form.appendChild(input)
+    }
+    document.body.appendChild(form)
+    form.submit()
   }
 }

@@ -1,4 +1,3 @@
-import type { HydroServer } from '../HydroServer'
 import type { ThingService } from '../services/thing.service'
 import { HydroServerBaseModel } from './base'
 import { ThingContract, DataArchiveContract } from '../../generated/contracts'
@@ -12,19 +11,6 @@ export class ThingModel extends HydroServerBaseModel<
 > {
   static writableKeys =
     ThingContract.writableKeys as readonly (keyof ThingContract.PatchBody)[]
-
-  constructor(
-    client: HydroServer,
-    service: ThingService,
-    serverData: ThingContract.SummaryResponse
-  ) {
-    super({ client, service, serverData })
-  }
-
-  protected override hydrate(serverData: ThingContract.SummaryResponse): void {
-    Object.assign(this, serverData)
-    this._serverData = { ...serverData }
-  }
 
   /* -------------------- Sub-resources: Tags -------------------- */
 

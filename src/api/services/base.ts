@@ -12,7 +12,10 @@ export type BaseListParams = {
   fetchAll?: boolean
 }
 
-export abstract class HydroServerBaseService<TModel> {
+export abstract class HydroServerBaseService<
+  TModel,
+  TParams extends BaseListParams = BaseListParams
+> {
   protected _client: HydroServer
   protected _route: string
 
@@ -31,10 +34,13 @@ export abstract class HydroServerBaseService<TModel> {
     return body ?? {}
   }
 
-  async list<P extends BaseListParams = BaseListParams>(
-    params: P = {} as P
-  ): Promise<ListResult<TModel>> {
-    const { fetchAll, ...query } = params
+  protected prepareListParams(params: TParams): TParams {
+    return params
+  }
+
+  async list(params: TParams = {} as TParams): Promise<ListResult<TModel>> {
+    const { fetchAll, ...query } = params as BaseListParams &
+      Record<string, unknown>
     const serverQuery = normalizeParams(query as Record<string, unknown>)
     const url = withQuery(this._route, serverQuery)
     const startedAt = performance.now()
@@ -42,7 +48,7 @@ export abstract class HydroServerBaseService<TModel> {
     try {
       if (fetchAll) {
         const json = await apiMethods.paginatedFetch(url)
-        const items = json.data.map((it: P) => this.deserialize(it))
+        const items = json.data.map((it: TModel) => this.deserialize(it))
         const collection = new HydroServerCollection<TModel>({
           service: this,
           items,
@@ -73,7 +79,7 @@ export abstract class HydroServerBaseService<TModel> {
 
       // Single page (no headers available via apiMethods.fetch)
       const json = await apiMethods.fetch(url)
-      const items = json.data.map((it: P) => this.deserialize(it))
+      const items = json.data.map((it: TModel) => this.deserialize(it))
       const collection = new HydroServerCollection<TModel>({
         service: this,
         items,
@@ -128,8 +134,8 @@ export abstract class HydroServerBaseService<TModel> {
       return {
         kind: 'item',
         ok: true,
-        status: 200,
-        message: 'Created',
+        status: json.status,
+        message: json.message,
         item,
         meta: makeMeta(
           'POST',
@@ -163,8 +169,8 @@ export abstract class HydroServerBaseService<TModel> {
       return {
         kind: 'item',
         ok: true,
-        status: 200,
-        message: 'Updated',
+        status: json.status,
+        message: json.message,
         item,
         meta: makeMeta(
           'PATCH',
@@ -185,12 +191,12 @@ export abstract class HydroServerBaseService<TModel> {
     const url = `${this._route}/${encodeURIComponent(id)}`
     const startedAt = performance.now()
     try {
-      await apiMethods.delete(url)
+      const json = await apiMethods.delete(url)
       return {
         kind: 'none',
         ok: true,
-        status: 200,
-        message: 'Deleted',
+        status: json.status,
+        message: json.message,
         meta: makeMeta(
           'DELETE',
           url,
@@ -206,13 +212,18 @@ export abstract class HydroServerBaseService<TModel> {
 
   /* ------------------------------ SUGAR ------------------------------ */
 
-  async listItems<P extends BaseListParams = BaseListParams>(params?: P) {
-    const res = await this.list(params as P)
+  async listItems(params?: TParams) {
+    const res = await this.list(params as TParams)
     return res.ok ? res.items : []
   }
 
-  async listAllItems<P extends BaseListParams = BaseListParams>(params?: P) {
+  async listAllItems(params?: TParams) {
     return this.listItems({ ...(params as any), fetchAll: true })
+  }
+
+  async getItem(id: string) {
+    const res = await this.get(id)
+    return res.ok ? res.item : null
   }
 }
 

@@ -117,7 +117,7 @@ export class DatastreamModel
   }
 
   /** Download CSV as Blob wrapped in ApiResponse. */
-  downloadCsv(): Promise<ApiResponse<Blob>> {
-    return this.service.downloadCsv(this.id)
+  async downloadCsv(filename?: string): Promise<void> {
+    return this.service.downloadCsv(this.id, filename)
   }
 }

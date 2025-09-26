@@ -5,22 +5,23 @@ import type { Datastream } from '../../types'
 import { DatastreamModel } from '../models/datastream.model'
 import type { ItemResult, ListResult } from '../result'
 import type { ApiResponse } from '../responseInterceptor'
+import { ThingScoped, WorkspaceScoped } from './ref-utils'
 
-export type DatastreamListParams = BaseListParams & {
-  workspaceId?: string
-  thingId?: string
-  unitId?: string
-  sensorId?: string
-  observedPropertyId?: string
-  processingLevelId?: string
-  dataSourceId?: string
-  status?: string
-  sampledMedium?: string
-  resultType?: string
-  observationType?: string
-  excludeUnowned?: boolean
-  expandRelated?: boolean
-}
+export type DatastreamListParams = BaseListParams &
+  WorkspaceScoped &
+  ThingScoped & {
+    unitId?: string
+    sensorId?: string
+    observedPropertyId?: string
+    processingLevelId?: string
+    dataSourceId?: string
+    status?: string
+    sampledMedium?: string
+    resultType?: string
+    observationType?: string
+    excludeUnowned?: boolean
+    expandRelated?: boolean
+  }
 
 export type DatastreamObservationsParams = {
   /** 'column' or 'json' depending on server support */
@@ -37,7 +38,10 @@ export type DatastreamObservationsParams = {
  * Transport layer for /datastreams routes. Builds URLs, handles pagination,
  * and returns rich DatastreamModel instances.
  */
-export class DatastreamService extends HydroServerBaseService<DatastreamModel> {
+export class DatastreamService extends HydroServerBaseService<
+  DatastreamModel,
+  DatastreamListParams
+> {
   constructor(client: HydroServer) {
     super(client, `${client.baseRoute}/datastreams`)
   }
@@ -102,10 +106,54 @@ export class DatastreamService extends HydroServerBaseService<DatastreamModel> {
     return apiMethods.post(url, body)
   }
 
-  /** Download CSV (Blob) wrapped in ApiResponse<Blob>. */
-  async downloadCsv(datastreamId: string): Promise<ApiResponse<Blob>> {
-    const url = `${this._route}/${datastreamId}/csv`
-    return apiMethods.fetch(url) as Promise<ApiResponse<Blob>>
+  /**
+   * Fetch CSV as a Blob for a datastream.
+   * You can use this to manage your own file saving if you don't want the helper to auto-download.
+   */
+  async fetchCsvBlob(id: string): Promise<ApiResponse<Blob>> {
+    const url = `${this._route}/${encodeURIComponent(id)}/csv`
+    return apiMethods.fetch(url, {
+      headers: { Accept: 'text/csv' },
+    }) as Promise<ApiResponse<Blob>>
+  }
+
+  /**
+   * Trigger a browser download for a single datastream CSV.
+   * Returns void; it performs a side-effect (download).
+   */
+  async downloadCsv(id: string, filename?: string): Promise<void> {
+    const res = await this.fetchCsvBlob(id)
+    const blob =
+      res.data instanceof Blob
+        ? res.data
+        : new Blob([res.data], { type: 'text/csv' })
+    triggerDownload(blob, filename ?? `datastream_${id}.csv`)
+  }
+
+  /**
+   * Download many plotted datastreams as a single ZIP file.
+   * Accepts either ids or model instances.
+   */
+  async downloadCsvZip(
+    datastreams: Array<string | Pick<Datastream, 'id'>>,
+    zipName = 'datastreams.zip'
+  ): Promise<void> {
+    const { default: JSZip } = await import('jszip')
+    const zip = new JSZip()
+
+    // Fetch all CSVs (sequential keeps server happy; parallel is possible if rate limits allow)
+    for (const ds of datastreams) {
+      const id = typeof ds === 'string' ? ds : ds.id
+      const res = await this.fetchCsvBlob(id)
+      const blob =
+        res.data instanceof Blob
+          ? res.data
+          : new Blob([res.data], { type: 'text/csv' })
+      zip.file(`datastream_${id}.csv`, blob)
+    }
+
+    const archive = await zip.generateAsync({ type: 'blob' })
+    triggerDownload(archive, zipName)
   }
 
   /* ------------------- Static enumerations ---------------------- */
@@ -161,4 +209,15 @@ function withQuery(base: string, params?: Record<string, unknown>): string {
     url.searchParams.set(key, String(value))
   }
   return url.toString()
+}
+
+function triggerDownload(blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  URL.revokeObjectURL(url)
 }

@@ -14,9 +14,9 @@
     "test": "vitest",
     "driver": "tsx driver/index.ts",
     "coverage": "vitest run --coverage --environment jsdom",
-    "generate:types:auth": "openapi-typescript openapi/auth/schema.json --output src/models/auth-types.ts",
-    "generate:types:data": "openapi-typescript openapi/data/schema.json --output src/models/data-types.ts",
-    "generate:types": "npm run generate:types:auth && npm run generate:types:data"
+    "gen:types": "openapi-typescript ./schemas/data.openapi.json --output ./src/generated/data.types.d.ts && openapi-typescript ./schemas/auth.openapi.json --output ./src/generated/auth.types.d.ts",
+    "gen:contracts": "tsx ./scripts/generate-contracts.ts",
+    "gen": "npm run gen:types && npm run gen:contracts"
   },
   "repository": {
     "type": "git",
@@ -31,15 +31,17 @@
   "homepage": "https://github.com/hydroserver2/hydroserver-ts#readme",
   "dependencies": {
     "cross-fetch": "^4.1.0",
+    "jszip": "^3.10.1",
     "p-limit": "^6.2.0"
   },
   "devDependencies": {
     "@types/node": "^24.1.0",
-    "openapi-typescript": "^7.8.0",
+    "openapi-typescript": "^7.9.1",
+    "openapi-zod-client": "^1.18.3",
+    "tsx": "^4.16.2",
     "typescript": "^5.8.3",
     "vite": "^7.0.5",
     "vite-plugin-dts": "^4.5.4",
-    "vitest": "^3.2.4",
-    "tsx": "^4.16.2"
+    "vitest": "^3.2.4"
   }
 }

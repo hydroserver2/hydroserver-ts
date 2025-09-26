@@ -1,14 +1,9 @@
 import type { HydroServer } from '../HydroServer'
 import { apiMethods } from '../apiMethods'
 import { BaseListParams, HydroServerBaseService } from './base'
-import type {
-  Thing,
-  Tag,
-  HydroShareArchive,
-  PostHydroShareArchive,
-} from '../../types'
 import { ThingModel } from '../models/thing.model'
 import type { ItemResult, ListResult } from '../result'
+import { ThingContract, DataArchiveContract } from '../../generated/contracts'
 
 export type ThingListParams = BaseListParams & {
   workspaceId?: string
@@ -25,7 +20,10 @@ export type ThingListParams = BaseListParams & {
  * Transport layer for /things routes. Builds URLs, handles pagination,
  * and returns rich ThingModel instances.
  */
-export class ThingService extends HydroServerBaseService<ThingModel> {
+export class ThingService extends HydroServerBaseService<
+  ThingModel,
+  ThingListParams
+> {
   constructor(client: HydroServer) {
     super(client, `${client.baseRoute}/things`)
   }
@@ -38,14 +36,16 @@ export class ThingService extends HydroServerBaseService<ThingModel> {
     return super.get(id)
   }
 
-  create(body: Partial<Thing>): Promise<ItemResult<ThingModel>> {
+  create(
+    body: Partial<ThingContract.SummaryResponse>
+  ): Promise<ItemResult<ThingModel>> {
     return super.create(body)
   }
 
   update(
     id: string,
-    body: Partial<Thing>,
-    originalBody?: Partial<Thing>
+    body: Partial<ThingContract.SummaryResponse>,
+    originalBody?: Partial<ThingContract.SummaryResponse>
   ): Promise<ItemResult<ThingModel>> {
     return super.update(id, body, originalBody)
   }
@@ -140,6 +140,10 @@ export class ThingService extends HydroServerBaseService<ThingModel> {
   /* ------------------------- Model wiring ---------------------------- */
 
   protected override deserialize(data: unknown): ThingModel {
-    return new ThingModel(this._client, this, data as Thing)
+    return new ThingModel({
+      client: this._client,
+      service: this,
+      serverData: data as ThingContract.SummaryResponse,
+    })
   }
 }

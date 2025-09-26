@@ -5,15 +5,22 @@ import type { HydroServer } from '../HydroServer'
  * - Tracks server snapshot to compute unsaved changes
  * - save / refresh / delete methods delegate to the service
  */
-export abstract class HydroServerBaseModel<
-  TServerData extends { id: string },
-  TService = unknown
-> {
+export abstract class HydroServerBaseModel<TServerData, TService = unknown> {
   abstract id: string
 
   protected _client: HydroServer
   protected _service!: TService
   protected _serverData: Partial<TServerData> = {}
+
+  /** Generated code makes patchBody variables available at runtime for creating patch diffs */
+  private getWritableKeys(): (keyof TServerData)[] {
+    const ctor = this.constructor as any
+    const keys: readonly string[] | undefined = ctor?.writableKeys
+    if (Array.isArray(keys) && keys.length) {
+      return keys as (keyof TServerData)[]
+    }
+    return Object.keys(this._serverData) as (keyof TServerData)[]
+  }
 
   constructor(opts: {
     client: HydroServer
@@ -55,10 +62,18 @@ export abstract class HydroServerBaseModel<
     if (!(this as any)._service)
       throw new Error('Saving not enabled for this object.')
     if (!this.id) throw new Error('Data cannot be saved: id is not set.')
+
+    const allowed = new Set(this.getWritableKeys() as string[])
     const body = patch ?? this.unsavedChanges
+    // Filter to runtime-allowed keys to avoid 400s on readOnly fields
+    const filtered: Record<string, unknown> = {}
+    for (const [k, v] of Object.entries(body)) {
+      if (allowed.has(k)) filtered[k] = v
+    }
+
     const updated = await (this._service as any).update(
       this.id,
-      body,
+      filtered,
       this._serverData
     )
     this.hydrate(updated as TServerData)

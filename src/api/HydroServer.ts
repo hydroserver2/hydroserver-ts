@@ -60,8 +60,8 @@ export class HydroServer {
   }
 
   async providerSignup(user: User) {
-    const apiResponse = await apiMethods.post(this.providerBase, user)
-    this.session._setSession(apiResponse)
+    const res = await apiMethods.post(this.providerBase, user)
+    this.session._setSession(res.data)
   }
 
   private listeners: Record<string, Array<(...args: any[]) => void>> = {}
@@ -94,18 +94,18 @@ export class HydroServer {
   get processingLevels(): ProcessingLevelService {
     return (this._processingLevels ??= new ProcessingLevelService(this))
   }
-  get resultQualifiers(): ResultQualifierService {
-    return (this._resultQualifiers ??= new ResultQualifierService(this))
-  }
+  // get resultQualifiers(): ResultQualifierService {
+  //   return (this._resultQualifiers ??= new ResultQualifierService(this))
+  // }
   get sensors(): SensorService {
     return (this._sensors ??= new SensorService(this))
   }
   get datastreams(): DatastreamService {
     return (this._datastreams ??= new DatastreamService(this))
   }
-  get orchestrationSystems(): OrchestrationSystemService {
-    return (this._orchestrationSystems ??= new OrchestrationSystemService(this))
-  }
+  // get orchestrationSystems(): OrchestrationSystemService {
+  //   return (this._orchestrationSystems ??= new OrchestrationSystemService(this))
+  // }
   get dataSources(): DataSourceService {
     return (this._dataSources ??= new DataSourceService(this))
   }
