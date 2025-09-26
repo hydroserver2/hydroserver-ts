@@ -4,18 +4,9 @@ import { HydroServerCollection } from '../collections/base'
 import type { ListResult, ItemResult, VoidResult, Meta } from '../result'
 import { ApiError } from '../responseInterceptor'
 
-export type BaseListParams = {
-  page?: number
-  pageSize?: number
-  orderBy?: string[]
-  expandRelated?: boolean
-  fetchAll?: boolean
-}
+type ContractLike = { route: string }
 
-export abstract class HydroServerBaseService<
-  TModel,
-  TParams extends BaseListParams = BaseListParams
-> {
+export abstract class HydroServerBaseService<TModel, TQueryParams> {
   protected _client: HydroServer
   protected _route: string
 
@@ -34,19 +25,22 @@ export abstract class HydroServerBaseService<
     return body ?? {}
   }
 
-  protected prepareListParams(params: TParams): TParams {
+  protected prepareListParams(params: TQueryParams): TQueryParams {
     return params
   }
 
-  async list(params: TParams = {} as TParams): Promise<ListResult<TModel>> {
-    const { fetchAll, ...query } = params as BaseListParams &
-      Record<string, unknown>
+  async list(
+    params: Partial<TQueryParams> & {
+      fetch_all?: boolean
+    } = {} as Partial<TQueryParams>
+  ): Promise<ListResult<TModel>> {
+    const { fetch_all, ...query } = params as Record<string, unknown>
     const serverQuery = normalizeParams(query as Record<string, unknown>)
     const url = withQuery(this._route, serverQuery)
     const startedAt = performance.now()
 
     try {
-      if (fetchAll) {
+      if (fetch_all) {
         const json = await apiMethods.paginatedFetch(url)
         const items = json.data.map((it: TModel) => this.deserialize(it))
         const collection = new HydroServerCollection<TModel>({
@@ -212,13 +206,13 @@ export abstract class HydroServerBaseService<
 
   /* ------------------------------ SUGAR ------------------------------ */
 
-  async listItems(params?: TParams) {
-    const res = await this.list(params as TParams)
+  async listItems(params?: Partial<TQueryParams> & { fetch_all?: boolean }) {
+    const res = await this.list(params as any)
     return res.ok ? res.items : []
   }
 
-  async listAllItems(params?: TParams) {
-    return this.listItems({ ...(params as any), fetchAll: true })
+  async listAllItems(params?: TQueryParams) {
+    return this.listItems({ ...(params as any), fetch_all: true })
   }
 
   async getItem(id: string) {

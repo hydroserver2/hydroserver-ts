@@ -4,8 +4,10 @@ import type * as Data from '../data.types'
 
 export namespace ResultQualifierContract {
   export const route = 'result-qualifiers' as const
+  export type QueryParameters = Data.components['schemas']['ResultQualifierQueryParameters']
   export type SummaryResponse = Data.components['schemas']['ResultQualifierSummaryResponse']
-  export type PostBody = Data.components['schemas']['ResultQualifierPostBody']
-  export type PatchBody = Data.components['schemas']['ResultQualifierPatchBody']
+  export type DetailResponse  = Data.components['schemas']['ResultQualifierDetailResponse']
+  export type PostBody        = Data.components['schemas']['ResultQualifierPostBody']
+  export type PatchBody       = Data.components['schemas']['ResultQualifierPatchBody']
   export const writableKeys = ["code","description"] as const
 }

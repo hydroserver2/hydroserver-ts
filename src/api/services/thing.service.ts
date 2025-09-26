@@ -1,20 +1,8 @@
 import type { HydroServer } from '../HydroServer'
 import { apiMethods } from '../apiMethods'
-import { BaseListParams, HydroServerBaseService } from './base'
+import { HydroServerBaseService } from './base'
 import { ThingModel } from '../models/thing.model'
-import type { ItemResult, ListResult } from '../result'
 import { ThingContract, DataArchiveContract } from '../../generated/contracts'
-
-export type ThingListParams = BaseListParams & {
-  workspaceId?: string
-  ownedOnly?: boolean
-  isPrivate?: boolean
-  search?: string
-  siteType?: string
-  samplingFeatureType?: string
-  tag?: string[] // comma-joined in query
-  expandRelated?: boolean
-}
 
 /**
  * Transport layer for /things routes. Builds URLs, handles pagination,
@@ -22,32 +10,10 @@ export type ThingListParams = BaseListParams & {
  */
 export class ThingService extends HydroServerBaseService<
   ThingModel,
-  ThingListParams
+  ThingContract.QueryParameters
 > {
   constructor(client: HydroServer) {
     super(client, `${client.baseRoute}/things`)
-  }
-
-  list(params: ThingListParams = {}): Promise<ListResult<ThingModel>> {
-    return super.list(params)
-  }
-
-  get(id: string): Promise<ItemResult<ThingModel>> {
-    return super.get(id)
-  }
-
-  create(
-    body: Partial<ThingContract.SummaryResponse>
-  ): Promise<ItemResult<ThingModel>> {
-    return super.create(body)
-  }
-
-  update(
-    id: string,
-    body: Partial<ThingContract.SummaryResponse>,
-    originalBody?: Partial<ThingContract.SummaryResponse>
-  ): Promise<ItemResult<ThingModel>> {
-    return super.update(id, body, originalBody)
   }
 
   /* ----------------------- Sub-resources: Tags ----------------------- */
@@ -91,15 +57,18 @@ export class ThingService extends HydroServerBaseService<
 
   /* --------------- Sub-resources: HydroShare Archive ----------------- */
 
-  createHydroShareArchive(thingId: string, archive: PostHydroShareArchive) {
+  createHydroShareArchive(
+    thingId: string,
+    archive: DataArchiveContract.PostBody
+  ) {
     const url = `${this._route}/${thingId}/archive`
     return apiMethods.post(url, archive)
   }
 
   updateHydroShareArchive(
     thingId: string,
-    archive: HydroShareArchive,
-    old?: HydroShareArchive
+    archive: DataArchiveContract.PatchBody,
+    old?: DataArchiveContract.PatchBody
   ) {
     const url = `${this._route}/${thingId}/archive`
     return apiMethods.patch(url, archive, old)
@@ -139,11 +108,13 @@ export class ThingService extends HydroServerBaseService<
 
   /* ------------------------- Model wiring ---------------------------- */
 
-  protected override deserialize(data: unknown): ThingModel {
+  protected override deserialize(
+    data: ThingContract.SummaryResponse
+  ): ThingModel {
     return new ThingModel({
       client: this._client,
       service: this,
-      serverData: data as ThingContract.SummaryResponse,
+      serverData: data,
     })
   }
 }

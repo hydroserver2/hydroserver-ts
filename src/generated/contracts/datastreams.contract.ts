@@ -4,8 +4,10 @@ import type * as Data from '../data.types'
 
 export namespace DatastreamContract {
   export const route = 'datastreams' as const
+  export type QueryParameters = Data.components['schemas']['DatastreamQueryParameters']
   export type SummaryResponse = Data.components['schemas']['DatastreamSummaryResponse']
-  export type PostBody = Data.components['schemas']['DatastreamPostBody']
-  export type PatchBody = Data.components['schemas']['DatastreamPatchBody']
+  export type DetailResponse  = Data.components['schemas']['DatastreamDetailResponse']
+  export type PostBody        = Data.components['schemas']['DatastreamPostBody']
+  export type PatchBody       = Data.components['schemas']['DatastreamPatchBody']
   export const writableKeys = ["dataSourceId","thingId","sensorId","observedPropertyId","processingLevelId","unitId","name","description","observationType","sampledMedium","noDataValue","aggregationStatistic","timeAggregationInterval","status","resultType","valueCount","phenomenonBeginTime","phenomenonEndTime","resultBeginTime","resultEndTime","isPrivate","isVisible","timeAggregationIntervalUnit","intendedTimeSpacing","intendedTimeSpacingUnit"] as const
 }
