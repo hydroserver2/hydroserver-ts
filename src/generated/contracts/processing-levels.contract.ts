@@ -9,5 +9,14 @@ export namespace ProcessingLevelContract {
   export type DetailResponse  = Data.components['schemas']['ProcessingLevelDetailResponse']
   export type PostBody        = Data.components['schemas']['ProcessingLevelPostBody']
   export type PatchBody       = Data.components['schemas']['ProcessingLevelPatchBody']
+  export type DeleteBody      = never
   export const writableKeys = ["code","definition","explanation"] as const
+  export declare const __types: {
+    SummaryResponse: SummaryResponse
+    DetailResponse: DetailResponse
+    PostBody: PostBody
+    PatchBody: PatchBody
+    DeleteBody: DeleteBody
+    QueryParameters: QueryParameters
+  }
 }

@@ -4,46 +4,76 @@ import { HydroServerCollection } from '../collections/base'
 import type { ListResult, ItemResult, VoidResult, Meta } from '../result'
 import { ApiError } from '../responseInterceptor'
 
-type ContractLike = { route: string }
+// --- shared in your services/base (or a types file) ---
+export type ApiTypes = {
+  SummaryResponse: unknown
+  DetailResponse: unknown
+  PostBody: unknown
+  PatchBody: unknown
+  DeleteBody: unknown
+  QueryParameters: Record<string, unknown>
+}
 
-export abstract class HydroServerBaseService<TModel, TQueryParams> {
+export type ApiContract = {
+  route: string
+  writableKeys: readonly string[]
+  __types: ApiTypes
+}
+
+// Convenience type helpers
+export type SummaryOf<C extends ApiContract> = C['__types']['SummaryResponse']
+export type DetailOf<C extends ApiContract> = C['__types']['DetailResponse']
+export type PostOf<C extends ApiContract> = C['__types']['PostBody']
+export type PatchOf<C extends ApiContract> = C['__types']['PatchBody']
+export type DeleteOf<C extends ApiContract> = C['__types']['DeleteBody']
+export type QueryParamsOf<C extends ApiContract> =
+  C['__types']['QueryParameters']
+export type WritableKeysOf<C extends ApiContract> = C['writableKeys']
+
+export type ServiceClass<C extends ApiContract> = {
+  new (client: HydroServer): HydroServerBaseService<C>
+  route: string
+}
+
+export abstract class HydroServerBaseService<C extends ApiContract> {
   protected _client: HydroServer
   protected _route: string
 
-  constructor(client: HydroServer, route: string) {
+  constructor(client: HydroServer) {
     this._client = client
-    this._route = route
+    const ctor = this.constructor as ServiceClass<C>
+    this._route = `${client.baseRoute}/${ctor.route}`
   }
 
   /** Override in child to map raw JSON into a model instance. */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected deserialize(data: unknown): TModel {
-    return data as TModel
+  protected deserialize(data: SummaryOf<C>): SummaryOf<C> {
+    return data as SummaryOf<C>
   }
 
-  protected serialize(body: unknown): unknown {
+  protected serialize(body: SummaryOf<C>): unknown {
     return body ?? {}
   }
 
-  protected prepareListParams(params: TQueryParams): TQueryParams {
+  protected prepareListParams(params: QueryParamsOf<C>): QueryParamsOf<C> {
     return params
   }
 
   async list(
-    params: Partial<TQueryParams> & {
+    params: Partial<QueryParamsOf<C>> & {
       fetch_all?: boolean
-    } = {} as Partial<TQueryParams>
-  ): Promise<ListResult<TModel>> {
+    } = {} as Partial<QueryParamsOf<C>>
+  ): Promise<ListResult<SummaryOf<C>>> {
     const { fetch_all, ...query } = params as Record<string, unknown>
-    const serverQuery = normalizeParams(query as Record<string, unknown>)
+    const serverQuery = query as Record<string, unknown>
     const url = withQuery(this._route, serverQuery)
     const startedAt = performance.now()
 
     try {
       if (fetch_all) {
         const json = await apiMethods.paginatedFetch(url)
-        const items = json.data.map((it: TModel) => this.deserialize(it))
-        const collection = new HydroServerCollection<TModel>({
+        const items = json.data.map((it: SummaryOf<C>) => this.deserialize(it))
+        const collection = new HydroServerCollection<SummaryOf<C>>({
           service: this,
           items,
           filters: removeKeys(serverQuery, ['page', 'page_size', 'order_by']),
@@ -73,8 +103,8 @@ export abstract class HydroServerBaseService<TModel, TQueryParams> {
 
       // Single page (no headers available via apiMethods.fetch)
       const json = await apiMethods.fetch(url)
-      const items = json.data.map((it: TModel) => this.deserialize(it))
-      const collection = new HydroServerCollection<TModel>({
+      const items = json.data.map((it: SummaryOf<C>) => this.deserialize(it))
+      const collection = new HydroServerCollection<SummaryOf<C>>({
         service: this,
         items,
         filters: removeKeys(serverQuery, ['page', 'page_size', 'order_by']),
@@ -98,7 +128,7 @@ export abstract class HydroServerBaseService<TModel, TQueryParams> {
 
   /* ------------------------------ GET ------------------------------ */
 
-  async get(id: string): Promise<ItemResult<TModel>> {
+  async get(id: string): Promise<ItemResult<SummaryOf<C>>> {
     const url = `${this._route}/${encodeURIComponent(id)}`
     const startedAt = performance.now()
     try {
@@ -119,7 +149,7 @@ export abstract class HydroServerBaseService<TModel, TQueryParams> {
 
   /* ------------------------------ CREATE ------------------------------ */
 
-  async create(body: unknown): Promise<ItemResult<TModel>> {
+  async create(body: PostOf<C>): Promise<ItemResult<SummaryOf<C>>> {
     const url = this._route
     const startedAt = performance.now()
     try {
@@ -148,9 +178,9 @@ export abstract class HydroServerBaseService<TModel, TQueryParams> {
 
   async update(
     id: string,
-    body: unknown,
-    originalBody?: unknown
-  ): Promise<ItemResult<TModel>> {
+    body: PatchOf<C>,
+    originalBody?: PatchOf<C>
+  ): Promise<ItemResult<SummaryOf<C>>> {
     const url = `${this._route}/${encodeURIComponent(id)}`
     const startedAt = performance.now()
     try {
@@ -206,12 +236,14 @@ export abstract class HydroServerBaseService<TModel, TQueryParams> {
 
   /* ------------------------------ SUGAR ------------------------------ */
 
-  async listItems(params?: Partial<TQueryParams> & { fetch_all?: boolean }) {
+  async listItems(
+    params?: Partial<QueryParamsOf<C>> & { fetch_all?: boolean }
+  ) {
     const res = await this.list(params as any)
     return res.ok ? res.items : []
   }
 
-  async listAllItems(params?: TQueryParams) {
+  async listAllItems(params?: QueryParamsOf<C>) {
     return this.listItems({ ...(params as any), fetch_all: true })
   }
 
@@ -287,23 +319,23 @@ function voidErr(
   }
 }
 
-/** Convert camelCase keys to snake_case for query params the API expects. */
-function normalizeParams(
-  params: Record<string, unknown>
-): Record<string, unknown> {
-  const out: Record<string, unknown> = {}
-  for (const [k, v] of Object.entries(params)) {
-    if (v === undefined) continue
-    const key =
-      k === 'pageSize'
-        ? 'page_size'
-        : k === 'orderBy'
-        ? 'order_by'
-        : camelToSnake(k)
-    out[key] = Array.isArray(v) ? v.join(',') : v
-  }
-  return out
-}
+// /** Convert camelCase keys to snake_case for query params the API expects. */
+// function normalizeParams(
+//   params: Record<string, unknown>
+// ): Record<string, unknown> {
+//   const out: Record<string, unknown> = {}
+//   for (const [k, v] of Object.entries(params)) {
+//     if (v === undefined) continue
+//     const key =
+//       k === 'pageSize'
+//         ? 'page_size'
+//         : k === 'orderBy'
+//         ? 'order_by'
+//         : camelToSnake(k)
+//     out[key] = Array.isArray(v) ? v.join(',') : v
+//   }
+//   return out
+// }
 
 /** Build a URL with query parameters. */
 function withQuery(base: string, params?: Record<string, unknown>): string {

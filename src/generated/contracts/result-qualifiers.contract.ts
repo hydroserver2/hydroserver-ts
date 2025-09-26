@@ -9,5 +9,14 @@ export namespace ResultQualifierContract {
   export type DetailResponse  = Data.components['schemas']['ResultQualifierDetailResponse']
   export type PostBody        = Data.components['schemas']['ResultQualifierPostBody']
   export type PatchBody       = Data.components['schemas']['ResultQualifierPatchBody']
+  export type DeleteBody      = never
   export const writableKeys = ["code","description"] as const
+  export declare const __types: {
+    SummaryResponse: SummaryResponse
+    DetailResponse: DetailResponse
+    PostBody: PostBody
+    PatchBody: PatchBody
+    DeleteBody: DeleteBody
+    QueryParameters: QueryParameters
+  }
 }

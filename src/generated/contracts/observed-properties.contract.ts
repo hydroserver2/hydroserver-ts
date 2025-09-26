@@ -9,5 +9,14 @@ export namespace ObservedPropertyContract {
   export type DetailResponse  = Data.components['schemas']['ObservedPropertyDetailResponse']
   export type PostBody        = Data.components['schemas']['ObservedPropertyPostBody']
   export type PatchBody       = Data.components['schemas']['ObservedPropertyPatchBody']
+  export type DeleteBody      = never
   export const writableKeys = ["name","definition","description","type","code"] as const
+  export declare const __types: {
+    SummaryResponse: SummaryResponse
+    DetailResponse: DetailResponse
+    PostBody: PostBody
+    PatchBody: PatchBody
+    DeleteBody: DeleteBody
+    QueryParameters: QueryParameters
+  }
 }

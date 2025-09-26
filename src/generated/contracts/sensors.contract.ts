@@ -9,5 +9,14 @@ export namespace SensorContract {
   export type DetailResponse  = Data.components['schemas']['SensorDetailResponse']
   export type PostBody        = Data.components['schemas']['SensorPostBody']
   export type PatchBody       = Data.components['schemas']['SensorPatchBody']
+  export type DeleteBody      = never
   export const writableKeys = ["name","description","encodingType","manufacturer","model","modelLink","methodType","methodLink","methodCode"] as const
+  export declare const __types: {
+    SummaryResponse: SummaryResponse
+    DetailResponse: DetailResponse
+    PostBody: PostBody
+    PatchBody: PatchBody
+    DeleteBody: DeleteBody
+    QueryParameters: QueryParameters
+  }
 }

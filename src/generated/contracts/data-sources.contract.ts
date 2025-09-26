@@ -9,5 +9,14 @@ export namespace DataSourceContract {
   export type DetailResponse  = Data.components['schemas']['DataSourceDetailResponse']
   export type PostBody        = Data.components['schemas']['DataSourcePostBody']
   export type PatchBody       = Data.components['schemas']['DataSourcePatchBody']
+  export type DeleteBody      = never
   export const writableKeys = ["name","settings","orchestrationSystemId","schedule","status"] as const
+  export declare const __types: {
+    SummaryResponse: SummaryResponse
+    DetailResponse: DetailResponse
+    PostBody: PostBody
+    PatchBody: PatchBody
+    DeleteBody: DeleteBody
+    QueryParameters: QueryParameters
+  }
 }

@@ -9,5 +9,14 @@ export namespace ThingContract {
   export type DetailResponse  = Data.components['schemas']['ThingDetailResponse']
   export type PostBody        = Data.components['schemas']['ThingPostBody']
   export type PatchBody       = Data.components['schemas']['ThingPatchBody']
+  export type DeleteBody      = never
   export const writableKeys = ["name","description","samplingFeatureType","samplingFeatureCode","siteType","dataDisclaimer","isPrivate","location"] as const
+  export declare const __types: {
+    SummaryResponse: SummaryResponse
+    DetailResponse: DetailResponse
+    PostBody: PostBody
+    PatchBody: PatchBody
+    DeleteBody: DeleteBody
+    QueryParameters: QueryParameters
+  }
 }

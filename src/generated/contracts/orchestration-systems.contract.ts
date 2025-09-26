@@ -9,5 +9,14 @@ export namespace OrchestrationSystemContract {
   export type DetailResponse  = Data.components['schemas']['OrchestrationSystemDetailResponse']
   export type PostBody        = Data.components['schemas']['OrchestrationSystemPostBody']
   export type PatchBody       = Data.components['schemas']['OrchestrationSystemPatchBody']
+  export type DeleteBody      = never
   export const writableKeys = ["name","type"] as const
+  export declare const __types: {
+    SummaryResponse: SummaryResponse
+    DetailResponse: DetailResponse
+    PostBody: PostBody
+    PatchBody: PatchBody
+    DeleteBody: DeleteBody
+    QueryParameters: QueryParameters
+  }
 }

@@ -1,20 +1,18 @@
-import type { HydroServer } from '../HydroServer'
 import { apiMethods } from '../apiMethods'
 import { HydroServerBaseService } from './base'
 import { ThingModel } from '../models/thing.model'
 import { ThingContract, DataArchiveContract } from '../../generated/contracts'
+import type * as Data from '../../generated/data.types'
+
+type TagPostBody = Data.components['schemas']['TagPostBody']
+type TagDeleteBody = Data.components['schemas']['TagDeleteBody']
 
 /**
  * Transport layer for /things routes. Builds URLs, handles pagination,
  * and returns rich ThingModel instances.
  */
-export class ThingService extends HydroServerBaseService<
-  ThingModel,
-  ThingContract.QueryParameters
-> {
-  constructor(client: HydroServer) {
-    super(client, `${client.baseRoute}/things`)
-  }
+export class ThingService extends HydroServerBaseService<typeof ThingContract> {
+  static route = ThingContract.route
 
   /* ----------------------- Sub-resources: Tags ----------------------- */
 
@@ -23,17 +21,17 @@ export class ThingService extends HydroServerBaseService<
     return apiMethods.fetch(url)
   }
 
-  createTag(thingId: string, tag: Tag) {
+  createTag(thingId: string, tag: TagPostBody) {
     const url = `${this._route}/${thingId}/tags`
     return apiMethods.post(url, tag)
   }
 
-  updateTag(thingId: string, tag: Tag) {
+  updateTag(thingId: string, tag: TagPostBody) {
     const url = `${this._route}/${thingId}/tags`
     return apiMethods.put(url, tag)
   }
 
-  deleteTag(thingId: string, tag: Tag) {
+  deleteTag(thingId: string, tag: TagDeleteBody) {
     const url = `${this._route}/${thingId}/tags`
     return apiMethods.delete(url, tag)
   }

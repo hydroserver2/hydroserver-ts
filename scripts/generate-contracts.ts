@@ -26,7 +26,7 @@ function toPascalCase(resource: string): string {
     .join('')
 }
 
-/** "observed-properties" -> "observed-property" (singularizes final segment) */
+/** "observed-properties" -> "observed-property" (singularizes only last segment) */
 function singularizeKebab(resource: string): string {
   const parts = resource.split('-')
   const last = parts.pop() || ''
@@ -38,6 +38,7 @@ function singularizeKebab(resource: string): string {
   return parts.join('-')
 }
 
+/** Return a TS type path like: Data.components['schemas']['Thing'] */
 function refName(ref?: string): string | null {
   if (!ref) return null
   const name = ref.split('/').pop()
@@ -71,8 +72,7 @@ function collectComboRefs(schema: any): string[] {
         if (s?.$ref) {
           const rn = refName(s.$ref)
           if (rn) out.push(rn)
-        }
-        if (s?.type === 'array' && s.items?.$ref) {
+        } else if (s?.type === 'array' && s.items?.$ref) {
           const rn = refName(s.items.$ref)
           if (rn) out.push(rn)
         }
@@ -91,30 +91,33 @@ function pickRefByName(refs: string[], prefer: RegExp): string | null {
   return pref ?? refs[0] ?? null
 }
 
+/** For collection GET: pick the item schema (Summary*) */
 function extractCollectionItemRef(schema: any): string | null {
   if (!schema) return null
   schema = deepDerefSchema(schema)
 
-  // array style
+  // array shape
   if (schema.type === 'array' && schema.items?.$ref) {
     return refName(schema.items.$ref)
   }
-  // common paged response shapes
+
+  // paged/common shapes
   const itemsRef =
     schema?.properties?.results?.items?.$ref ??
     schema?.properties?.items?.items?.$ref
   if (itemsRef) return refName(itemsRef)
 
-  // direct ref
+  // direct $ref
   if (schema.$ref) return refName(schema.$ref)
 
-  // combos
+  // unions/compositions — prefer *Summary*
   const refs = collectComboRefs(schema)
   if (refs.length) return pickRefByName(refs, /Summary(Response)?$/i)
 
   return null
 }
 
+/** For item GET: pick the detail schema (Detail*) */
 function extractItemRef(schema: any): string | null {
   if (!schema) return null
   schema = deepDerefSchema(schema)
@@ -130,6 +133,7 @@ function extractItemRef(schema: any): string | null {
   return null
 }
 
+/** Accumulate non-readOnly properties across allOf/oneOf/anyOf/object.props */
 function gatherObjectProps(
   schema: any,
   props: Record<string, any>,
@@ -166,19 +170,18 @@ function analyzeResource(resource: string) {
   const itemPath = Object.keys(spec.paths).find((p) =>
     p.startsWith(collectionPath + '/{')
   )
+
   const colPathObj = spec.paths[collectionPath] || {}
   const itemPathObj = itemPath ? spec.paths[itemPath] : {}
 
   // GET list → SummaryResponse
-  const colGet = colPathObj.get
   const colGetSchema =
-    colGet?.responses?.['200']?.content?.['application/json']?.schema
+    colPathObj.get?.responses?.['200']?.content?.['application/json']?.schema
   const summaryRef = extractCollectionItemRef(colGetSchema)
 
   // GET item → DetailResponse
-  const itemGet = itemPathObj.get
   const itemGetSchema =
-    itemGet?.responses?.['200']?.content?.['application/json']?.schema
+    itemPathObj.get?.responses?.['200']?.content?.['application/json']?.schema
   const detailRef = extractItemRef(itemGetSchema)
 
   // Bodies
@@ -200,14 +203,14 @@ function analyzeResource(resource: string) {
   const candidateForWritable = patchReqSchema ?? postReqSchema ?? null
   const writableKeys = extractWritableKeys(candidateForWritable)
 
-  // QueryParameters should directly point to Data.components['schemas']['<Singular>QueryParameters']
-  const singular = singularizeKebab(resource) // e.g. "things" -> "thing"
+  // QueryParameters → Data.components['schemas']['<Singular>QueryParameters']
+  const singular = singularizeKebab(resource) // e.g., "things" -> "thing"
   const pascalSingular = toPascalCase(singular) // "Thing"
-  const qpSchemaName = `${pascalSingular}QueryParameters` // "ThingQueryParameters"
+  const qpSchemaName = `${pascalSingular}QueryParameters`
   const hasQP = Boolean(spec.components?.schemas?.[qpSchemaName])
   const queryType = hasQP
     ? `Data.components['schemas']['${qpSchemaName}']`
-    : `{}` // fallback if a resource has no QueryParameters schema
+    : `{}`
 
   return {
     summaryRef,
@@ -261,18 +264,34 @@ for (const resource of resources) {
     queryType,
   } = analyzed
 
+  // Always emit aliases (fallback to `never`) so the phantom __types can reference them.
+  const SummaryResponse = summaryRef ?? 'never'
+  const DetailResponse = detailRef ?? 'never'
+  const PostBodyType = PostBody ?? 'never'
+  const PatchBodyType = PatchBody ?? 'never'
+  const DeleteBodyType = DeleteBody ?? 'never'
+
   const lines: string[] = []
   lines.push(`export namespace ${ns} {`)
   lines.push(`  export const route = '${resource}' as const`)
   lines.push(`  export type QueryParameters = ${queryType}`)
-  if (summaryRef) lines.push(`  export type SummaryResponse = ${summaryRef}`)
-  if (detailRef) lines.push(`  export type DetailResponse  = ${detailRef}`)
-  if (PostBody) lines.push(`  export type PostBody        = ${PostBody}`)
-  if (PatchBody) lines.push(`  export type PatchBody       = ${PatchBody}`)
-  if (DeleteBody) lines.push(`  export type DeleteBody      = ${DeleteBody}`)
+  lines.push(`  export type SummaryResponse = ${SummaryResponse}`)
+  lines.push(`  export type DetailResponse  = ${DetailResponse}`)
+  lines.push(`  export type PostBody        = ${PostBodyType}`)
+  lines.push(`  export type PatchBody       = ${PatchBodyType}`)
+  lines.push(`  export type DeleteBody      = ${DeleteBodyType}`)
   lines.push(
     `  export const writableKeys = ${JSON.stringify(writableKeys)} as const`
   )
+  // PHANTOM BAG (type-only): lets you do typeof Contract['__types']['SummaryResponse']
+  lines.push(`  export declare const __types: {`)
+  lines.push(`    SummaryResponse: SummaryResponse`)
+  lines.push(`    DetailResponse: DetailResponse`)
+  lines.push(`    PostBody: PostBody`)
+  lines.push(`    PatchBody: PatchBody`)
+  lines.push(`    DeleteBody: DeleteBody`)
+  lines.push(`    QueryParameters: QueryParameters`)
+  lines.push(`  }`)
   lines.push(`}`)
 
   const ts = `${header}\n${lines.join('\n')}\n`

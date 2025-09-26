@@ -9,5 +9,14 @@ export namespace WorkspaceContract {
   export type DetailResponse  = Data.components['schemas']['WorkspaceDetailResponse']
   export type PostBody        = Data.components['schemas']['WorkspacePostBody']
   export type PatchBody       = Data.components['schemas']['WorkspacePatchBody']
+  export type DeleteBody      = never
   export const writableKeys = ["name","isPrivate"] as const
+  export declare const __types: {
+    SummaryResponse: SummaryResponse
+    DetailResponse: DetailResponse
+    PostBody: PostBody
+    PatchBody: PatchBody
+    DeleteBody: DeleteBody
+    QueryParameters: QueryParameters
+  }
 }
