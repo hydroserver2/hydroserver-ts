@@ -15,7 +15,9 @@
     "driver": "tsx driver/index.ts",
     "coverage": "vitest run --coverage --environment jsdom",
     "gen:types": "openapi-typescript ./schemas/data.openapi.json --output ./src/generated/data.types.d.ts && openapi-typescript ./schemas/auth.openapi.json --output ./src/generated/auth.types.d.ts",
-    "gen:contracts": "tsx ./scripts/generate-contracts.ts",
+    "gen:data-contracts": "tsx ./scripts/generate-contracts.data.ts",
+    "gen:auth-contracts": "tsx ./scripts/generate-contracts.auth.ts",
+    "gen:contracts": "npm run gen:data-contracts && npm run gen:auth-contracts",
     "gen": "npm run gen:types && npm run gen:contracts"
   },
   "repository": {
