@@ -46,6 +46,17 @@ export class UserService {
     return apiMethods.delete(this.accountBase)
   }
 
+  async normalizeWorkspace(
+    workspaceOrId: Workspace | string | null | undefined
+  ) {
+    if (typeof workspaceOrId === 'string') {
+      const res = await this._client.workspaces.get(workspaceOrId)
+      if (res.ok) return res.item
+    } else {
+      return workspaceOrId ?? null
+    }
+  }
+
   async can(
     action: ActionInput,
     resource: ResourceInput,
@@ -54,14 +65,12 @@ export class UserService {
     const normalizedAction = normalizeAction(action)
     const normalizedResource = normalizeResource(resource)
 
-    const workspace =
-      typeof workspaceOrId === 'string'
-        ? await this._client.workspaces.get(workspaceOrId)
-        : workspaceOrId ?? null
+    const workspace = this.normalizeWorkspace(workspaceOrId)
 
     if (!workspace) return false
 
-    const sessionUser = await this.get()
+    const res = await this.get()
+    const sessionUser = res.data
 
     if (isAdmin(sessionUser)) return true
     if (isOwner(sessionUser, workspace)) return true

@@ -1,7 +1,6 @@
 import type { User } from '../types'
-import { UserService, SessionService } from './services'
+import { UserService, SessionService, WorkspaceService } from './services'
 import { apiMethods } from './apiMethods'
-import { WorkspaceService } from './services/workspace.service'
 import { ThingService } from './services/thing.service'
 import { ObservedPropertyService } from './services/observed-property.service'
 import { RoleService } from './services/role.service'

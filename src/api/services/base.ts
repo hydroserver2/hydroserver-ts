@@ -332,6 +332,25 @@ export abstract class HydroServerBaseService<C extends ApiContract> {
     const res = await this.get(id)
     return res.ok ? res.item : null
   }
+
+  newForm(overrides?: Partial<PostOf<C>>): PostOf<C> {
+    return { ...(overrides ?? {}) } as PostOf<C>
+  }
+
+  getFormFrom(
+    payload: SummaryOf<C> | DetailOf<C>,
+    overrides?: Partial<PatchOf<C>>
+  ): PatchOf<C> {
+    const src = payload as Record<string, unknown>
+    const allowed = new Set(this._writableKeys as readonly string[])
+
+    const base: Record<string, unknown> = {}
+    for (const k of allowed) {
+      if (k in src) base[k] = src[k]
+    }
+
+    return { ...base, ...(overrides ?? {}) } as PatchOf<C>
+  }
 }
 
 /* ---------------------------- helpers ---------------------------- */
