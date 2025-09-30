@@ -78,7 +78,6 @@ export const apiMethods = {
     const totalPages = Number(firstResponse.headers.get('x-total-pages')) || 1
     const iRes = await responseInterceptor(firstResponse)
 
-    console.log('all', iRes)
     const all: T[] = Array.isArray(iRes.data) ? [...iRes.data] : []
 
     for (let p = 2; p <= totalPages; p++) {

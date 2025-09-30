@@ -4,7 +4,6 @@ import { HydroServerCollection } from '../collections/base'
 import type { ListResult, ItemResult, VoidResult, Meta } from '../result'
 import { ApiError } from '../responseInterceptor'
 
-// --- shared in your services/base (or a types file) ---
 export type ApiTypes = {
   SummaryResponse: unknown
   DetailResponse: unknown
@@ -33,22 +32,35 @@ export type WritableKeysOf<C extends ApiContract> = C['writableKeys']
 export type ServiceClass<C extends ApiContract> = {
   new (client: HydroServer): HydroServerBaseService<C>
   route: string
+  writableKeys: string[]
+}
+
+type WithExpand<C extends ApiContract, T extends boolean> = Omit<
+  Partial<QueryParamsOf<C>>,
+  'expand_related'
+> & {
+  expand_related?: T
+  fetch_all?: boolean
+}
+
+export type Handle<
+  C extends ApiContract,
+  TPayload extends SummaryOf<C> | DetailOf<C> = SummaryOf<C>
+> = TPayload & {
+  save(patch?: Partial<PatchOf<C>>): Promise<Handle<C, TPayload>>
+  delete(): Promise<void>
 }
 
 export abstract class HydroServerBaseService<C extends ApiContract> {
   protected _client: HydroServer
   protected _route: string
+  protected _writableKeys: readonly string[]
 
   constructor(client: HydroServer) {
     this._client = client
     const ctor = this.constructor as ServiceClass<C>
     this._route = `${client.baseRoute}/${ctor.route}`
-  }
-
-  /** Override in child to map raw JSON into a model instance. */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected deserialize(data: SummaryOf<C>): SummaryOf<C> {
-    return data as SummaryOf<C>
+    this._writableKeys = (ctor.writableKeys ?? []) as readonly string[]
   }
 
   protected serialize(body: SummaryOf<C>): unknown {
@@ -59,12 +71,62 @@ export abstract class HydroServerBaseService<C extends ApiContract> {
     return params
   }
 
+  protected makeHandle<TPayload extends SummaryOf<C> | DetailOf<C>>(
+    raw: TPayload
+  ): Handle<C, TPayload> {
+    const id = (raw as any).id
+    if (!id) throw new Error('Server object is missing id')
+
+    // Maintain a snapshot for diffing when save() is called without an explicit patch.
+    let snapshot: Record<string, unknown> = { ...(raw as any) }
+
+    // Create a live object carrying the server fields.
+    const obj: any = { ...(raw as any) }
+
+    // Non-enumerable helpers so JSON.stringify(data) stays clean.
+    Object.defineProperties(obj, {
+      save: {
+        enumerable: false,
+        writable: false,
+        value: async (patch?: Record<string, unknown>) => {
+          const url = `${this._route}/${encodeURIComponent(String(id))}`
+          const res = await apiMethods.patch(url, patch, snapshot)
+          // Update object and snapshot with server truth
+          const next = res.data as Record<string, unknown>
+          for (const k of Object.keys(obj)) delete obj[k]
+          Object.assign(obj, next)
+          snapshot = { ...next }
+          return obj as Handle<C>
+        },
+      },
+      delete: {
+        enumerable: false,
+        writable: false,
+        value: async () => {
+          const url = `${this._route}/${encodeURIComponent(String(id))}`
+          await apiMethods.delete(url)
+        },
+      },
+    })
+
+    return obj as Handle<C, TPayload>
+  }
+
+  async list(
+    params: WithExpand<C, true>
+  ): Promise<ListResult<Handle<C, DetailOf<C>>>>
+  async list(
+    params?: WithExpand<C, false> // false or omitted
+  ): Promise<ListResult<Handle<C, SummaryOf<C>>>>
+
   async list(
     params: Partial<QueryParamsOf<C>> & {
       fetch_all?: boolean
     } = {} as Partial<QueryParamsOf<C>>
-  ): Promise<ListResult<SummaryOf<C>>> {
-    const { fetch_all, ...query } = params as Record<string, unknown>
+  ): Promise<ListResult<SummaryOf<C> | DetailOf<C>>> {
+    const { fetch_all, ...query } = params
+    const wantsDetail = params.expand_related === true
+
     const serverQuery = query as Record<string, unknown>
     const url = withQuery(this._route, serverQuery)
     const startedAt = performance.now()
@@ -72,7 +134,17 @@ export abstract class HydroServerBaseService<C extends ApiContract> {
     try {
       if (fetch_all) {
         const json = await apiMethods.paginatedFetch(url)
-        const items = json.data.map((it: SummaryOf<C>) => this.deserialize(it))
+
+        const items = (
+          wantsDetail
+            ? (json.data as DetailOf<C>[])
+            : (json.data as SummaryOf<C>[])
+        ).map((row) =>
+          wantsDetail
+            ? this.makeHandle<DetailOf<C>>(row as DetailOf<C>)
+            : this.makeHandle<SummaryOf<C>>(row as SummaryOf<C>)
+        )
+
         const collection = new HydroServerCollection<SummaryOf<C>>({
           service: this,
           items,
@@ -103,7 +175,14 @@ export abstract class HydroServerBaseService<C extends ApiContract> {
 
       // Single page (no headers available via apiMethods.fetch)
       const json = await apiMethods.fetch(url)
-      const items = json.data.map((it: SummaryOf<C>) => this.deserialize(it))
+      const rows = wantsDetail
+        ? (json.data as DetailOf<C>[])
+        : (json.data as SummaryOf<C>[])
+      const items = rows.map((row) =>
+        wantsDetail
+          ? this.makeHandle<DetailOf<C>>(row as DetailOf<C>)
+          : this.makeHandle<SummaryOf<C>>(row as SummaryOf<C>)
+      )
       const collection = new HydroServerCollection<SummaryOf<C>>({
         service: this,
         items,
@@ -126,14 +205,12 @@ export abstract class HydroServerBaseService<C extends ApiContract> {
     }
   }
 
-  /* ------------------------------ GET ------------------------------ */
-
   async get(id: string): Promise<ItemResult<SummaryOf<C>>> {
     const url = `${this._route}/${encodeURIComponent(id)}`
     const startedAt = performance.now()
     try {
       const json = await apiMethods.fetch(url)
-      const item = this.deserialize(json)
+      const item = this.makeHandle(json)
       return {
         kind: 'item',
         ok: true,
@@ -147,14 +224,12 @@ export abstract class HydroServerBaseService<C extends ApiContract> {
     }
   }
 
-  /* ------------------------------ CREATE ------------------------------ */
-
   async create(body: PostOf<C>): Promise<ItemResult<SummaryOf<C>>> {
     const url = this._route
     const startedAt = performance.now()
     try {
       const json = await apiMethods.post(url, this.serialize(body))
-      const item = this.deserialize(json)
+      const item = this.makeHandle(json)
       return {
         kind: 'item',
         ok: true,
@@ -174,8 +249,6 @@ export abstract class HydroServerBaseService<C extends ApiContract> {
     }
   }
 
-  /* ------------------------------ UPDATE ------------------------------ */
-
   async update(
     id: string,
     body: PatchOf<C>,
@@ -189,7 +262,7 @@ export abstract class HydroServerBaseService<C extends ApiContract> {
         this.serialize(body),
         originalBody ?? null
       )
-      const item = this.deserialize(json)
+      const item = this.makeHandle(json)
       return {
         kind: 'item',
         ok: true,
@@ -208,8 +281,6 @@ export abstract class HydroServerBaseService<C extends ApiContract> {
       return itemErr('PATCH', url, startedAt, err)
     }
   }
-
-  /* ------------------------------ DELETE ------------------------------ */
 
   async delete(id: string): Promise<VoidResult> {
     const url = `${this._route}/${encodeURIComponent(id)}`
@@ -234,8 +305,12 @@ export abstract class HydroServerBaseService<C extends ApiContract> {
     }
   }
 
-  /* ------------------------------ SUGAR ------------------------------ */
-
+  async listItems(
+    params: WithExpand<C, true>
+  ): Promise<Handle<C, DetailOf<C>>[]>
+  async listItems(
+    params?: WithExpand<C, false>
+  ): Promise<Handle<C, SummaryOf<C>>[]>
   async listItems(
     params?: Partial<QueryParamsOf<C>> & { fetch_all?: boolean }
   ) {
@@ -243,6 +318,12 @@ export abstract class HydroServerBaseService<C extends ApiContract> {
     return res.ok ? res.items : []
   }
 
+  async listAllItems(
+    params: Omit<WithExpand<C, true>, 'fetch_all'>
+  ): Promise<Handle<C, DetailOf<C>>[]>
+  async listAllItems(
+    params?: Omit<WithExpand<C, false>, 'fetch_all'>
+  ): Promise<Handle<C, SummaryOf<C>>[]>
   async listAllItems(params?: QueryParamsOf<C>) {
     return this.listItems({ ...(params as any), fetch_all: true })
   }
@@ -319,24 +400,6 @@ function voidErr(
   }
 }
 
-// /** Convert camelCase keys to snake_case for query params the API expects. */
-// function normalizeParams(
-//   params: Record<string, unknown>
-// ): Record<string, unknown> {
-//   const out: Record<string, unknown> = {}
-//   for (const [k, v] of Object.entries(params)) {
-//     if (v === undefined) continue
-//     const key =
-//       k === 'pageSize'
-//         ? 'page_size'
-//         : k === 'orderBy'
-//         ? 'order_by'
-//         : camelToSnake(k)
-//     out[key] = Array.isArray(v) ? v.join(',') : v
-//   }
-//   return out
-// }
-
 /** Build a URL with query parameters. */
 function withQuery(base: string, params?: Record<string, unknown>): string {
   if (!params || Object.keys(params).length === 0) return base
@@ -363,8 +426,4 @@ function toStringArray(v: unknown): string[] | undefined {
   if (typeof v === 'string') return v.split(',').filter(Boolean)
   if (Array.isArray(v)) return v.map(String)
   return undefined
-}
-
-function camelToSnake(s: string): string {
-  return s.replace(/[A-Z]/g, (m) => `_${m.toLowerCase()}`)
 }

@@ -1,43 +1,14 @@
-import type { HydroServer } from '../HydroServer'
 import { apiMethods } from '../apiMethods'
-import { BaseListParams, HydroServerBaseService } from './base'
-import type { Workspace } from '../../types'
-import { WorkspaceModel } from '../models/workspace.model'
-import { ItemResult, ListResult } from '../result'
-
-export type WorkspaceListParams = BaseListParams & {
-  isPrivate?: boolean
-  isAssociated?: boolean
-}
+import { HydroServerBaseService } from './base'
+import { WorkspaceContract as C } from '../../generated/contracts'
 
 /**
  * Transport layer for /workspaces routes. Builds URLs, handles pagination,
  * and returns rich WorkspaceModel instances.
  */
-export class WorkspaceService extends HydroServerBaseService<WorkspaceModel> {
-  constructor(client: HydroServer) {
-    super(client, `${client.baseRoute}/workspaces`)
-  }
-
-  list(params: WorkspaceListParams = {}): Promise<ListResult<WorkspaceModel>> {
-    return super.list(params)
-  }
-
-  get(id: string): Promise<ItemResult<WorkspaceModel>> {
-    return super.get(id)
-  }
-
-  create(body: Partial<Workspace>): Promise<ItemResult<WorkspaceModel>> {
-    return super.create(body)
-  }
-
-  update(
-    id: string,
-    body: Partial<Workspace>,
-    originalBody?: Partial<Workspace>
-  ): Promise<ItemResult<WorkspaceModel>> {
-    return super.update(id, body, originalBody)
-  }
+export class WorkspaceService extends HydroServerBaseService<typeof C> {
+  static route = C.route
+  static writableKeys = C.writableKeys
 
   // ---------- sub-resources: collaborators ----------
   collaborators(workspaceId: string) {
@@ -89,9 +60,5 @@ export class WorkspaceService extends HydroServerBaseService<WorkspaceModel> {
   roles(workspaceId: string) {
     const url = `${this._route}/${workspaceId}/roles`
     return apiMethods.fetch(url)
-  }
-
-  protected override deserialize(data: unknown): WorkspaceModel {
-    return new WorkspaceModel(this._client, this, data as Workspace)
   }
 }

@@ -13,6 +13,7 @@ type TagDeleteBody = Data.components['schemas']['TagDeleteBody']
  */
 export class ThingService extends HydroServerBaseService<typeof ThingContract> {
   static route = ThingContract.route
+  static writableKeys = ThingContract.writableKeys
 
   /* ----------------------- Sub-resources: Tags ----------------------- */
 
@@ -102,17 +103,5 @@ export class ThingService extends HydroServerBaseService<typeof ThingContract> {
   transferPrimaryOwnership(thingId: string, email: string) {
     const url = `${this._route}/${thingId}/ownership`
     return apiMethods.patch(url, { email, transferPrimary: true })
-  }
-
-  /* ------------------------- Model wiring ---------------------------- */
-
-  protected override deserialize(
-    data: ThingContract.SummaryResponse
-  ): ThingModel {
-    return new ThingModel({
-      client: this._client,
-      service: this,
-      serverData: data,
-    })
   }
 }
