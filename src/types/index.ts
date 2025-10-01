@@ -363,32 +363,6 @@ export class OAuthProvider {
   }
 }
 
-export enum PermissionAction {
-  Global = '*',
-  View = 'view',
-  Create = 'create',
-  Edit = 'edit',
-  Delete = 'delete',
-}
-
-export enum PermissionResource {
-  Global = '*',
-  Workspace = 'Workspace',
-  Collaborator = 'Collaborator',
-  Thing = 'Thing',
-  Datastream = 'Datastream',
-  Sensor = 'Sensor',
-  Unit = 'Unit',
-  ObservedProperty = 'ObservedProperty',
-  ProcessingLevel = 'ProcessingLevel',
-  Observation = 'Observation',
-}
-
-export interface Permission {
-  action: PermissionAction
-  resource: PermissionResource
-}
-
 export interface CollaboratorRole {
   name: string
   description: string

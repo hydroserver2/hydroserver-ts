@@ -43,6 +43,11 @@ type WithExpand<C extends ApiContract, T extends boolean> = Omit<
   fetch_all?: boolean
 }
 
+type ItemParams<C extends ApiContract, T extends boolean> = Omit<
+  WithExpand<C, T>,
+  'fetch_all'
+>
+
 export type Handle<
   C extends ApiContract,
   TPayload extends SummaryOf<C> | DetailOf<C> = SummaryOf<C>
@@ -205,7 +210,16 @@ export abstract class HydroServerBaseService<C extends ApiContract> {
     }
   }
 
-  async get(id: string): Promise<ItemResult<SummaryOf<C>>> {
+  async get(
+    id: string,
+    params: ItemParams<C, true>
+  ): Promise<ItemResult<Handle<C, DetailOf<C>>>>
+  async get(
+    id: string,
+    params?: ItemParams<C, false> // false or omitted
+  ): Promise<ItemResult<Handle<C, SummaryOf<C>>>>
+
+  async get(id: string) {
     const url = `${this._route}/${encodeURIComponent(id)}`
     const startedAt = performance.now()
     try {
@@ -355,7 +369,7 @@ export abstract class HydroServerBaseService<C extends ApiContract> {
 
 /* ---------------------------- helpers ---------------------------- */
 
-function makeMeta(
+export function makeMeta(
   method: string,
   url: string,
   startedAt: number,
@@ -369,7 +383,7 @@ function makeMeta(
   }
 }
 
-function listErr(
+export function listErr(
   method: string,
   url: string,
   startedAt: number,
@@ -387,7 +401,7 @@ function listErr(
   }
 }
 
-function itemErr(
+export function itemErr(
   method: string,
   url: string,
   startedAt: number,
@@ -403,7 +417,7 @@ function itemErr(
   }
 }
 
-function voidErr(
+export function voidErr(
   method: string,
   url: string,
   startedAt: number,
@@ -420,7 +434,10 @@ function voidErr(
 }
 
 /** Build a URL with query parameters. */
-function withQuery(base: string, params?: Record<string, unknown>): string {
+export function withQuery(
+  base: string,
+  params?: Record<string, unknown>
+): string {
   if (!params || Object.keys(params).length === 0) return base
   const url = new URL(base, globalThis.location?.origin ?? undefined)
   for (const [key, value] of Object.entries(params)) {
@@ -430,7 +447,7 @@ function withQuery(base: string, params?: Record<string, unknown>): string {
   return url.toString()
 }
 
-function removeKeys<T extends Record<string, unknown>>(
+export function removeKeys<T extends Record<string, unknown>>(
   object: T,
   keys: string[]
 ): T {

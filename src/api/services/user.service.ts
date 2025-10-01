@@ -1,44 +1,39 @@
-import type { HydroServer } from '../HydroServer'
-import {
-  PermissionAction,
-  PermissionResource,
-  type Permission,
-  type Workspace,
-  type User,
-} from '../../types'
 import { apiMethods } from '../apiMethods'
+import { AccountContract as C } from '../../generated/auth-contracts'
+import { WorkspaceContract } from '../../generated/contracts'
+import { type HydroServer } from '../HydroServer'
+import type * as Data from '../../generated/data.types'
 
-export type ActionInput =
-  | PermissionAction
-  | Lowercase<PermissionAction>
-  | string
-export type ResourceInput =
-  | PermissionResource
-  | Lowercase<PermissionResource>
-  | string
+export type Permission = Data.components['schemas']['PermissionDetailResponse']
+export type PermissionAction =
+  Data.components['schemas']['PermissionDetailResponse']['action']
+export type PermissionResource =
+  Data.components['schemas']['PermissionDetailResponse']['resource']
 
 /** Minimal shape of the session user we rely on */
-type SessionUser = Partial<Pick<User, 'email' | 'accountType'>> &
+type SessionUser = Partial<Pick<C.DetailResponse, 'email' | 'accountType'>> &
   Record<string, unknown>
 
 export class UserService {
-  readonly accountBase: string
   private readonly _client: HydroServer
+  readonly accountBase: string
+  readonly providerBase: string
 
   constructor(client: HydroServer) {
     this._client = client
     this.accountBase = `${this._client.authBase}/browser/account`
+    this.providerBase = `${this._client.authBase}/browser/provider`
   }
 
   async get() {
     return await apiMethods.fetch(this.accountBase)
   }
 
-  async create(user: User) {
+  async create(user: C.PostBody) {
     return await apiMethods.post(this.accountBase, user)
   }
 
-  async update(user: User, oldUser?: User) {
+  async update(user: C.PatchBody, oldUser?: C.PatchBody) {
     return apiMethods.patch(this.accountBase, user, oldUser)
   }
 
@@ -46,29 +41,63 @@ export class UserService {
     return apiMethods.delete(this.accountBase)
   }
 
-  async normalizeWorkspace(
-    workspaceOrId: Workspace | string | null | undefined
-  ) {
-    if (typeof workspaceOrId === 'string') {
-      const res = await this._client.workspaces.get(workspaceOrId)
-      if (res.ok) return res.item
-    } else {
-      return workspaceOrId ?? null
-    }
+  /* ---------------------------- Email verification --------------------------- */
+  async sendVerificationEmail(email: string) {
+    return apiMethods.put(`${this.accountBase}/email/verify`, { email })
+  }
+
+  async verifyEmailWithCode(key: string) {
+    return apiMethods.post(`${this.accountBase}/email/verify`, { key })
+  }
+
+  /* ---------------------------- Password helpers --------------------------- */
+  requestPasswordReset(email: string) {
+    const url = `${this.accountBase}/password/request`
+    return apiMethods.post(url, { email })
+  }
+
+  resetPassword(key: string, password: string) {
+    const url = `${this.accountBase}/password/reset`
+    return apiMethods.post(url, { key, password })
+  }
+
+  /* ----------------------- Organization/User types ------------------------- */
+  getOrganizationTypes() {
+    const url = `${this.accountBase}/organization-types`
+    return apiMethods.fetch(url)
+  }
+
+  getUserTypes() {
+    const url = `${this.accountBase}/user-types`
+    return apiMethods.fetch(url)
+  }
+
+  /* ------------------------------ Providers -------------------------------- */
+  listProviderConnections() {
+    const url = `${this.providerBase}/connections`
+    return apiMethods.fetch(url)
+  }
+
+  disconnectProvider(provider: string) {
+    const url = toUrl(`${this.providerBase}/connections`, { provider })
+    return apiMethods.delete(url)
+  }
+
+  redirectToProvider(provider: string, next?: string) {
+    const url = toUrl(`${this.providerBase}/redirect`, { provider, next })
+    return apiMethods.fetch(url)
+  }
+
+  providerSignup(payload: unknown) {
+    const url = `${this.providerBase}/signup`
+    return apiMethods.post(url, payload)
   }
 
   async can(
-    action: ActionInput,
-    resource: ResourceInput,
-    workspaceOrId: Workspace | string | null | undefined
+    action: PermissionAction,
+    resource: PermissionResource,
+    workspace: WorkspaceContract.DetailResponse
   ): Promise<boolean> {
-    const normalizedAction = normalizeAction(action)
-    const normalizedResource = normalizeResource(resource)
-
-    const workspace = this.normalizeWorkspace(workspaceOrId)
-
-    if (!workspace) return false
-
     const res = await this.get()
     const sessionUser = res.data
 
@@ -78,31 +107,9 @@ export class UserService {
     const perms: Permission[] = workspace.collaboratorRole?.permissions ?? []
     const allowed =
       hasGlobalPermission(perms) ||
-      perms.some(
-        (p) =>
-          p.action === normalizedAction && p.resource === normalizedResource
-      )
+      perms.some((p) => p.action === action && p.resource === resource)
 
     return allowed
-  }
-
-  async sendVerificationEmail(email: string) {
-    return apiMethods.put(`${this.accountBase}/email/verify`, { email })
-  }
-
-  async verifyEmailWithCode(key: string) {
-    return apiMethods.post(`${this.accountBase}/email/verify`, { key })
-  }
-
-  async requestPasswordReset(email: string) {
-    return apiMethods.post(`${this.accountBase}/password/request`, { email })
-  }
-
-  async resetPassword(key: string, password: string) {
-    return apiMethods.post(`${this.accountBase}/password/reset`, {
-      key,
-      password,
-    })
   }
 }
 
@@ -112,68 +119,25 @@ function isAdmin(user: SessionUser | null): boolean {
 
 function isOwner(
   user: SessionUser | null,
-  workspace: Workspace | null
+  workspace: WorkspaceContract.DetailResponse | null
 ): boolean {
   if (!user?.email || !workspace?.owner?.email) return false
   return workspace.owner.email === user.email
 }
 
 function hasGlobalPermission(perms: Permission[]): boolean {
-  return perms.some(
-    (p) =>
-      p.resource === PermissionResource.Global &&
-      p.action === PermissionAction.Global
-  )
+  return perms.some((p) => p.resource === '*' && p.action === '*')
 }
 
-function normalizeAction(input: ActionInput): PermissionAction {
-  // Accept "edit", "EDIT", PermissionAction.Edit, etc.
-  const s = String(input).toLowerCase()
-  switch (s) {
-    case '*':
-      return PermissionAction.Global
-    case 'view':
-      return PermissionAction.View
-    case 'create':
-      return PermissionAction.Create
-    case 'edit':
-      return PermissionAction.Edit
-    case 'delete':
-      return PermissionAction.Delete
-    default:
-      // Keep strict: throw if unknown to catch typos early
-      throw new Error(`Unknown action: ${input}`)
+function toUrl(
+  base: string,
+  params?: Record<string, string | number | boolean | undefined | null>
+): string {
+  if (!params) return base
+  const url = new URL(base, globalThis.location?.origin ?? undefined)
+  for (const [k, v] of Object.entries(params)) {
+    if (v === undefined || v === null) continue
+    url.searchParams.set(k, String(v))
   }
-}
-
-function normalizeResource(input: ResourceInput): PermissionResource {
-  // Accept "datastream", "Datastream", PermissionResource.Datastream, etc.
-  const s = String(input).toLowerCase()
-  switch (s) {
-    case '*':
-    case 'global':
-      return PermissionResource.Global
-    case 'workspace':
-      return PermissionResource.Workspace
-    case 'collaborator':
-      return PermissionResource.Collaborator
-    case 'thing':
-      return PermissionResource.Thing
-    case 'datastream':
-      return PermissionResource.Datastream
-    case 'sensor':
-      return PermissionResource.Sensor
-    case 'unit':
-      return PermissionResource.Unit
-    case 'observedproperty':
-    case 'observed_property':
-      return PermissionResource.ObservedProperty
-    case 'processinglevel':
-    case 'processing_level':
-      return PermissionResource.ProcessingLevel
-    case 'observation':
-      return PermissionResource.Observation
-    default:
-      throw new Error(`Unknown resource: ${input}`)
-  }
+  return url.toString()
 }
