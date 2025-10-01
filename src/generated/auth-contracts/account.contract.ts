@@ -6,11 +6,11 @@ export namespace AccountContract {
   export const route = 'account' as const
   export type QueryParameters = {}
   export type SummaryResponse = never
-  export type DetailResponse  = never
+  export type DetailResponse  = Data.components['schemas']['AccountDetailResponse']
   export type PostBody        = Data.components['schemas']['AccountPostBody']
-  export type PatchBody       = Partial<Data.components['schemas']['AccountPostBody']>
+  export type PatchBody       = Data.components['schemas']['AccountPatchBody']
   export type DeleteBody      = never
-  export const writableKeys = ["phone","address","link","type","firstName","middleName","lastName","organization","email","password"] as const
+  export const writableKeys = ["phone","address","link","type","firstName","middleName","lastName","organization"] as const
   export declare const __types: {
     SummaryResponse: SummaryResponse
     DetailResponse: DetailResponse
