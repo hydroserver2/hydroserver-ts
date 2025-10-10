@@ -4,10 +4,10 @@ import { WorkspaceContract } from '../../generated/contracts'
 import { type HydroServer } from '../HydroServer'
 import type * as Data from '../../generated/data.types'
 
-export type Permission = Data.components['schemas']['PermissionDetailResponse']
-export type PermissionAction =
+type Permission = Data.components['schemas']['PermissionDetailResponse']
+type PermissionAction =
   Data.components['schemas']['PermissionDetailResponse']['action']
-export type PermissionResource =
+type PermissionResource =
   Data.components['schemas']['PermissionDetailResponse']['resource']
 
 /** Minimal shape of the session user we rely on */

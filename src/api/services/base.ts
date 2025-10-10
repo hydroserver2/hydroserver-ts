@@ -48,6 +48,16 @@ type ItemParams<C extends ApiContract, T extends boolean> = Omit<
   'fetch_all'
 >
 
+type ListParamsTrue<C extends ApiContract> = Omit<
+  Partial<QueryParamsOf<C>>,
+  'expand_related'
+> & { expand_related: true; fetch_all?: boolean }
+
+type ListParamsFalse<C extends ApiContract> = Omit<
+  Partial<QueryParamsOf<C>>,
+  'expand_related'
+> & { expand_related?: false; fetch_all?: boolean }
+
 export type Handle<
   C extends ApiContract,
   TPayload extends SummaryOf<C> | DetailOf<C> = SummaryOf<C>
@@ -118,10 +128,10 @@ export abstract class HydroServerBaseService<C extends ApiContract> {
   }
 
   async list(
-    params: WithExpand<C, true>
+    params: ListParamsTrue<C>
   ): Promise<ListResult<Handle<C, DetailOf<C>>>>
   async list(
-    params?: WithExpand<C, false> // false or omitted
+    params?: ListParamsFalse<C> // omitted or false
   ): Promise<ListResult<Handle<C, SummaryOf<C>>>>
 
   async list(
@@ -212,11 +222,11 @@ export abstract class HydroServerBaseService<C extends ApiContract> {
 
   async get(
     id: string,
-    params: ItemParams<C, true>
+    params: ListParamsTrue<C>
   ): Promise<ItemResult<Handle<C, DetailOf<C>>>>
   async get(
     id: string,
-    params?: ItemParams<C, false> // false or omitted
+    params?: ListParamsFalse<C>
   ): Promise<ItemResult<Handle<C, SummaryOf<C>>>>
 
   async get(id: string) {
@@ -319,11 +329,9 @@ export abstract class HydroServerBaseService<C extends ApiContract> {
     }
   }
 
+  async listItems(params: ListParamsTrue<C>): Promise<Handle<C, DetailOf<C>>[]>
   async listItems(
-    params: WithExpand<C, true>
-  ): Promise<Handle<C, DetailOf<C>>[]>
-  async listItems(
-    params?: WithExpand<C, false>
+    params?: ListParamsFalse<C>
   ): Promise<Handle<C, SummaryOf<C>>[]>
   async listItems(
     params?: Partial<QueryParamsOf<C>> & { fetch_all?: boolean }
@@ -333,7 +341,7 @@ export abstract class HydroServerBaseService<C extends ApiContract> {
   }
 
   async listAllItems(
-    params: Omit<WithExpand<C, true>, 'fetch_all'>
+    params: Omit<ListParamsTrue<C>, 'fetch_all'>
   ): Promise<Handle<C, DetailOf<C>>[]>
   async listAllItems(
     params?: Omit<WithExpand<C, false>, 'fetch_all'>
@@ -347,8 +355,9 @@ export abstract class HydroServerBaseService<C extends ApiContract> {
     return res.ok ? res.item : null
   }
 
-  newForm(overrides?: Partial<PostOf<C>>): PostOf<C> {
-    return { ...(overrides ?? {}) } as PostOf<C>
+  newForm(overrides?: Partial<SummaryOf<C>>): Handle<C, SummaryOf<C>> {
+    const ctor = this.constructor as any // your ServiceClass<C>
+    return this.makeHandle(ctor.makeDefaultSummary())
   }
 
   getFormFrom(

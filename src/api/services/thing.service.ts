@@ -1,6 +1,5 @@
 import { apiMethods } from '../apiMethods'
 import { HydroServerBaseService } from './base'
-import { ThingModel } from '../models/thing.model'
 import { ThingContract, DataArchiveContract } from '../../generated/contracts'
 import type * as Data from '../../generated/data.types'
 
@@ -11,9 +10,14 @@ type TagDeleteBody = Data.components['schemas']['TagDeleteBody']
  * Transport layer for /things routes. Builds URLs, handles pagination,
  * and returns rich ThingModel instances.
  */
+
 export class ThingService extends HydroServerBaseService<typeof ThingContract> {
   static route = ThingContract.route
   static writableKeys = ThingContract.writableKeys
+
+  /* ----------------------- Sub-resources: Site types ----------------------- */
+
+  siteTypes = () => apiMethods.fetch(`${this._route}/site-types`)
 
   /* ----------------------- Sub-resources: Tags ----------------------- */
 
