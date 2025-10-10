@@ -1,4 +1,4 @@
-// import { DataSource } from 'src/models'
+import { DataSource } from './dataSource'
 
 export type DataPoint = {
   date: Date
@@ -116,15 +116,6 @@ export class Thing {
   }
 }
 
-export interface ThingWithColor extends Thing {
-  color?: {
-    borderColor: string
-    background: string
-    glyphColor: string
-  }
-  tagValue?: string
-}
-
 export class Datastream {
   id: string
   workspaceId: string
@@ -202,7 +193,7 @@ export interface DatastreamExtended {
   observedProperty: ObservedProperty
   sensor: Sensor
   processingLevel: ProcessingLevel
-  // dataSource: DataSource
+  dataSource: DataSource
 }
 
 export class Unit {
@@ -361,6 +352,32 @@ export class OAuthProvider {
     this.signupEnabled = true
     this.connectEnabled = true
   }
+}
+
+export enum PermissionAction {
+  Global = '*',
+  View = 'view',
+  Create = 'create',
+  Edit = 'edit',
+  Delete = 'delete',
+}
+
+export enum PermissionResource {
+  Global = '*',
+  Workspace = 'Workspace',
+  Collaborator = 'Collaborator',
+  Thing = 'Thing',
+  Datastream = 'Datastream',
+  Sensor = 'Sensor',
+  Unit = 'Unit',
+  ObservedProperty = 'ObservedProperty',
+  ProcessingLevel = 'ProcessingLevel',
+  Observation = 'Observation',
+}
+
+export interface Permission {
+  action: PermissionAction
+  resource: PermissionResource
 }
 
 export interface CollaboratorRole {
