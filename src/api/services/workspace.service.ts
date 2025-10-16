@@ -1,17 +1,23 @@
 import { apiMethods } from '../apiMethods'
-import { HydroServerBaseService } from './base'
+import { HydroServerBaseService, withQuery } from './base'
 import { WorkspaceContract as C } from '../../generated/contracts'
+import { ApiKey, Workspace as M } from '../../types'
+import { ItemResult } from '../result'
+import type * as Data from '../../generated/data.types'
+
+type RoleQueryParameters = Data.components['schemas']['RoleQueryParameters']
 
 /**
  * Transport layer for /workspaces routes. Builds URLs, handles pagination,
  * and returns rich WorkspaceModel instances.
  */
-export class WorkspaceService extends HydroServerBaseService<typeof C> {
+export class WorkspaceService extends HydroServerBaseService<typeof C, M> {
   static route = C.route
   static writableKeys = C.writableKeys
+  static Model = M
 
   // ---------- sub-resources: collaborators ----------
-  collaborators(workspaceId: string) {
+  getCollaborators(workspaceId: string) {
     const url = `${this._route}/${workspaceId}/collaborators`
     return apiMethods.fetch(url)
   }
@@ -21,7 +27,7 @@ export class WorkspaceService extends HydroServerBaseService<typeof C> {
     return apiMethods.post(url, { email, role: roleId })
   }
 
-  editCollaboratorRole(workspaceId: string, email: string, roleId: string) {
+  updateCollaboratorRole(workspaceId: string, email: string, roleId: string) {
     const url = `${this._route}/${workspaceId}/collaborators`
     return apiMethods.patch(url, { email, role: roleId }, null)
   }
@@ -46,19 +52,70 @@ export class WorkspaceService extends HydroServerBaseService<typeof C> {
     return apiMethods.post(url, {})
   }
 
-  cancelOwnershipTransfer(workspaceId: string) {
-    const url = `${this._route}/${workspaceId}/ownership/cancel`
-    return apiMethods.post(url, {})
-  }
+  rejectWorkspaceTransfer = (id: string) =>
+    apiMethods.delete(`${this.removeCollaborator}/${id}/transfer`)
 
   // ---------- sub-resources: keys/roles ----------
-  apiKeys(workspaceId: string) {
+  getApiKeys(workspaceId: string) {
     const url = `${this._route}/${workspaceId}/apikeys`
     return apiMethods.fetch(url)
   }
 
-  roles(workspaceId: string) {
-    const url = `${this._route}/${workspaceId}/roles`
-    return apiMethods.fetch(url)
+  getApiKey = (workspaceId: string, apiKeyId: string) =>
+    apiMethods.fetch(
+      `${this._route}/${workspaceId}/api-keys/${apiKeyId}?expand_related=true`
+    )
+
+  createApiKey = async (apiKey: ApiKey): Promise<ItemResult<ApiKey>> => {
+    const json = await apiMethods.post(
+      `${this._route}/${apiKey.workspaceId}/api-keys?expand_related=true`,
+      {
+        name: apiKey.name,
+        description: apiKey.description,
+        isActive: true,
+        roleId: apiKey.role!.id,
+      }
+    )
+    return this.createItemOK(json)
   }
+
+  updateApiKey = async (
+    newKey: ApiKey,
+    oldKey?: ApiKey
+  ): Promise<ItemResult<ApiKey>> => {
+    const json = await apiMethods.patch(
+      `${this._route}/${newKey.workspaceId}/api-keys/${newKey.id}?expand_related=true`,
+      {
+        name: newKey.name,
+        description: newKey.description,
+        isActive: true,
+        roleId: newKey.role!.id,
+      },
+      oldKey
+        ? {
+            name: oldKey.name,
+            description: oldKey.description,
+            isActive: true,
+            roleId: oldKey.role!.id,
+          }
+        : oldKey
+    )
+    return this.createItemOK(json)
+  }
+
+  regenerateApiKey = async (id: string, apiKeyId: string) =>
+    apiMethods.put(
+      `${this._route}/${id}/api-keys/${apiKeyId}/regenerate?expand_related=true`
+    )
+
+  deleteApiKey = async (id: string, apiKeyId: string) =>
+    apiMethods.delete(`${this._route}/${id}/api-keys/${apiKeyId}`)
+
+  getRoles = (params?: RoleQueryParameters) => {
+    const url = withQuery(this._route, params)
+    return apiMethods.paginatedFetch(url)
+  }
+
+  getRole = (id: string) =>
+    apiMethods.fetch(`${this._client.baseRoute}/data/roles/${id}`)
 }

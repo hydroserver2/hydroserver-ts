@@ -1,6 +1,4 @@
-import { HydroServer } from './HydroServer'
-
-type HSOpts = { host?: string }
+import { HydroServer, HydroServerOptions } from './HydroServer'
 
 let _hs: HydroServer | null = null
 let _creating: Promise<HydroServer> | null = null
@@ -15,19 +13,19 @@ function assertHS(): HydroServer {
 }
 
 export async function createHydroServer(
-  opts: HSOpts = {}
+  opts: HydroServerOptions
 ): Promise<HydroServer> {
   if (_hs) return _hs
   if (_creating) return _creating
 
-  _creating = HydroServer.initialize({ host: opts.host ?? '' }).then(
-    (client) => {
-      client.session.enableAutoRefresh()
-      _hs = client
-      _creating = null
-      return client
-    }
-  )
+  _creating = HydroServer.initialize(opts).then((client) => {
+    client.session.enableAutoRefresh()
+    _hs = client
+    // Rebind the proxy target to the actual instance
+    Object.setPrototypeOf(hs, _hs)
+    _creating = null
+    return client
+  })
   return _creating
 }
 

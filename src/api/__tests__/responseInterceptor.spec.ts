@@ -46,7 +46,7 @@ describe('responseInterceptor', () => {
     })
 
     const result = await responseInterceptor(mockResponse)
-    const textContent = await (result as Blob).text()
+    const textContent = await (result.data as Blob).text()
     expect(textContent).toBe(csvData)
   })
 

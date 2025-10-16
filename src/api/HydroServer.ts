@@ -3,7 +3,6 @@ import { UserService, SessionService, WorkspaceService } from './services'
 import { apiMethods } from './apiMethods'
 import { ThingService } from './services/thing.service'
 import { ObservedPropertyService } from './services/observed-property.service'
-import { RoleService } from './services/role.service'
 import { UnitService } from './services/unit.service'
 import { ProcessingLevelService } from './services/processing-level.service'
 import { ResultQualifierService } from './services/result-qualifier.service'
@@ -26,7 +25,6 @@ export class HydroServer {
   readonly providerBase: string
 
   private _workspaces?: WorkspaceService
-  private _roles?: RoleService
   private _things?: ThingService
   private _observedProperties?: ObservedPropertyService
   private _units?: UnitService
@@ -52,9 +50,6 @@ export class HydroServer {
     const client = new HydroServer(options)
     await client.session.initialize()
     client.session.enableAutoRefresh()
-    // if (options.email && options.password) {
-    //   await client.session.login(options.email, options.password)
-    // }
     return client
   }
 
@@ -78,9 +73,6 @@ export class HydroServer {
   get workspaces(): WorkspaceService {
     return (this._workspaces ??= new WorkspaceService(this))
   }
-  get roles(): RoleService {
-    return (this._roles ??= new RoleService(this))
-  }
   get things(): ThingService {
     return (this._things ??= new ThingService(this))
   }
@@ -93,18 +85,18 @@ export class HydroServer {
   get processingLevels(): ProcessingLevelService {
     return (this._processingLevels ??= new ProcessingLevelService(this))
   }
-  // get resultQualifiers(): ResultQualifierService {
-  //   return (this._resultQualifiers ??= new ResultQualifierService(this))
-  // }
+  get resultQualifiers(): ResultQualifierService {
+    return (this._resultQualifiers ??= new ResultQualifierService(this))
+  }
   get sensors(): SensorService {
     return (this._sensors ??= new SensorService(this))
   }
   get datastreams(): DatastreamService {
     return (this._datastreams ??= new DatastreamService(this))
   }
-  // get orchestrationSystems(): OrchestrationSystemService {
-  //   return (this._orchestrationSystems ??= new OrchestrationSystemService(this))
-  // }
+  get orchestrationSystems(): OrchestrationSystemService {
+    return (this._orchestrationSystems ??= new OrchestrationSystemService(this))
+  }
   get dataSources(): DataSourceService {
     return (this._dataSources ??= new DataSourceService(this))
   }

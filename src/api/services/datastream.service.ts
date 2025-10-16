@@ -1,8 +1,8 @@
-// src/services/datastream.service.ts
 import { apiMethods } from '../apiMethods'
 import { HydroServerBaseService, withQuery } from './base'
 import { DatastreamContract as C } from '../../generated/contracts'
 import type { ApiResponse } from '../responseInterceptor'
+import { Datastream as M, ObservationRecord } from '../../types'
 
 /** Minimal "has id" shape for convenience inputs */
 type WithId = { id: string }
@@ -14,9 +14,10 @@ type WithId = { id: string }
  * - Enumeration endpoints (/statuses, /aggregation-statistics, /sampled-mediums)
  * - Observation sub-resource endpoints under /datastreams/{id}/observations
  */
-export class DatastreamService extends HydroServerBaseService<typeof C> {
+export class DatastreamService extends HydroServerBaseService<typeof C, M> {
   static route = C.route
   static writableKeys = C.writableKeys
+  static Model = M
 
   /* ============================== CSV =============================== */
 
@@ -69,25 +70,19 @@ export class DatastreamService extends HydroServerBaseService<typeof C> {
    * Pass strongly-typed generics if you have them:
    *   listObservations<MyObservationSummary>(id, { page_size: '100' })
    */
-  listObservations<T = unknown>(
-    datastreamId: string,
-    params: Record<string, unknown> = {}
-  ): Promise<ApiResponse<T[]>> {
+  listObservations(datastreamId: string, params: Record<string, unknown> = {}) {
     const url = withQuery(
       `${this._route}/${encodeURIComponent(datastreamId)}/observations`,
       params
     )
-    return apiMethods.paginatedFetch<T[]>(url)
+    return apiMethods.paginatedFetch<ObservationRecord[]>(url)
   }
 
   /**
    * Get a single observation by observation id.
    * Endpoint: /datastreams/{id}/observations/{observation_id}
    */
-  getObservation<T = unknown>(
-    datastreamId: string,
-    observationId: string
-  ): Promise<ApiResponse<T>> {
+  getObservation(datastreamId: string, observationId: string) {
     const url = `${this._route}/${encodeURIComponent(
       datastreamId
     )}/observations/${encodeURIComponent(observationId)}`
@@ -98,10 +93,7 @@ export class DatastreamService extends HydroServerBaseService<typeof C> {
    * Create observations for a datastream.
    * Accepts single or batch payloads depending on your API.
    */
-  createObservations<TBody = unknown, TOut = unknown>(
-    datastreamId: string,
-    body: TBody
-  ): Promise<ApiResponse<TOut>> {
+  createObservations(datastreamId: string, body: unknown) {
     const url = `${this._route}/${encodeURIComponent(
       datastreamId
     )}/observations`
@@ -124,51 +116,23 @@ export class DatastreamService extends HydroServerBaseService<typeof C> {
     return apiMethods.patch(url, body, originalBody ?? null)
   }
 
-  /**
-   * Delete one observation.
-   * Endpoint: /datastreams/{id}/observations/{observation_id}
-   */
-  deleteObservation(
-    datastreamId: string,
-    observationId: string
-  ): Promise<ApiResponse<void>> {
+  deleteObservation(datastreamId: string, observationId: string) {
     const url = `${this._route}/${encodeURIComponent(
       datastreamId
     )}/observations/${encodeURIComponent(observationId)}`
     return apiMethods.delete(url)
   }
 
-  /**
-   * Bulk delete observations (if your API supports it).
-   * Often a time-range or filter-based delete via request body.
-   * Endpoint: /datastreams/{id}/observations (DELETE + body)
-   */
-  deleteObservations<TBody = unknown>(
-    datastreamId: string,
-    body?: TBody
-  ): Promise<ApiResponse<void>> {
-    const url = `${this._route}/${encodeURIComponent(
-      datastreamId
-    )}/observations`
-    return apiMethods.delete(url, body as any)
-  }
+  deleteObservations = (datastreamId: string, body?: {}) =>
+    apiMethods.delete(`${this._route}/${datastreamId}/observations`, body)
 
-  /* ====================== Enumeration helpers ====================== */
+  getStatuses = () => apiMethods.paginatedFetch(`${this._route}/statuses`)
 
-  listStatuses(): Promise<ApiResponse<string[]>> {
-    const url = `${this._route}/statuses`
-    return apiMethods.paginatedFetch<string[]>(url)
-  }
+  getAggregationStatistics = () =>
+    apiMethods.paginatedFetch(`${this._route}/aggregation-statistics`)
 
-  listAggregationStatistics(): Promise<ApiResponse<string[]>> {
-    const url = `${this._route}/aggregation-statistics`
-    return apiMethods.paginatedFetch<string[]>(url)
-  }
-
-  listSampledMediums(): Promise<ApiResponse<string[]>> {
-    const url = `${this._route}/sampled-mediums`
-    return apiMethods.paginatedFetch<string[]>(url)
-  }
+  getSampledMediums = () =>
+    apiMethods.paginatedFetch(`${this._route}/sampled-mediums`)
 }
 
 /* ---------------------------- local helpers ---------------------------- */

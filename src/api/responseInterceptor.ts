@@ -1,12 +1,8 @@
-export interface ApiError {
-  status: number
-  message?: string
-}
-
 export interface ApiResponse<T = any> {
   data: T
   status: number
   message: string
+  meta?: any
 }
 
 export function extractErrorMessage(body: any) {
@@ -65,18 +61,28 @@ export async function responseInterceptor<T = any>(
   // Django AllAuth doesn't consider 401 responses errors but rather an
   // message to put the caller in an unauthenticated flow state.
   // Pass the response to the calling component to handle the returned AllAuth flows.
-  if (response.ok || response.status === 401)
-    return {
-      data: parsedBody as T,
-      status: response.status,
-      message: extractSuccessMessage(parsedBody, response),
-    }
+  if (response.ok || response.status === 401) {
+    const body = parsedBody
+    const looksEnveloped =
+      body &&
+      typeof body === 'object' &&
+      !Array.isArray(body) &&
+      ('data' in body || 'meta' in body)
 
-  const apiError: ApiError = {
+    const data = (looksEnveloped ? body.data : body) as T
+    const message = looksEnveloped
+      ? typeof body.message === 'string' && body.message.trim()
+        ? body.message
+        : extractSuccessMessage(body, response)
+      : extractSuccessMessage(body, response)
+    const meta = looksEnveloped ? body.meta : undefined
+
+    return { data, status: response.status, message, meta }
+  }
+
+  return {
+    data: parsedBody as T,
     status: response.status,
     message: extractErrorMessage(parsedBody),
   }
-
-  console.error('API response not OK:', apiError.message)
-  throw apiError
 }

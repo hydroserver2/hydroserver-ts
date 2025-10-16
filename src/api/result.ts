@@ -1,38 +1,11 @@
 import type { HydroServerCollection } from './collections/base'
 
-/** Request/response metadata useful for telemetry and UI hints. */
-export type Meta = {
-  request: {
-    method: string
-    url: string
-    startedAt: number // ms since epoch
-    durationMs: number // total wall time
-    retryCount: number // how many retries were attempted
-    fromCache?: boolean // optional: if a cache layer served it
-  }
-  /** Present for list endpoints when pagination headers exist. */
-  pagination?: {
-    page?: number
-    pageSize?: number
-    totalPages?: number
-    totalCount?: number
-  }
-  /** Correlate client UI to server logs. */
-  traceId?: string
-  /** Deprecation notices, truncation warnings, etc. */
-  warnings?: string[]
-  /** Cache validators if the server provides them. */
-  etag?: string
-  lastModified?: string
-}
-
 /** Common fields shared by all result kinds. */
 type BaseResult = {
   ok: boolean
   status: number
   /** Human-friendly message (from API if provided, otherwise synthesized). */
   message: string
-  meta?: Meta
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -204,20 +177,12 @@ export function tapVoid(
   return r
 }
 
-/* ──────────────────────────────────────────────────────────────────────────
- * ERROR CONVERSION
- * ────────────────────────────────────────────────────────────────────────── */
-
 /** Convert an error result into a thrown Error enriched with status/code/details. */
 export function toError(r: Extract<AnyResult, { ok: false }>): Error {
   const e = new Error(r.message)
   ;(e as any).status = r.status
   return e
 }
-
-/* ──────────────────────────────────────────────────────────────────────────
- * LITTLE UTILITIES
- * ────────────────────────────────────────────────────────────────────────── */
 
 /** Human-friendly HTTP category (e.g., "2xx", "4xx"). */
 export function statusBucket(
@@ -227,13 +192,3 @@ export function statusBucket(
   const h = Math.floor(status / 100)
   return (['1xx', '2xx', '3xx', '4xx', '5xx'][h - 1] ?? '0') as any
 }
-
-/** True when the error is likely retriable (rate-limit or server-side). */
-// export function isRetriable(r: AnyResult): boolean {
-//   if (r.ok) return false
-//   return (
-//     Boolean(r.error?.retriable) ||
-//     r.status === 429 ||
-//     (r.status >= 500 && r.status < 600)
-//   )
-// }

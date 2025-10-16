@@ -3,6 +3,7 @@ import type { HydroServer } from '../HydroServer'
 import { apiMethods } from '../apiMethods'
 import Storage from '../../utils/storage'
 import { getCSRFToken } from '../getCSRFToken'
+import { ApiResponse } from '../responseInterceptor'
 
 export interface Provider {
   id: string
@@ -97,7 +98,7 @@ export class SessionService {
 
   async initialize(): Promise<void> {
     const res = await apiMethods.fetch(this.sessionBase)
-    this._setSession(res.data)
+    this._setSession(res)
   }
 
   async login(email: string, password: string) {
@@ -105,12 +106,12 @@ export class SessionService {
       email,
       password,
     })
-    this._setSession(res.data)
+    this._setSession(res)
   }
 
   async signup(user: User) {
     const res = await apiMethods.post(this._client.authBase, user)
-    this._setSession(res.data)
+    this._setSession(res)
   }
 
   private _loggingOut = false
@@ -126,7 +127,7 @@ export class SessionService {
         }
       }
       const res = await apiMethods.delete(this.sessionBase)
-      this._setSession(res.data)
+      this._setSession(res)
     } catch (error) {
       console.error('Error logging out.', error)
     } finally {
@@ -134,9 +135,9 @@ export class SessionService {
     }
   }
 
-  _setSession(apiResponse: any) {
-    const meta = apiResponse?.meta ?? {}
-    const data = apiResponse?.data ?? {}
+  _setSession(res: ApiResponse) {
+    const meta = res?.meta ?? {}
+    const data = res?.data ?? {}
 
     this.snapshot = {
       isAuthenticated: Boolean(meta.is_authenticated),
@@ -221,4 +222,16 @@ export class SessionService {
     document.body.appendChild(form)
     form.submit()
   }
+
+  fetchConnectedProviders = async () =>
+    apiMethods.fetch(`${this._client.providerBase}/connections`)
+
+  providerSignup = async (user: User) =>
+    apiMethods.post(`${this._client.providerBase}/signup`, user)
+
+  deleteProvider = async (provider: string, account: string) =>
+    apiMethods.delete(`${this._client.providerBase}/connections`, {
+      provider: provider,
+      account: account,
+    })
 }

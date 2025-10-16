@@ -1,28 +1,37 @@
 import { apiMethods } from '../apiMethods'
-import { HydroServerBaseService } from './base'
-import { ThingContract, DataArchiveContract } from '../../generated/contracts'
+import { HydroServerBaseService, withQuery } from './base'
+import { ThingContract as C } from '../../generated/contracts'
 import type * as Data from '../../generated/data.types'
+import { Thing, PostHydroShareArchive, HydroShareArchive } from '../../types'
+import { ApiResponse } from '../responseInterceptor'
 
 type TagPostBody = Data.components['schemas']['TagPostBody']
 type TagDeleteBody = Data.components['schemas']['TagDeleteBody']
 
-/**
- * Transport layer for /things routes. Builds URLs, handles pagination,
- * and returns rich ThingModel instances.
- */
+export class ThingService extends HydroServerBaseService<typeof C, Thing> {
+  static route = C.route
+  static writableKeys = C.writableKeys
+  static Model = Thing
 
-export class ThingService extends HydroServerBaseService<typeof ThingContract> {
-  static route = ThingContract.route
-  static writableKeys = ThingContract.writableKeys
+  updatePrivacy = (
+    id: string,
+    isPrivate: boolean
+  ): Promise<ApiResponse<Thing>> =>
+    apiMethods.patch(`${this._route}/${id}`, { isPrivate })
 
-  /* ----------------------- Sub-resources: Site types ----------------------- */
-
-  siteTypes = () => apiMethods.fetch(`${this._route}/site-types`)
+  getSiteTypes = () => apiMethods.fetch(`${this._route}/site-types`)
+  getSamplingFeatureTypes = () =>
+    apiMethods.fetch(`${this._route}/sampling-feature-types`)
 
   /* ----------------------- Sub-resources: Tags ----------------------- */
 
-  listTags(thingId: string) {
+  getTags(thingId: string) {
     const url = `${this._route}/${thingId}/tags`
+    return apiMethods.fetch(url)
+  }
+
+  getTagKeys(params: { workspace_id?: string; thing_id?: string }) {
+    const url = withQuery(`${this._route}/tags/keys`, params)
     return apiMethods.fetch(url)
   }
 
@@ -48,7 +57,7 @@ export class ThingService extends HydroServerBaseService<typeof ThingContract> {
     return apiMethods.post(url, data)
   }
 
-  listPhotos(thingId: string) {
+  getPhotos(thingId: string) {
     const url = `${this._route}/${thingId}/photos`
     return apiMethods.paginatedFetch(url)
   }
@@ -60,21 +69,19 @@ export class ThingService extends HydroServerBaseService<typeof ThingContract> {
 
   /* --------------- Sub-resources: HydroShare Archive ----------------- */
 
-  createHydroShareArchive(
-    thingId: string,
-    archive: DataArchiveContract.PostBody
-  ) {
-    const url = `${this._route}/${thingId}/archive`
-    return apiMethods.post(url, archive)
+  async createHydroShareArchive(archive: PostHydroShareArchive) {
+    const url = `${this._route}/${archive.thingId}/archive`
+    const json = await apiMethods.post(url, archive)
+    return this.createItemOK(json)
   }
 
-  updateHydroShareArchive(
-    thingId: string,
-    archive: DataArchiveContract.PatchBody,
-    old?: DataArchiveContract.PatchBody
+  async updateHydroShareArchive(
+    archive: HydroShareArchive,
+    old?: HydroShareArchive
   ) {
-    const url = `${this._route}/${thingId}/archive`
-    return apiMethods.patch(url, archive, old)
+    const url = `${this._route}/${archive.thingId}/archive`
+    const json = await apiMethods.patch(url, archive, old)
+    return this.createItemOK(json)
   }
 
   getHydroShareArchive(thingId: string) {
