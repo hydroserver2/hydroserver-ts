@@ -1,8 +1,11 @@
 import { apiMethods } from '../apiMethods'
-import { HydroServerBaseService, withQuery } from './base'
-import { DatastreamContract as C } from '../../generated/contracts'
+import { HydroServerBaseService } from './base'
+import {
+  DatastreamContract as C,
+  ObservationContract,
+} from '../../generated/contracts'
 import type { ApiResponse } from '../responseInterceptor'
-import { Datastream as M, ObservationRecord } from '../../types'
+import { Datastream as M } from '../../types'
 
 /** Minimal "has id" shape for convenience inputs */
 type WithId = { id: string }
@@ -40,7 +43,7 @@ export class DatastreamService extends HydroServerBaseService<typeof C, M> {
   }
 
   /** Download many datastream CSVs as a single ZIP. */
-  async downloadCsvZip(
+  async downloadCsvBatchZip(
     datastreams: Array<string | WithId>,
     zipName = 'datastreams.zip'
   ): Promise<void> {
@@ -70,12 +73,15 @@ export class DatastreamService extends HydroServerBaseService<typeof C, M> {
    * Pass strongly-typed generics if you have them:
    *   listObservations<MyObservationSummary>(id, { page_size: '100' })
    */
-  listObservations(datastreamId: string, params: Record<string, unknown> = {}) {
-    const url = withQuery(
-      `${this._route}/${encodeURIComponent(datastreamId)}/observations`,
+  getObservations(
+    datastreamId: string,
+    params: ObservationContract.QueryParameters
+  ) {
+    const url = this.withQuery(
+      `${this._route}/${datastreamId}/observations`,
       params
     )
-    return apiMethods.paginatedFetch<ObservationRecord[]>(url)
+    return apiMethods.paginatedFetch(url)
   }
 
   /**

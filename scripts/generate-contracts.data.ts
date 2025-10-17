@@ -17,6 +17,7 @@ const resources = [
   'orchestration-systems',
   'data-sources',
   'data-archives',
+  'observations',
 ]
 
 generateContracts({

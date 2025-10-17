@@ -1,9 +1,9 @@
 import { apiMethods } from '../apiMethods'
-import { HydroServerBaseService, withQuery } from './base'
+import { HydroServerBaseService } from './base'
 import { WorkspaceContract as C } from '../../generated/contracts'
 import { ApiKey, Workspace as M } from '../../types'
-import { ItemResult } from '../result'
 import type * as Data from '../../generated/data.types'
+import { ApiResponse } from '../responseInterceptor'
 
 type RoleQueryParameters = Data.components['schemas']['RoleQueryParameters']
 
@@ -66,8 +66,8 @@ export class WorkspaceService extends HydroServerBaseService<typeof C, M> {
       `${this._route}/${workspaceId}/api-keys/${apiKeyId}?expand_related=true`
     )
 
-  createApiKey = async (apiKey: ApiKey): Promise<ItemResult<ApiKey>> => {
-    const json = await apiMethods.post(
+  createApiKey = async (apiKey: ApiKey): Promise<ApiResponse<ApiKey>> => {
+    return apiMethods.post(
       `${this._route}/${apiKey.workspaceId}/api-keys?expand_related=true`,
       {
         name: apiKey.name,
@@ -76,14 +76,13 @@ export class WorkspaceService extends HydroServerBaseService<typeof C, M> {
         roleId: apiKey.role!.id,
       }
     )
-    return this.createItemOK(json)
   }
 
   updateApiKey = async (
     newKey: ApiKey,
     oldKey?: ApiKey
-  ): Promise<ItemResult<ApiKey>> => {
-    const json = await apiMethods.patch(
+  ): Promise<ApiResponse<ApiKey>> => {
+    return await apiMethods.patch(
       `${this._route}/${newKey.workspaceId}/api-keys/${newKey.id}?expand_related=true`,
       {
         name: newKey.name,
@@ -100,7 +99,6 @@ export class WorkspaceService extends HydroServerBaseService<typeof C, M> {
           }
         : oldKey
     )
-    return this.createItemOK(json)
   }
 
   regenerateApiKey = async (id: string, apiKeyId: string) =>
@@ -112,7 +110,7 @@ export class WorkspaceService extends HydroServerBaseService<typeof C, M> {
     apiMethods.delete(`${this._route}/${id}/api-keys/${apiKeyId}`)
 
   getRoles = (params?: RoleQueryParameters) => {
-    const url = withQuery(this._route, params)
+    const url = this.withQuery(this._route, params)
     return apiMethods.paginatedFetch(url)
   }
 

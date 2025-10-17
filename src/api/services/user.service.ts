@@ -1,18 +1,15 @@
 import { apiMethods } from '../apiMethods'
-import { AccountContract as C } from '../../generated/auth-contracts'
 import { WorkspaceContract } from '../../generated/contracts'
 import { type HydroServer } from '../HydroServer'
 import type * as Data from '../../generated/data.types'
+import { User } from '../../types'
+import { ApiResponse } from '../responseInterceptor'
 
 type Permission = Data.components['schemas']['PermissionDetailResponse']
 type PermissionAction =
   Data.components['schemas']['PermissionDetailResponse']['action']
 type PermissionResource =
   Data.components['schemas']['PermissionDetailResponse']['resource']
-
-/** Minimal shape of the session user we rely on */
-type SessionUser = Partial<Pick<C.DetailResponse, 'email' | 'accountType'>> &
-  Record<string, unknown>
 
 export class UserService {
   private readonly _client: HydroServer
@@ -25,21 +22,17 @@ export class UserService {
     this.providerBase = `${this._client.authBase}/browser/provider`
   }
 
-  async get() {
-    return await apiMethods.fetch(this.accountBase)
+  get = async (): Promise<ApiResponse<User>> =>
+    apiMethods.fetch(this.accountBase)
+  create = async (user: User): Promise<ApiResponse<User>> =>
+    apiMethods.post(this.accountBase, user)
+  update = async (user: User, oldUser?: User): Promise<ApiResponse<User>> =>
+    apiMethods.patch(this.accountBase, user, oldUser)
+  updateItem = async (user: User, oldUser?: User): Promise<User | null> => {
+    const res = await apiMethods.patch(this.accountBase, user, oldUser)
+    return res.ok ? res.data : null
   }
-
-  async create(user: C.PostBody) {
-    return await apiMethods.post(this.accountBase, user)
-  }
-
-  async update(user: C.PatchBody, oldUser?: C.PatchBody) {
-    return apiMethods.patch(this.accountBase, user, oldUser)
-  }
-
-  async delete() {
-    return apiMethods.delete(this.accountBase)
-  }
+  delete = async () => apiMethods.delete(this.accountBase)
 
   /* ---------------------------- Email verification --------------------------- */
   async sendVerificationEmail(email: string) {
@@ -99,10 +92,10 @@ export class UserService {
     workspace: WorkspaceContract.DetailResponse
   ): Promise<boolean> {
     const res = await this.get()
-    const sessionUser = res.data
+    const user = res.data
 
-    if (isAdmin(sessionUser)) return true
-    if (isOwner(sessionUser, workspace)) return true
+    if (isAdmin(user)) return true
+    if (isOwner(user, workspace)) return true
 
     const perms: Permission[] = workspace.collaboratorRole?.permissions ?? []
     const allowed =
@@ -113,12 +106,12 @@ export class UserService {
   }
 }
 
-function isAdmin(user: SessionUser | null): boolean {
+function isAdmin(user: User | null): boolean {
   return (user?.accountType as string) === 'admin'
 }
 
 function isOwner(
-  user: SessionUser | null,
+  user: User | null,
   workspace: WorkspaceContract.DetailResponse | null
 ): boolean {
   if (!user?.email || !workspace?.owner?.email) return false

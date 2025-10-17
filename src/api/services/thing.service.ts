@@ -1,5 +1,5 @@
 import { apiMethods } from '../apiMethods'
-import { HydroServerBaseService, withQuery } from './base'
+import { HydroServerBaseService } from './base'
 import { ThingContract as C } from '../../generated/contracts'
 import type * as Data from '../../generated/data.types'
 import { Thing, PostHydroShareArchive, HydroShareArchive } from '../../types'
@@ -31,7 +31,7 @@ export class ThingService extends HydroServerBaseService<typeof C, Thing> {
   }
 
   getTagKeys(params: { workspace_id?: string; thing_id?: string }) {
-    const url = withQuery(`${this._route}/tags/keys`, params)
+    const url = this.withQuery(`${this._route}/tags/keys`, params)
     return apiMethods.fetch(url)
   }
 
@@ -71,8 +71,7 @@ export class ThingService extends HydroServerBaseService<typeof C, Thing> {
 
   async createHydroShareArchive(archive: PostHydroShareArchive) {
     const url = `${this._route}/${archive.thingId}/archive`
-    const json = await apiMethods.post(url, archive)
-    return this.createItemOK(json)
+    return await apiMethods.post(url, archive)
   }
 
   async updateHydroShareArchive(
@@ -80,8 +79,7 @@ export class ThingService extends HydroServerBaseService<typeof C, Thing> {
     old?: HydroShareArchive
   ) {
     const url = `${this._route}/${archive.thingId}/archive`
-    const json = await apiMethods.patch(url, archive, old)
-    return this.createItemOK(json)
+    return await apiMethods.patch(url, archive, old)
   }
 
   getHydroShareArchive(thingId: string) {

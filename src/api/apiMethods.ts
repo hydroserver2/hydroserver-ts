@@ -17,12 +17,12 @@ export const apiMethods = {
     options.method = 'GET'
     return await limit(() => interceptedFetch(endpoint, options))
   },
-  async patch<TResp>(
+  async patch(
     endpoint: string,
     body: any,
     originalBody: any = null,
     options: any = {}
-  ): Promise<ApiResponse<TResp>> {
+  ): Promise<ApiResponse> {
     options.method = 'PATCH'
     options.body = originalBody ? createPatchObject(originalBody, body) : body
     const bodyIsEmpty =
@@ -30,9 +30,10 @@ export const apiMethods = {
 
     if (!options.body || bodyIsEmpty) {
       return {
-        data: (originalBody ?? null) as TResp,
+        data: originalBody ?? null,
         status: 204,
         message: 'No changes',
+        ok: true,
       }
     }
     return await limit(() => interceptedFetch(endpoint, options))
@@ -76,9 +77,9 @@ export const apiMethods = {
     const opts = requestInterceptor({ method: 'GET' })
     const firstResponse = await limit(() => fetch(url, opts))
     const totalPages = Number(firstResponse.headers.get('x-total-pages')) || 1
-    const iRes = await responseInterceptor(firstResponse)
+    const res = await responseInterceptor(firstResponse)
 
-    const all: T[] = Array.isArray(iRes.data) ? [...iRes.data] : []
+    const all: T[] = Array.isArray(res.data) ? [...res.data] : []
 
     for (let p = 2; p <= totalPages; p++) {
       const url = `${base}${sep}page_size=${size}&page=${p}`
@@ -88,8 +89,10 @@ export const apiMethods = {
 
     return {
       data: all,
-      status: iRes.status,
-      message: iRes.message,
+      status: res.status,
+      message: res.message,
+      meta: res.message,
+      ok: res.ok,
     }
   },
 }
