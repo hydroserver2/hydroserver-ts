@@ -6,13 +6,25 @@
   "main": "dist/@hydroserver-client.umd.cjs",
   "module": "dist/@hydroserver-client.es.mjs",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/@hydroserver-client.es.mjs",
+      "require": "./dist/@hydroserver-client.umd.cjs"
+    }
+  },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "dev": "vite",
+    "build": "vite build",
     "test": "vitest",
-    "driver": "tsx driver/index.ts",
     "coverage": "vitest run --coverage --environment jsdom",
     "gen:types": "openapi-typescript ./schemas/data.openapi.json --output ./src/generated/data.types.d.ts && openapi-typescript ./schemas/auth.openapi.json --output ./src/generated/auth.types.d.ts",
     "gen:data-contracts": "tsx ./scripts/generate-contracts.data.ts",
@@ -24,13 +36,7 @@
     "type": "git",
     "url": "git+https://github.com/hydroserver2/hydroserver-ts.git"
   },
-  "keywords": [],
-  "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/hydroserver2/hydroserver-ts/issues"
-  },
-  "homepage": "https://github.com/hydroserver2/hydroserver-ts#readme",
   "dependencies": {
     "cross-fetch": "^4.1.0",
     "jszip": "^3.10.1",

@@ -11,6 +11,9 @@ export default defineConfig({
     },
     sourcemap: true,
     rollupOptions: {
+      output: {
+        exports: 'named',
+      },
       external: [], // add externals to keep them out of your bundle if needed
     },
   },
