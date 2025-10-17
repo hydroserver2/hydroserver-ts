@@ -4,12 +4,12 @@
   "description": "HydroServer TypeScript client",
   "type": "module",
   "main": "dist/@hydroserver-client.umd.cjs",
-  "module": "dist/@hydroserver-client.es.mjs",
+  "module": "dist/@hydroserver-client.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/@hydroserver-client.es.mjs",
+      "import": "./dist/@hydroserver-client.js",
       "require": "./dist/@hydroserver-client.umd.cjs"
     }
   },
