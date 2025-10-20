@@ -1,6 +1,12 @@
 import { HydroServerBaseService } from './base'
 import { OrchestrationSystemContract as C } from '../../generated/contracts'
-import { OrchestrationSystem as M } from '../../types/dataSource'
+
+export interface OrchestrationSystem {
+  name: string
+  id: string
+  workspaceId: string
+  type: string
+}
 
 /**
  * Transport for /orchestration-systems routes.
@@ -8,13 +14,13 @@ import { OrchestrationSystem as M } from '../../types/dataSource'
  */
 export class OrchestrationSystemService extends HydroServerBaseService<
   typeof C,
-  M
+  OrchestrationSystem
 > {
   static route = C.route
   static writableKeys = C.writableKeys
 
-  protected deserialize(m: unknown): M {
-    const o = m as Partial<M>
+  protected deserialize(m: unknown): OrchestrationSystem {
+    const o = m as Partial<OrchestrationSystem>
     return {
       id: String(o.id ?? ''),
       name: String(o.name ?? ''),

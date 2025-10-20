@@ -28,7 +28,7 @@ export type ServiceClass<C extends ApiContract, M extends { id: string }> = {
   Model: new () => M
 }
 
-type PatchBody<M extends { id: string }> = Partial<M> & Pick<M, 'id'>
+export type PatchBody<M extends { id: string }> = Partial<M> & Pick<M, 'id'>
 
 export abstract class HydroServerBaseService<
   C extends ApiContract,

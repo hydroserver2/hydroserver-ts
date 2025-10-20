@@ -1,4 +1,4 @@
-import { DataSource } from './dataSource'
+import type { DataSource } from '../api/services/data-source.service'
 
 export type DataPoint = {
   date: Date
