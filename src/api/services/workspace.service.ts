@@ -57,7 +57,7 @@ export class WorkspaceService extends HydroServerBaseService<typeof C, M> {
 
   // ---------- sub-resources: keys/roles ----------
   getApiKeys(workspaceId: string) {
-    const url = `${this._route}/${workspaceId}/apikeys`
+    const url = `${this._route}/${workspaceId}/api-keys`
     return apiMethods.fetch(url)
   }
 
@@ -110,10 +110,10 @@ export class WorkspaceService extends HydroServerBaseService<typeof C, M> {
     apiMethods.delete(`${this._route}/${id}/api-keys/${apiKeyId}`)
 
   getRoles = (params?: RoleQueryParameters) => {
-    const url = this.withQuery(this._route, params)
+    const url = this.withQuery(`${this._client.baseRoute}/roles`, params)
     return apiMethods.paginatedFetch(url)
   }
 
   getRole = (id: string) =>
-    apiMethods.fetch(`${this._client.baseRoute}/data/roles/${id}`)
+    apiMethods.fetch(`${this._client.baseRoute}/roles/${id}`)
 }
