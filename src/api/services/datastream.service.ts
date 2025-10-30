@@ -7,9 +7,30 @@ import {
 import type { ApiResponse } from '../responseInterceptor'
 import { Datastream as M } from '../../types'
 
-/** Minimal "has id" shape for convenience inputs */
 type WithId = { id: string }
 
+type ObservationBulkPostQueryParameters = {
+  /**
+   * Mode
+   * @description Specifies how new observations are added to the datastream. `insert` allows observations at any timestamp. `append` adds only future observations (after the latest existing timestamp). `backfill` adds only historical observations (before the earliest existing timestamp). `replace` deletes all observations in the range of provided observations before inserting new ones.
+   */
+  mode?: ('insert' | 'append' | 'backfill' | 'replace') | null
+}
+
+type ObservationBulkPostBody = {
+  fields: ('phenomenonTime' | 'result')[]
+  data: unknown[][]
+}
+
+type ObservationBulkDeleteBody = {
+  phenomenonTimeStart?: string | null
+  phenomenonTimeEnd?: string | null
+}
+
+type ObservationPostBody = {
+  phenomenonTime: string
+  result: number
+}
 /**
  * Transport layer for /datastreams routes.
  * Inherits CRUD + handle helpers from HydroServerBaseService and adds:
@@ -66,13 +87,6 @@ export class DatastreamService extends HydroServerBaseService<typeof C, M> {
   }
 
   /* ======================= Observation APIs ======================== */
-  // All of these live under: /datastreams/{datastream_id}/observations
-
-  /**
-   * List observations for a datastream.
-   * Pass strongly-typed generics if you have them:
-   *   listObservations<MyObservationSummary>(id, { page_size: '100' })
-   */
   getObservations(
     datastreamId: string,
     params: ObservationContract.QueryParameters
@@ -84,10 +98,31 @@ export class DatastreamService extends HydroServerBaseService<typeof C, M> {
     return apiMethods.paginatedFetch(url)
   }
 
-  /**
-   * Get a single observation by observation id.
-   * Endpoint: /datastreams/{id}/observations/{observation_id}
-   */
+  createObservation(datastreamId: string, body: ObservationPostBody) {
+    const url = `${this._route}/${datastreamId}/observations`
+    return apiMethods.post(url, body)
+  }
+
+  createObservations(
+    datastreamId: string,
+    body: ObservationBulkPostBody,
+    params?: ObservationBulkPostQueryParameters
+  ) {
+    const url = this.withQuery(
+      `${this._route}/${datastreamId}/observations/bulk-create`,
+      params
+    )
+    return apiMethods.post(url, body)
+  }
+
+  deleteObservations(datastreamId: string, body?: ObservationBulkDeleteBody) {
+    const url = `${this._route}/${datastreamId}/observations/bulk-delete`
+    return apiMethods.post(
+      url,
+      body || { phenomenonTimeStart: null, phenomenonTimeEnd: null }
+    )
+  }
+
   getObservation(datastreamId: string, observationId: string) {
     const url = `${this._route}/${encodeURIComponent(
       datastreamId
@@ -95,42 +130,10 @@ export class DatastreamService extends HydroServerBaseService<typeof C, M> {
     return apiMethods.fetch(url)
   }
 
-  /**
-   * Create observations for a datastream.
-   * Accepts single or batch payloads depending on your API.
-   */
-  createObservations(datastreamId: string, body: unknown) {
-    const url = `${this._route}/${encodeURIComponent(
-      datastreamId
-    )}/observations`
-    return apiMethods.post(url, body)
-  }
-
-  /**
-   * Update one observation (PATCH).
-   * Endpoint: /datastreams/{id}/observations/{observation_id}
-   */
-  updateObservation<TBody = unknown, TOut = unknown>(
-    datastreamId: string,
-    observationId: string,
-    body: TBody,
-    originalBody?: TBody
-  ): Promise<ApiResponse<TOut>> {
-    const url = `${this._route}/${encodeURIComponent(
-      datastreamId
-    )}/observations/${encodeURIComponent(observationId)}`
-    return apiMethods.patch(url, body, originalBody ?? null)
-  }
-
   deleteObservation(datastreamId: string, observationId: string) {
-    const url = `${this._route}/${encodeURIComponent(
-      datastreamId
-    )}/observations/${encodeURIComponent(observationId)}`
+    const url = `${this._route}/${datastreamId}/observations/${observationId}`
     return apiMethods.delete(url)
   }
-
-  deleteObservations = (datastreamId: string, body?: {}) =>
-    apiMethods.delete(`${this._route}/${datastreamId}/observations`, body)
 
   getStatuses = () => apiMethods.paginatedFetch(`${this._route}/statuses`)
 
