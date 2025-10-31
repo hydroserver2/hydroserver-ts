@@ -23,6 +23,32 @@ function deferredError(name: PropertyKey) {
   }
 }
 
+function checkSessionExpiration() {
+  _hs?.session?.checkExpiration()
+}
+
+let listenersAttached = false
+function attachGlobalSessionGuards() {
+  if (listenersAttached || typeof document === 'undefined') return
+  const onFocus = () => checkSessionExpiration()
+  const onVis = () => {
+    if (document.visibilityState === 'visible') checkSessionExpiration()
+  }
+
+  window.addEventListener('focus', onFocus)
+  document.addEventListener('visibilitychange', onVis)
+  listenersAttached = true
+
+  // Optional: expose a cleanup for HMR
+  if (import.meta && (import.meta as any).hot) {
+    ;(import.meta as any).hot.dispose(() => {
+      window.removeEventListener('focus', onFocus)
+      document.removeEventListener('visibilitychange', onVis)
+      listenersAttached = false
+    })
+  }
+}
+
 export async function createHydroServer(
   opts: HydroServerOptions
 ): Promise<HydroServer> {
@@ -30,10 +56,11 @@ export async function createHydroServer(
   if (_creating) return _creating
 
   _creating = HydroServer.initialize(opts).then((client) => {
-    client.session.enableAutoRefresh()
     _hs = client
     // Rebind the proxy target to the actual instance
     Object.setPrototypeOf(hs, _hs)
+
+    attachGlobalSessionGuards()
     _creating = null
     return client
   })

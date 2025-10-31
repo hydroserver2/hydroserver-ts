@@ -162,24 +162,6 @@ export class SessionService {
     }
   }
 
-  enableAutoRefresh() {
-    if (this.autoRefreshEnabled) return
-    const handler = () => this.checkExpiration()
-    window.addEventListener('focus', handler)
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible') handler()
-    })
-    this.autoRefreshEnabled = true
-  }
-
-  disableAutoRefresh() {
-    if (!this.autoRefreshEnabled) return
-    const handler = () => this.checkExpiration()
-    window.removeEventListener('focus', handler)
-    document.removeEventListener('visibilitychange', handler)
-    this.autoRefreshEnabled = false
-  }
-
   /**
    * Initiates a synchronous form submission to redirect the user for OAuth login in a Django AllAuth
    * environment. This allows the server to return a 302 redirect that the browser will follow,
