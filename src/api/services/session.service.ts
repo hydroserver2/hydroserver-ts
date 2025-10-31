@@ -107,6 +107,7 @@ export class SessionService {
       password,
     })
     this._setSession(res)
+    return res
   }
 
   async signup(user: User) {
