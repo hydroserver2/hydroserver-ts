@@ -1818,6 +1818,8 @@ export interface components {
             name: string;
             /** Link */
             link: string;
+            /** Fileattachmenttype */
+            fileAttachmentType: string;
         };
         /** LocationDetailResponse */
         LocationDetailResponse: {
@@ -2010,13 +2012,6 @@ export interface components {
             key: string;
             /** Value */
             value?: string | null;
-        };
-        /** FileAttachmentPostBody */
-        FileAttachmentPostBody: {
-            /** Name */
-            name: string;
-            /** Fileattachmenttype */
-            fileAttachmentType: string;
         };
         /** FileAttachmentDeleteBody */
         FileAttachmentDeleteBody: {
@@ -2308,6 +2303,10 @@ export interface components {
             observedProperty: components["schemas"]["ObservedPropertySummaryResponse"];
             processingLevel: components["schemas"]["ProcessingLevelSummaryResponse"];
             unit: components["schemas"]["UnitSummaryResponse"];
+            /** Tags */
+            tags: components["schemas"]["TagGetResponse"][];
+            /** Fileattachments */
+            fileAttachments: components["schemas"]["FileAttachmentGetResponse"][];
         };
         /** DatastreamSummaryResponse */
         DatastreamSummaryResponse: {
@@ -2395,6 +2394,10 @@ export interface components {
              * Format: uuid
              */
             workspace_id: string;
+            /** Tags */
+            tags: components["schemas"]["TagGetResponse"][];
+            /** Fileattachments */
+            fileAttachments: components["schemas"]["FileAttachmentGetResponse"][];
         };
         /** ObservedPropertySummaryResponse */
         ObservedPropertySummaryResponse: {
@@ -5197,12 +5200,13 @@ export interface operations {
         requestBody: {
             content: {
                 "multipart/form-data": {
+                    /** File Attachment Type */
+                    file_attachment_type: string;
                     /**
                      * File
                      * Format: binary
                      */
                     file: string;
-                    data: components["schemas"]["FileAttachmentPostBody"];
                 };
             };
         };
@@ -6274,12 +6278,13 @@ export interface operations {
         requestBody: {
             content: {
                 "multipart/form-data": {
+                    /** File Attachment Type */
+                    file_attachment_type: string;
                     /**
                      * File
                      * Format: binary
                      */
                     file: string;
-                    data: components["schemas"]["FileAttachmentPostBody"];
                 };
             };
         };

@@ -333,9 +333,10 @@ export class User {
   }
 }
 
-export interface Photo {
+export interface FileAttachment {
   name: string
   link: string
+  fileAttachmentType: string
 }
 
 export class OAuthProvider {

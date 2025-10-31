@@ -2725,19 +2725,20 @@
           "content": {
             "multipart/form-data": {
               "schema": {
+                "title": "MultiPartBodyParams",
+                "type": "object",
                 "properties": {
+                  "file_attachment_type": {
+                    "title": "File Attachment Type",
+                    "type": "string"
+                  },
                   "file": {
                     "format": "binary",
                     "title": "File",
                     "type": "string"
-                  },
-                  "data": {
-                    "$ref": "#/components/schemas/FileAttachmentPostBody"
                   }
                 },
-                "required": ["file", "data"],
-                "title": "MultiPartBodyParams",
-                "type": "object"
+                "required": ["file_attachment_type", "file"]
               }
             }
           },
@@ -4553,19 +4554,20 @@
           "content": {
             "multipart/form-data": {
               "schema": {
+                "title": "MultiPartBodyParams",
+                "type": "object",
                 "properties": {
+                  "file_attachment_type": {
+                    "title": "File Attachment Type",
+                    "type": "string"
+                  },
                   "file": {
                     "format": "binary",
                     "title": "File",
                     "type": "string"
-                  },
-                  "data": {
-                    "$ref": "#/components/schemas/FileAttachmentPostBody"
                   }
                 },
-                "required": ["file", "data"],
-                "title": "MultiPartBodyParams",
-                "type": "object"
+                "required": ["file_attachment_type", "file"]
               }
             }
           },
@@ -10332,9 +10334,13 @@
       "FileAttachmentGetResponse": {
         "properties": {
           "name": { "title": "Name", "type": "string" },
-          "link": { "title": "Link", "type": "string" }
+          "link": { "title": "Link", "type": "string" },
+          "fileAttachmentType": {
+            "title": "Fileattachmenttype",
+            "type": "string"
+          }
         },
-        "required": ["name", "link"],
+        "required": ["name", "link", "fileAttachmentType"],
         "title": "FileAttachmentGetResponse",
         "type": "object"
       },
@@ -10739,18 +10745,6 @@
         },
         "required": ["key"],
         "title": "TagDeleteBody",
-        "type": "object"
-      },
-      "FileAttachmentPostBody": {
-        "properties": {
-          "name": { "title": "Name", "type": "string" },
-          "fileAttachmentType": {
-            "title": "Fileattachmenttype",
-            "type": "string"
-          }
-        },
-        "required": ["name", "fileAttachmentType"],
-        "title": "FileAttachmentPostBody",
         "type": "object"
       },
       "FileAttachmentDeleteBody": {
@@ -11266,7 +11260,19 @@
           "processingLevel": {
             "$ref": "#/components/schemas/ProcessingLevelSummaryResponse"
           },
-          "unit": { "$ref": "#/components/schemas/UnitSummaryResponse" }
+          "unit": { "$ref": "#/components/schemas/UnitSummaryResponse" },
+          "tags": {
+            "items": { "$ref": "#/components/schemas/TagGetResponse" },
+            "title": "Tags",
+            "type": "array"
+          },
+          "fileAttachments": {
+            "items": {
+              "$ref": "#/components/schemas/FileAttachmentGetResponse"
+            },
+            "title": "Fileattachments",
+            "type": "array"
+          }
         },
         "required": [
           "name",
@@ -11285,7 +11291,9 @@
           "sensor",
           "observedProperty",
           "processingLevel",
-          "unit"
+          "unit",
+          "tags",
+          "fileAttachments"
         ],
         "title": "DatastreamDetailResponse",
         "type": "object"
@@ -11420,6 +11428,18 @@
             "format": "uuid",
             "title": "Workspace Id",
             "type": "string"
+          },
+          "tags": {
+            "items": { "$ref": "#/components/schemas/TagGetResponse" },
+            "title": "Tags",
+            "type": "array"
+          },
+          "fileAttachments": {
+            "items": {
+              "$ref": "#/components/schemas/FileAttachmentGetResponse"
+            },
+            "title": "Fileattachments",
+            "type": "array"
           }
         },
         "required": [
@@ -11438,7 +11458,9 @@
           "resultType",
           "timeAggregationIntervalUnit",
           "id",
-          "workspace_id"
+          "workspace_id",
+          "tags",
+          "fileAttachments"
         ],
         "title": "DatastreamSummaryResponse",
         "type": "object"
