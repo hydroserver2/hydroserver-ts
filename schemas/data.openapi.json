@@ -30,7 +30,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -587,7 +587,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -867,7 +867,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -1364,7 +1364,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -1584,7 +1584,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -1879,8 +1879,8 @@
     },
     "/api/data/things/tags/keys": {
       "get": {
-        "operationId": "sta_views_thing_get_tag_keys",
-        "summary": "Get Tag Keys",
+        "operationId": "sta_views_thing_get_thing_tag_keys",
+        "summary": "Get Thing Tag Keys",
         "parameters": [
           {
             "in": "query",
@@ -1932,7 +1932,7 @@
             }
           }
         },
-        "description": "Get all existing unique tag keys.",
+        "description": "Get all existing unique thing tag keys.",
         "tags": ["Things"],
         "security": [
           { "SessionAuth": [] },
@@ -1965,7 +1965,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -2029,7 +2029,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -2066,6 +2066,70 @@
           }
         },
         "description": "Get sampling feature types.",
+        "tags": ["Things"]
+      }
+    },
+    "/api/data/things/file-attachment-types": {
+      "get": {
+        "operationId": "sta_views_thing_get_file_attachment_types",
+        "summary": "Get File Attachment Types",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "anyOf": [
+                { "minimum": 1, "type": "integer" },
+                { "type": "null" }
+              ],
+              "description": "Page number (1-based).",
+              "title": "Page"
+            },
+            "required": false,
+            "description": "Page number (1-based)."
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "schema": {
+              "anyOf": [
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
+                { "type": "null" }
+              ],
+              "description": "The number of items per page.",
+              "title": "Page Size"
+            },
+            "required": false,
+            "description": "The number of items per page."
+          },
+          {
+            "in": "query",
+            "name": "order_desc",
+            "schema": {
+              "anyOf": [{ "type": "boolean" }, { "type": "null" }],
+              "default": false,
+              "description": "Sort terms by descending.",
+              "title": "Order Desc"
+            },
+            "required": false,
+            "description": "Sort terms by descending."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": { "type": "string" },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get file attachment types.",
         "tags": ["Things"]
       }
     },
@@ -2267,8 +2331,8 @@
     },
     "/api/data/things/{thing_id}/tags": {
       "get": {
-        "operationId": "sta_views_thing_get_tags",
-        "summary": "Get Tags",
+        "operationId": "sta_views_thing_get_thing_tags",
+        "summary": "Get Thing Tags",
         "parameters": [
           {
             "in": "path",
@@ -2320,8 +2384,8 @@
         ]
       },
       "post": {
-        "operationId": "sta_views_thing_add_tag",
-        "summary": "Add Tag",
+        "operationId": "sta_views_thing_add_thing_tag",
+        "summary": "Add Thing Tag",
         "parameters": [
           {
             "in": "path",
@@ -2393,8 +2457,8 @@
         ]
       },
       "put": {
-        "operationId": "sta_views_thing_edit_tag",
-        "summary": "Edit Tag",
+        "operationId": "sta_views_thing_edit_thing_tag",
+        "summary": "Edit Thing Tag",
         "parameters": [
           {
             "in": "path",
@@ -2466,8 +2530,8 @@
         ]
       },
       "delete": {
-        "operationId": "sta_views_thing_remove_tag",
-        "summary": "Remove Tag",
+        "operationId": "sta_views_thing_remove_thing_tag",
+        "summary": "Remove Thing Tag",
         "parameters": [
           {
             "in": "path",
@@ -2532,10 +2596,10 @@
         ]
       }
     },
-    "/api/data/things/{thing_id}/photos": {
+    "/api/data/things/{thing_id}/file-attachments": {
       "get": {
-        "operationId": "sta_views_thing_get_photos",
-        "summary": "Get Photos",
+        "operationId": "sta_views_thing_get_thing_file_attachments",
+        "summary": "Get Thing File Attachments",
         "parameters": [
           {
             "in": "path",
@@ -2554,7 +2618,9 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "items": { "$ref": "#/components/schemas/PhotoGetResponse" },
+                  "items": {
+                    "$ref": "#/components/schemas/FileAttachmentGetResponse"
+                  },
                   "title": "Response",
                   "type": "array"
                 }
@@ -2578,7 +2644,7 @@
             }
           }
         },
-        "description": "Get all photos associated with a Thing.",
+        "description": "Get all file attachments associated with a Thing.",
         "tags": ["Things"],
         "security": [
           { "SessionAuth": [] },
@@ -2587,8 +2653,8 @@
         ]
       },
       "post": {
-        "operationId": "sta_views_thing_add_photo",
-        "summary": "Add Photo",
+        "operationId": "sta_views_thing_add_thing_file_attachment",
+        "summary": "Add Thing File Attachment",
         "parameters": [
           {
             "in": "path",
@@ -2606,7 +2672,9 @@
             "description": "Created",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/PhotoGetResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/FileAttachmentGetResponse"
+                }
               }
             }
           },
@@ -2651,7 +2719,7 @@
             }
           }
         },
-        "description": "Add a photo to a thing.",
+        "description": "Add a file attachment to a thing.",
         "tags": ["Things"],
         "requestBody": {
           "content": {
@@ -2662,10 +2730,13 @@
                     "format": "binary",
                     "title": "File",
                     "type": "string"
+                  },
+                  "data": {
+                    "$ref": "#/components/schemas/FileAttachmentPostBody"
                   }
                 },
-                "required": ["file"],
-                "title": "FileParams",
+                "required": ["file", "data"],
+                "title": "MultiPartBodyParams",
                 "type": "object"
               }
             }
@@ -2679,8 +2750,8 @@
         ]
       },
       "delete": {
-        "operationId": "sta_views_thing_remove_photo",
-        "summary": "Remove Photo",
+        "operationId": "sta_views_thing_remove_thing_file_attachment",
+        "summary": "Remove Thing File Attachment",
         "parameters": [
           {
             "in": "path",
@@ -2728,12 +2799,14 @@
             }
           }
         },
-        "description": "Remove a photo from a thing.",
+        "description": "Remove a file attachment from a thing.",
         "tags": ["Things"],
         "requestBody": {
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/PhotoDeleteBody" }
+              "schema": {
+                "$ref": "#/components/schemas/FileAttachmentDeleteBody"
+              }
             }
           },
           "required": true
@@ -3056,7 +3129,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -3564,6 +3637,70 @@
         ]
       }
     },
+    "/api/data/datastreams/tags/keys": {
+      "get": {
+        "operationId": "sta_views_datastream_get_datastream_tag_keys",
+        "summary": "Get Datastream Tag Keys",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "workspace_id",
+            "schema": {
+              "anyOf": [
+                { "format": "uuid", "type": "string" },
+                { "type": "null" }
+              ],
+              "title": "Workspace Id"
+            },
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "datastream_id",
+            "schema": {
+              "anyOf": [
+                { "format": "uuid", "type": "string" },
+                { "type": "null" }
+              ],
+              "title": "Datastream Id"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "items": { "type": "string" },
+                    "type": "array"
+                  },
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "title": "Response", "type": "string" }
+              }
+            }
+          }
+        },
+        "description": "Get all existing unique datastream tag keys.",
+        "tags": ["Datastreams"],
+        "security": [
+          { "SessionAuth": [] },
+          { "BearerAuth": [] },
+          { "APIKeyAuth": [] }
+        ]
+      }
+    },
     "/api/data/datastreams/aggregation-statistics": {
       "get": {
         "operationId": "sta_views_datastream_get_datastream_aggregation_statistics",
@@ -3588,7 +3725,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -3652,7 +3789,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -3716,7 +3853,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -3753,6 +3890,70 @@
           }
         },
         "description": "Get datastream sampled mediums.",
+        "tags": ["Datastreams"]
+      }
+    },
+    "/api/data/datastreams/file-attachment-types": {
+      "get": {
+        "operationId": "sta_views_datastream_get_file_attachment_types",
+        "summary": "Get File Attachment Types",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "anyOf": [
+                { "minimum": 1, "type": "integer" },
+                { "type": "null" }
+              ],
+              "description": "Page number (1-based).",
+              "title": "Page"
+            },
+            "required": false,
+            "description": "Page number (1-based)."
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "schema": {
+              "anyOf": [
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
+                { "type": "null" }
+              ],
+              "description": "The number of items per page.",
+              "title": "Page Size"
+            },
+            "required": false,
+            "description": "The number of items per page."
+          },
+          {
+            "in": "query",
+            "name": "order_desc",
+            "schema": {
+              "anyOf": [{ "type": "boolean" }, { "type": "null" }],
+              "default": false,
+              "description": "Sort terms by descending.",
+              "title": "Order Desc"
+            },
+            "required": false,
+            "description": "Sort terms by descending."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": { "type": "string" },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get file attachment types.",
         "tags": ["Datastreams"]
       }
     },
@@ -3956,6 +4157,495 @@
         ]
       }
     },
+    "/api/data/datastreams/{datastream_id}/tags": {
+      "get": {
+        "operationId": "sta_views_datastream_get_datastream_tags",
+        "summary": "Get Datastream Tags",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "datastream_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Datastream Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": { "$ref": "#/components/schemas/TagGetResponse" },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "title": "Response", "type": "string" }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": { "title": "Response", "type": "string" }
+              }
+            }
+          }
+        },
+        "description": "Get all tags associated with a Datastream.",
+        "tags": ["Datastreams"],
+        "security": [
+          { "SessionAuth": [] },
+          { "BearerAuth": [] },
+          { "APIKeyAuth": [] }
+        ]
+      },
+      "post": {
+        "operationId": "sta_views_datastream_add_datastream_tag",
+        "summary": "Add Datastream Tag",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "datastream_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Datastream Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TagGetResponse" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "title": "Response", "type": "string" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "title": "Response", "type": "string" }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": { "title": "Response", "type": "string" }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": { "title": "Response", "type": "string" }
+              }
+            }
+          }
+        },
+        "description": "Add a tag to a Datastream.",
+        "tags": ["Datastreams"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/TagPostBody" }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          { "SessionAuth": [] },
+          { "BearerAuth": [] },
+          { "APIKeyAuth": [] }
+        ]
+      },
+      "put": {
+        "operationId": "sta_views_datastream_edit_datastream_tag",
+        "summary": "Edit Datastream Tag",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "datastream_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Datastream Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TagGetResponse" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "title": "Response", "type": "string" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "title": "Response", "type": "string" }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": { "title": "Response", "type": "string" }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": { "title": "Response", "type": "string" }
+              }
+            }
+          }
+        },
+        "description": "Edit a tag of a Datastream.",
+        "tags": ["Datastreams"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/TagPostBody" }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          { "SessionAuth": [] },
+          { "BearerAuth": [] },
+          { "APIKeyAuth": [] }
+        ]
+      },
+      "delete": {
+        "operationId": "sta_views_datastream_remove_datastream_tag",
+        "summary": "Remove Datastream Tag",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "datastream_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Datastream Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": { "description": "No Content" },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "title": "Response", "type": "string" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "title": "Response", "type": "string" }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": { "title": "Response", "type": "string" }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": { "title": "Response", "type": "string" }
+              }
+            }
+          }
+        },
+        "description": "Remove a tag from a Datastream.",
+        "tags": ["Datastreams"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/TagDeleteBody" }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          { "SessionAuth": [] },
+          { "BearerAuth": [] },
+          { "APIKeyAuth": [] }
+        ]
+      }
+    },
+    "/api/data/datastreams/{datastream_id}/file-attachments": {
+      "get": {
+        "operationId": "sta_views_datastream_get_datastream_file_attachments",
+        "summary": "Get Datastream File Attachments",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "datastream_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Datastream Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/FileAttachmentGetResponse"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "title": "Response", "type": "string" }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": { "title": "Response", "type": "string" }
+              }
+            }
+          }
+        },
+        "description": "Get all file attachments associated with a Datastream.",
+        "tags": ["Datastreams"],
+        "security": [
+          { "SessionAuth": [] },
+          { "BearerAuth": [] },
+          { "APIKeyAuth": [] }
+        ]
+      },
+      "post": {
+        "operationId": "sta_views_datastream_add_datastream_file_attachment",
+        "summary": "Add Datastream File Attachment",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "datastream_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Datastream Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileAttachmentGetResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "title": "Response", "type": "string" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "title": "Response", "type": "string" }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": { "title": "Response", "type": "string" }
+              }
+            }
+          },
+          "413": {
+            "description": "Request Entity Too Large",
+            "content": {
+              "application/json": {
+                "schema": { "title": "Response", "type": "string" }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": { "title": "Response", "type": "string" }
+              }
+            }
+          }
+        },
+        "description": "Add a file attachment to a datastream.",
+        "tags": ["Datastreams"],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "properties": {
+                  "file": {
+                    "format": "binary",
+                    "title": "File",
+                    "type": "string"
+                  },
+                  "data": {
+                    "$ref": "#/components/schemas/FileAttachmentPostBody"
+                  }
+                },
+                "required": ["file", "data"],
+                "title": "MultiPartBodyParams",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          { "SessionAuth": [] },
+          { "BearerAuth": [] },
+          { "APIKeyAuth": [] }
+        ]
+      },
+      "delete": {
+        "operationId": "sta_views_datastream_remove_datastream_file_attachment",
+        "summary": "Remove Datastream File Attachment",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "datastream_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Datastream Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": { "description": "No Content" },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "title": "Response", "type": "string" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "title": "Response", "type": "string" }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": { "title": "Response", "type": "string" }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": { "title": "Response", "type": "string" }
+              }
+            }
+          }
+        },
+        "description": "Remove a file attachment from a datastream.",
+        "tags": ["Datastreams"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FileAttachmentDeleteBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          { "SessionAuth": [] },
+          { "BearerAuth": [] },
+          { "APIKeyAuth": [] }
+        ]
+      }
+    },
     "/api/data/datastreams/{datastream_id}/csv": {
       "get": {
         "operationId": "sta_views_datastream_get_datastream_csv",
@@ -4034,7 +4724,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -4116,6 +4806,19 @@
             },
             "required": false,
             "description": "Sets the minimum phenomenon time of filtered observations."
+          },
+          {
+            "in": "query",
+            "name": "result_qualifier_code",
+            "schema": {
+              "default": [],
+              "description": "Filter observations by result qualifier code.",
+              "items": { "type": "string" },
+              "title": "Result Qualifier Code",
+              "type": "array"
+            },
+            "required": false,
+            "description": "Filter observations by result qualifier code."
           }
         ],
         "responses": {
@@ -4465,106 +5168,6 @@
           { "APIKeyAuth": [] }
         ]
       },
-      "patch": {
-        "operationId": "sta_views_observation_update_observation",
-        "summary": "Update Observation",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "datastream_id",
-            "schema": {
-              "format": "uuid",
-              "title": "Datastream Id",
-              "type": "string"
-            },
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "observation_id",
-            "schema": {
-              "format": "uuid",
-              "title": "Observation Id",
-              "type": "string"
-            },
-            "required": true
-          },
-          {
-            "in": "query",
-            "name": "expand_related",
-            "schema": {
-              "anyOf": [{ "type": "boolean" }, { "type": "null" }],
-              "title": "Expand Related"
-            },
-            "required": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/components/schemas/ObservationSummaryResponse"
-                    },
-                    { "$ref": "#/components/schemas/ObservationDetailResponse" }
-                  ],
-                  "title": "Response"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": { "title": "Response", "type": "string" }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": { "title": "Response", "type": "string" }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": { "title": "Response", "type": "string" }
-              }
-            }
-          },
-          "422": {
-            "description": "Unprocessable Entity",
-            "content": {
-              "application/json": {
-                "schema": { "title": "Response", "type": "string" }
-              }
-            }
-          }
-        },
-        "description": "Update an Observation.",
-        "tags": ["Observations"],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": { "$ref": "#/components/schemas/ObservationPatchBody" }
-            }
-          },
-          "required": true
-        },
-        "security": [
-          { "SessionAuth": [] },
-          { "BearerAuth": [] },
-          { "APIKeyAuth": [] }
-        ]
-      },
       "delete": {
         "operationId": "sta_views_observation_delete_observation",
         "summary": "Delete Observation",
@@ -4650,7 +5253,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -4908,7 +5511,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -5186,7 +5789,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -5437,7 +6040,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -5705,7 +6308,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -5996,7 +6599,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -6060,7 +6663,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -6328,7 +6931,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -6784,7 +7387,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -7216,7 +7819,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -7652,7 +8255,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -8301,7 +8904,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -8938,7 +9541,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",
@@ -9151,7 +9754,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",
@@ -9239,7 +9842,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",
@@ -9544,7 +10147,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",
@@ -9611,7 +10214,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",
@@ -9726,6 +10329,15 @@
         "title": "ThingQueryParameters",
         "type": "object"
       },
+      "FileAttachmentGetResponse": {
+        "properties": {
+          "name": { "title": "Name", "type": "string" },
+          "link": { "title": "Link", "type": "string" }
+        },
+        "required": ["name", "link"],
+        "title": "FileAttachmentGetResponse",
+        "type": "object"
+      },
       "LocationDetailResponse": {
         "properties": {
           "latitude": {
@@ -9777,15 +10389,6 @@
         "title": "LocationDetailResponse",
         "type": "object"
       },
-      "PhotoGetResponse": {
-        "properties": {
-          "name": { "title": "Name", "type": "string" },
-          "link": { "title": "Link", "type": "string" }
-        },
-        "required": ["name", "link"],
-        "title": "PhotoGetResponse",
-        "type": "object"
-      },
       "TagGetResponse": {
         "properties": {
           "key": { "title": "Key", "type": "string" },
@@ -9829,9 +10432,11 @@
             "title": "Tags",
             "type": "array"
           },
-          "photos": {
-            "items": { "$ref": "#/components/schemas/PhotoGetResponse" },
-            "title": "Photos",
+          "fileAttachments": {
+            "items": {
+              "$ref": "#/components/schemas/FileAttachmentGetResponse"
+            },
+            "title": "Fileattachments",
             "type": "array"
           }
         },
@@ -9846,7 +10451,7 @@
           "workspace",
           "location",
           "tags",
-          "photos"
+          "fileAttachments"
         ],
         "title": "ThingDetailResponse",
         "type": "object"
@@ -9887,9 +10492,11 @@
             "title": "Tags",
             "type": "array"
           },
-          "photos": {
-            "items": { "$ref": "#/components/schemas/PhotoGetResponse" },
-            "title": "Photos",
+          "fileAttachments": {
+            "items": {
+              "$ref": "#/components/schemas/FileAttachmentGetResponse"
+            },
+            "title": "Fileattachments",
             "type": "array"
           }
         },
@@ -9904,7 +10511,7 @@
           "workspaceId",
           "location",
           "tags",
-          "photos"
+          "fileAttachments"
         ],
         "title": "ThingSummaryResponse",
         "type": "object"
@@ -10013,7 +10620,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",
@@ -10134,10 +10741,22 @@
         "title": "TagDeleteBody",
         "type": "object"
       },
-      "PhotoDeleteBody": {
+      "FileAttachmentPostBody": {
+        "properties": {
+          "name": { "title": "Name", "type": "string" },
+          "fileAttachmentType": {
+            "title": "Fileattachmenttype",
+            "type": "string"
+          }
+        },
+        "required": ["name", "fileAttachmentType"],
+        "title": "FileAttachmentPostBody",
+        "type": "object"
+      },
+      "FileAttachmentDeleteBody": {
         "properties": { "name": { "title": "Name", "type": "string" } },
         "required": ["name"],
-        "title": "PhotoDeleteBody",
+        "title": "FileAttachmentDeleteBody",
         "type": "object"
       },
       "HydroShareArchivalDetailResponse": {
@@ -10259,7 +10878,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",
@@ -11321,7 +11940,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",
@@ -11371,6 +11990,13 @@
             ],
             "description": "Sets the minimum phenomenon time of filtered observations.",
             "title": "Phenomenon Time Min"
+          },
+          "result_qualifier_code": {
+            "default": [],
+            "description": "Filter observations by result qualifier code.",
+            "items": { "type": "string" },
+            "title": "Result Qualifier Code",
+            "type": "array"
           }
         },
         "title": "ObservationQueryParameters",
@@ -11383,9 +12009,14 @@
             "title": "Phenomenontime",
             "type": "array"
           },
-          "result": { "items": {}, "title": "Result", "type": "array" }
+          "result": { "items": {}, "title": "Result", "type": "array" },
+          "resultQualifierCodes": {
+            "items": {},
+            "title": "Resultqualifiercodes",
+            "type": "array"
+          }
         },
-        "required": ["phenomenonTime", "result"],
+        "required": ["phenomenonTime", "result", "resultQualifierCodes"],
         "title": "ObservationColumnarResponse",
         "type": "object"
       },
@@ -11399,6 +12030,12 @@
             "title": "Phenomenontime"
           },
           "result": { "title": "Result", "type": "number" },
+          "resultQualifierCodes": {
+            "default": [],
+            "items": { "type": "string" },
+            "title": "Resultqualifiercodes",
+            "type": "array"
+          },
           "id": { "format": "uuid", "title": "Id", "type": "string" },
           "workspace": {
             "$ref": "#/components/schemas/WorkspaceSummaryResponse"
@@ -11420,7 +12057,10 @@
       "ObservationRowResponse": {
         "properties": {
           "fields": {
-            "items": { "enum": ["phenomenonTime", "result"], "type": "string" },
+            "items": {
+              "enum": ["phenomenonTime", "result", "resultQualifierCodes"],
+              "type": "string"
+            },
             "title": "Fields",
             "type": "array"
           },
@@ -11444,6 +12084,12 @@
             "title": "Phenomenontime"
           },
           "result": { "title": "Result", "type": "number" },
+          "resultQualifierCodes": {
+            "default": [],
+            "items": { "type": "string" },
+            "title": "Resultqualifiercodes",
+            "type": "array"
+          },
           "id": { "format": "uuid", "title": "Id", "type": "string" },
           "workspaceId": {
             "format": "uuid",
@@ -11475,7 +12121,13 @@
             ],
             "title": "Phenomenontime"
           },
-          "result": { "title": "Result", "type": "number" }
+          "result": { "title": "Result", "type": "number" },
+          "resultQualifierCodes": {
+            "default": [],
+            "items": { "type": "string" },
+            "title": "Resultqualifiercodes",
+            "type": "array"
+          }
         },
         "required": ["phenomenonTime", "result"],
         "title": "ObservationPostBody",
@@ -11501,7 +12153,10 @@
       "ObservationBulkPostBody": {
         "properties": {
           "fields": {
-            "items": { "enum": ["phenomenonTime", "result"], "type": "string" },
+            "items": {
+              "enum": ["phenomenonTime", "result", "resultQualifierCodes"],
+              "type": "string"
+            },
             "title": "Fields",
             "type": "array"
           },
@@ -11537,20 +12192,6 @@
         "title": "ObservationBulkDeleteBody",
         "type": "object"
       },
-      "ObservationPatchBody": {
-        "properties": {
-          "phenomenonTime": {
-            "anyOf": [
-              { "type": "string" },
-              { "format": "date-time", "type": "string" }
-            ],
-            "title": "Phenomenontime"
-          },
-          "result": { "title": "Result", "type": "number" }
-        },
-        "title": "ObservationPatchBody",
-        "type": "object"
-      },
       "ObservedPropertyQueryParameters": {
         "properties": {
           "page": {
@@ -11560,7 +12201,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",
@@ -11705,7 +12346,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",
@@ -11839,7 +12480,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",
@@ -12147,7 +12788,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",
@@ -12279,7 +12920,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",
@@ -12407,7 +13048,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",
@@ -12521,7 +13162,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",

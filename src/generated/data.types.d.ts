@@ -260,10 +260,10 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Get Tag Keys
-         * @description Get all existing unique tag keys.
+         * Get Thing Tag Keys
+         * @description Get all existing unique thing tag keys.
          */
-        get: operations["sta_views_thing_get_tag_keys"];
+        get: operations["sta_views_thing_get_thing_tag_keys"];
         put?: never;
         post?: never;
         delete?: never;
@@ -312,6 +312,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/data/things/file-attachment-types": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get File Attachment Types
+         * @description Get file attachment types.
+         */
+        get: operations["sta_views_thing_get_file_attachment_types"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/data/things/{thing_id}": {
         parameters: {
             query?: never;
@@ -348,31 +368,31 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Get Tags
+         * Get Thing Tags
          * @description Get all tags associated with a Thing.
          */
-        get: operations["sta_views_thing_get_tags"];
+        get: operations["sta_views_thing_get_thing_tags"];
         /**
-         * Edit Tag
+         * Edit Thing Tag
          * @description Edit a tag of a Thing.
          */
-        put: operations["sta_views_thing_edit_tag"];
+        put: operations["sta_views_thing_edit_thing_tag"];
         /**
-         * Add Tag
+         * Add Thing Tag
          * @description Add a tag to a Thing.
          */
-        post: operations["sta_views_thing_add_tag"];
+        post: operations["sta_views_thing_add_thing_tag"];
         /**
-         * Remove Tag
+         * Remove Thing Tag
          * @description Remove a tag from a Thing.
          */
-        delete: operations["sta_views_thing_remove_tag"];
+        delete: operations["sta_views_thing_remove_thing_tag"];
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/data/things/{thing_id}/photos": {
+    "/api/data/things/{thing_id}/file-attachments": {
         parameters: {
             query?: never;
             header?: never;
@@ -380,21 +400,21 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Get Photos
-         * @description Get all photos associated with a Thing.
+         * Get Thing File Attachments
+         * @description Get all file attachments associated with a Thing.
          */
-        get: operations["sta_views_thing_get_photos"];
+        get: operations["sta_views_thing_get_thing_file_attachments"];
         put?: never;
         /**
-         * Add Photo
-         * @description Add a photo to a thing.
+         * Add Thing File Attachment
+         * @description Add a file attachment to a thing.
          */
-        post: operations["sta_views_thing_add_photo"];
+        post: operations["sta_views_thing_add_thing_file_attachment"];
         /**
-         * Remove Photo
-         * @description Remove a photo from a thing.
+         * Remove Thing File Attachment
+         * @description Remove a file attachment from a thing.
          */
-        delete: operations["sta_views_thing_remove_photo"];
+        delete: operations["sta_views_thing_remove_thing_file_attachment"];
         options?: never;
         head?: never;
         patch?: never;
@@ -476,6 +496,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/data/datastreams/tags/keys": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Datastream Tag Keys
+         * @description Get all existing unique datastream tag keys.
+         */
+        get: operations["sta_views_datastream_get_datastream_tag_keys"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/data/datastreams/aggregation-statistics": {
         parameters: {
             query?: never;
@@ -536,6 +576,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/data/datastreams/file-attachment-types": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get File Attachment Types
+         * @description Get file attachment types.
+         */
+        get: operations["sta_views_datastream_get_file_attachment_types"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/data/datastreams/{datastream_id}": {
         parameters: {
             query?: never;
@@ -562,6 +622,66 @@ export interface paths {
          * @description Update a Datastream.
          */
         patch: operations["sta_views_datastream_update_datastream"];
+        trace?: never;
+    };
+    "/api/data/datastreams/{datastream_id}/tags": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Datastream Tags
+         * @description Get all tags associated with a Datastream.
+         */
+        get: operations["sta_views_datastream_get_datastream_tags"];
+        /**
+         * Edit Datastream Tag
+         * @description Edit a tag of a Datastream.
+         */
+        put: operations["sta_views_datastream_edit_datastream_tag"];
+        /**
+         * Add Datastream Tag
+         * @description Add a tag to a Datastream.
+         */
+        post: operations["sta_views_datastream_add_datastream_tag"];
+        /**
+         * Remove Datastream Tag
+         * @description Remove a tag from a Datastream.
+         */
+        delete: operations["sta_views_datastream_remove_datastream_tag"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/data/datastreams/{datastream_id}/file-attachments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Datastream File Attachments
+         * @description Get all file attachments associated with a Datastream.
+         */
+        get: operations["sta_views_datastream_get_datastream_file_attachments"];
+        put?: never;
+        /**
+         * Add Datastream File Attachment
+         * @description Add a file attachment to a datastream.
+         */
+        post: operations["sta_views_datastream_add_datastream_file_attachment"];
+        /**
+         * Remove Datastream File Attachment
+         * @description Remove a file attachment from a datastream.
+         */
+        delete: operations["sta_views_datastream_remove_datastream_file_attachment"];
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/data/datastreams/{datastream_id}/csv": {
@@ -669,11 +789,7 @@ export interface paths {
         delete: operations["sta_views_observation_delete_observation"];
         options?: never;
         head?: never;
-        /**
-         * Update Observation
-         * @description Update an Observation.
-         */
-        patch: operations["sta_views_observation_update_observation"];
+        patch?: never;
         trace?: never;
     };
     "/api/data/observed-properties": {
@@ -1696,6 +1812,13 @@ export interface components {
              */
             is_private?: boolean | null;
         };
+        /** FileAttachmentGetResponse */
+        FileAttachmentGetResponse: {
+            /** Name */
+            name: string;
+            /** Link */
+            link: string;
+        };
         /** LocationDetailResponse */
         LocationDetailResponse: {
             /** Latitude */
@@ -1712,13 +1835,6 @@ export interface components {
             county?: string | null;
             /** Country */
             country?: string | null;
-        };
-        /** PhotoGetResponse */
-        PhotoGetResponse: {
-            /** Name */
-            name: string;
-            /** Link */
-            link: string;
         };
         /** TagGetResponse */
         TagGetResponse: {
@@ -1752,8 +1868,8 @@ export interface components {
             location: components["schemas"]["LocationDetailResponse"];
             /** Tags */
             tags: components["schemas"]["TagGetResponse"][];
-            /** Photos */
-            photos: components["schemas"]["PhotoGetResponse"][];
+            /** Fileattachments */
+            fileAttachments: components["schemas"]["FileAttachmentGetResponse"][];
         };
         /** ThingSummaryResponse */
         ThingSummaryResponse: {
@@ -1784,8 +1900,8 @@ export interface components {
             location: components["schemas"]["LocationDetailResponse"];
             /** Tags */
             tags: components["schemas"]["TagGetResponse"][];
-            /** Photos */
-            photos: components["schemas"]["PhotoGetResponse"][];
+            /** Fileattachments */
+            fileAttachments: components["schemas"]["FileAttachmentGetResponse"][];
         };
         /** LocationPostBody */
         LocationPostBody: {
@@ -1895,8 +2011,15 @@ export interface components {
             /** Value */
             value?: string | null;
         };
-        /** PhotoDeleteBody */
-        PhotoDeleteBody: {
+        /** FileAttachmentPostBody */
+        FileAttachmentPostBody: {
+            /** Name */
+            name: string;
+            /** Fileattachmenttype */
+            fileAttachmentType: string;
+        };
+        /** FileAttachmentDeleteBody */
+        FileAttachmentDeleteBody: {
             /** Name */
             name: string;
         };
@@ -2570,6 +2693,12 @@ export interface components {
              * @description Sets the minimum phenomenon time of filtered observations.
              */
             phenomenon_time_min?: string | null;
+            /**
+             * Result Qualifier Code
+             * @description Filter observations by result qualifier code.
+             * @default []
+             */
+            result_qualifier_code: string[];
         };
         /** ObservationColumnarResponse */
         ObservationColumnarResponse: {
@@ -2577,6 +2706,8 @@ export interface components {
             phenomenonTime: unknown[];
             /** Result */
             result: unknown[];
+            /** Resultqualifiercodes */
+            resultQualifierCodes: unknown[];
         };
         /** ObservationDetailResponse */
         ObservationDetailResponse: {
@@ -2584,6 +2715,11 @@ export interface components {
             phenomenonTime: string;
             /** Result */
             result: number;
+            /**
+             * Resultqualifiercodes
+             * @default []
+             */
+            resultQualifierCodes: string[];
             /**
              * Id
              * Format: uuid
@@ -2595,7 +2731,7 @@ export interface components {
         /** ObservationRowResponse */
         ObservationRowResponse: {
             /** Fields */
-            fields: ("phenomenonTime" | "result")[];
+            fields: ("phenomenonTime" | "result" | "resultQualifierCodes")[];
             /** Data */
             data: unknown[][];
         };
@@ -2605,6 +2741,11 @@ export interface components {
             phenomenonTime: string;
             /** Result */
             result: number;
+            /**
+             * Resultqualifiercodes
+             * @default []
+             */
+            resultQualifierCodes: string[];
             /**
              * Id
              * Format: uuid
@@ -2627,6 +2768,11 @@ export interface components {
             phenomenonTime: string;
             /** Result */
             result: number;
+            /**
+             * Resultqualifiercodes
+             * @default []
+             */
+            resultQualifierCodes: string[];
         };
         /** ObservationBulkPostQueryParameters */
         ObservationBulkPostQueryParameters: {
@@ -2639,7 +2785,7 @@ export interface components {
         /** ObservationBulkPostBody */
         ObservationBulkPostBody: {
             /** Fields */
-            fields: ("phenomenonTime" | "result")[];
+            fields: ("phenomenonTime" | "result" | "resultQualifierCodes")[];
             /** Data */
             data: unknown[][];
         };
@@ -2649,13 +2795,6 @@ export interface components {
             phenomenonTimeStart?: string | null;
             /** Phenomenontimeend */
             phenomenonTimeEnd?: string | null;
-        };
-        /** ObservationPatchBody */
-        ObservationPatchBody: {
-            /** Phenomenontime */
-            phenomenonTime?: string;
-            /** Result */
-            result?: number;
         };
         /** ObservedPropertyQueryParameters */
         ObservedPropertyQueryParameters: {
@@ -4523,7 +4662,7 @@ export interface operations {
             };
         };
     };
-    sta_views_thing_get_tag_keys: {
+    sta_views_thing_get_thing_tag_keys: {
         parameters: {
             query?: {
                 workspace_id?: string | null;
@@ -4585,6 +4724,33 @@ export interface operations {
         };
     };
     sta_views_thing_get_sampling_feature_types: {
+        parameters: {
+            query?: {
+                /** @description Page number (1-based). */
+                page?: number | null;
+                /** @description The number of items per page. */
+                page_size?: number | null;
+                /** @description Sort terms by descending. */
+                order_desc?: boolean | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string[];
+                };
+            };
+        };
+    };
+    sta_views_thing_get_file_attachment_types: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -4755,7 +4921,7 @@ export interface operations {
             };
         };
     };
-    sta_views_thing_get_tags: {
+    sta_views_thing_get_thing_tags: {
         parameters: {
             query?: never;
             header?: never;
@@ -4795,7 +4961,7 @@ export interface operations {
             };
         };
     };
-    sta_views_thing_edit_tag: {
+    sta_views_thing_edit_thing_tag: {
         parameters: {
             query?: never;
             header?: never;
@@ -4857,7 +5023,7 @@ export interface operations {
             };
         };
     };
-    sta_views_thing_add_tag: {
+    sta_views_thing_add_thing_tag: {
         parameters: {
             query?: never;
             header?: never;
@@ -4919,7 +5085,7 @@ export interface operations {
             };
         };
     };
-    sta_views_thing_remove_tag: {
+    sta_views_thing_remove_thing_tag: {
         parameters: {
             query?: never;
             header?: never;
@@ -4979,7 +5145,7 @@ export interface operations {
             };
         };
     };
-    sta_views_thing_get_photos: {
+    sta_views_thing_get_thing_file_attachments: {
         parameters: {
             query?: never;
             header?: never;
@@ -4996,7 +5162,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PhotoGetResponse"][];
+                    "application/json": components["schemas"]["FileAttachmentGetResponse"][];
                 };
             };
             /** @description Unauthorized */
@@ -5019,7 +5185,7 @@ export interface operations {
             };
         };
     };
-    sta_views_thing_add_photo: {
+    sta_views_thing_add_thing_file_attachment: {
         parameters: {
             query?: never;
             header?: never;
@@ -5036,6 +5202,7 @@ export interface operations {
                      * Format: binary
                      */
                     file: string;
+                    data: components["schemas"]["FileAttachmentPostBody"];
                 };
             };
         };
@@ -5046,7 +5213,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PhotoGetResponse"];
+                    "application/json": components["schemas"]["FileAttachmentGetResponse"];
                 };
             };
             /** @description Bad Request */
@@ -5096,7 +5263,7 @@ export interface operations {
             };
         };
     };
-    sta_views_thing_remove_photo: {
+    sta_views_thing_remove_thing_file_attachment: {
         parameters: {
             query?: never;
             header?: never;
@@ -5107,7 +5274,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["PhotoDeleteBody"];
+                "application/json": components["schemas"]["FileAttachmentDeleteBody"];
             };
         };
         responses: {
@@ -5545,6 +5712,40 @@ export interface operations {
             };
         };
     };
+    sta_views_datastream_get_datastream_tag_keys: {
+        parameters: {
+            query?: {
+                workspace_id?: string | null;
+                datastream_id?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: string[];
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
     sta_views_datastream_get_datastream_aggregation_statistics: {
         parameters: {
             query?: {
@@ -5600,6 +5801,33 @@ export interface operations {
         };
     };
     sta_views_datastream_get_datastream_sampled_mediums: {
+        parameters: {
+            query?: {
+                /** @description Page number (1-based). */
+                page?: number | null;
+                /** @description The number of items per page. */
+                page_size?: number | null;
+                /** @description Sort terms by descending. */
+                order_desc?: boolean | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string[];
+                };
+            };
+        };
+    };
+    sta_views_datastream_get_file_attachment_types: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -5770,6 +5998,408 @@ export interface operations {
             };
         };
     };
+    sta_views_datastream_get_datastream_tags: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                datastream_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TagGetResponse"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    sta_views_datastream_edit_datastream_tag: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                datastream_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TagPostBody"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TagGetResponse"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    sta_views_datastream_add_datastream_tag: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                datastream_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TagPostBody"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TagGetResponse"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    sta_views_datastream_remove_datastream_tag: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                datastream_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TagDeleteBody"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    sta_views_datastream_get_datastream_file_attachments: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                datastream_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FileAttachmentGetResponse"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    sta_views_datastream_add_datastream_file_attachment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                datastream_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /**
+                     * File
+                     * Format: binary
+                     */
+                    file: string;
+                    data: components["schemas"]["FileAttachmentPostBody"];
+                };
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FileAttachmentGetResponse"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Request Entity Too Large */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    sta_views_datastream_remove_datastream_file_attachment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                datastream_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FileAttachmentDeleteBody"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
     sta_views_datastream_get_datastream_csv: {
         parameters: {
             query?: never;
@@ -5824,6 +6454,8 @@ export interface operations {
                 phenomenon_time_max?: string | null;
                 /** @description Sets the minimum phenomenon time of filtered observations. */
                 phenomenon_time_min?: string | null;
+                /** @description Filter observations by result qualifier code. */
+                result_qualifier_code?: string[];
             };
             header?: never;
             path: {
@@ -6095,71 +6727,6 @@ export interface operations {
             };
             /** @description Conflict */
             409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-        };
-    };
-    sta_views_observation_update_observation: {
-        parameters: {
-            query?: {
-                expand_related?: boolean | null;
-            };
-            header?: never;
-            path: {
-                datastream_id: string;
-                observation_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ObservationPatchBody"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObservationSummaryResponse"] | components["schemas"]["ObservationDetailResponse"];
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Unprocessable Entity */
-            422: {
                 headers: {
                     [name: string]: unknown;
                 };
