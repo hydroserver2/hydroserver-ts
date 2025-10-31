@@ -4,10 +4,14 @@ import {
   DatastreamContract as C,
   ObservationContract,
 } from '../../generated/contracts'
+import type * as Data from '../../generated/data.types'
 import type { ApiResponse } from '../responseInterceptor'
 import { Datastream as M } from '../../types'
 
 type WithId = { id: string }
+
+type TagPostBody = Data.components['schemas']['TagPostBody']
+type TagDeleteBody = Data.components['schemas']['TagDeleteBody']
 
 type ObservationBulkPostQueryParameters = {
   /**
@@ -42,6 +46,53 @@ export class DatastreamService extends HydroServerBaseService<typeof C, M> {
   static route = C.route
   static writableKeys = C.writableKeys
   static Model = M
+
+  /* ----------------------- Sub-resources: Tags ----------------------- */
+
+  getTags(datastreamId: string) {
+    const url = `${this._route}/${datastreamId}/tags`
+    return apiMethods.fetch(url)
+  }
+
+  getTagKeys(params: { workspace_id?: string; datastream_id?: string }) {
+    const url = this.withQuery(`${this._route}/tags/keys`, params)
+    return apiMethods.fetch(url)
+  }
+
+  createTag(datastreamId: string, tag: TagPostBody) {
+    const url = `${this._route}/${datastreamId}/tags`
+    return apiMethods.post(url, tag)
+  }
+
+  updateTag(datastreamId: string, tag: TagPostBody) {
+    const url = `${this._route}/${datastreamId}/tags`
+    return apiMethods.put(url, tag)
+  }
+
+  deleteTag(datastreamId: string, tag: TagDeleteBody) {
+    const url = `${this._route}/${datastreamId}/tags`
+    return apiMethods.delete(url, tag)
+  }
+
+  /* ----------------- Sub-resources: File Attachments ----------------- */
+
+  getFileAttachmentTypes = () =>
+    apiMethods.fetch(`${this._route}/file-attachment-types`)
+
+  uploadAttachments(datastreamId: string, data: FormData) {
+    const url = `${this._route}/${datastreamId}/file-attachments`
+    return apiMethods.post(url, data)
+  }
+
+  getAttachments(datastreamId: string) {
+    const url = `${this._route}/${datastreamId}/file-attachments`
+    return apiMethods.paginatedFetch(url)
+  }
+
+  deleteAttachment(datastreamId: string, name: string) {
+    const url = `${this._route}/${datastreamId}/file-attachments`
+    return apiMethods.delete(url, { name })
+  }
 
   /* ============================== CSV =============================== */
 

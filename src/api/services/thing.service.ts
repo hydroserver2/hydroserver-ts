@@ -50,20 +50,23 @@ export class ThingService extends HydroServerBaseService<typeof C, Thing> {
     return apiMethods.delete(url, tag)
   }
 
-  /* ---------------------- Sub-resources: Photos ---------------------- */
+  /* ----------------- Sub-resources: File Attachments ----------------- */
 
-  uploadPhotos(thingId: string, data: FormData) {
-    const url = `${this._route}/${thingId}/photos`
+  getFileAttachmentTypes = () =>
+    apiMethods.fetch(`${this._route}/file-attachment-types`)
+
+  uploadAttachments(thingId: string, data: FormData) {
+    const url = `${this._route}/${thingId}/file-attachments`
     return apiMethods.post(url, data)
   }
 
-  getPhotos(thingId: string) {
-    const url = `${this._route}/${thingId}/photos`
+  getAttachments(thingId: string) {
+    const url = `${this._route}/${thingId}/file-attachments`
     return apiMethods.paginatedFetch(url)
   }
 
-  deletePhoto(thingId: string, name: string) {
-    const url = `${this._route}/${thingId}/photos`
+  deleteAttachment(thingId: string, name: string) {
+    const url = `${this._route}/${thingId}/file-attachments`
     return apiMethods.delete(url, { name })
   }
 

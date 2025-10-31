@@ -8,9 +8,9 @@ export namespace ObservationContract {
   export type SummaryResponse = Data.components['schemas']['ObservationSummaryResponse']
   export type DetailResponse  = Data.components['schemas']['ObservationDetailResponse']
   export type PostBody        = Data.components['schemas']['ObservationPostBody']
-  export type PatchBody       = Data.components['schemas']['ObservationPatchBody']
+  export type PatchBody       = Partial<Data.components['schemas']['ObservationPostBody']>
   export type DeleteBody      = never
-  export const writableKeys = ["phenomenonTime","result"] as const
+  export const writableKeys = ["phenomenonTime","result","resultQualifierCodes"] as const
   export declare const __types: {
     SummaryResponse: SummaryResponse
     DetailResponse: DetailResponse
