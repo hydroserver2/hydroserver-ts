@@ -49,7 +49,6 @@ export class HydroServer {
   static async initialize(options: HydroServerOptions): Promise<HydroServer> {
     const client = new HydroServer(options)
     await client.session.initialize()
-    client.session.enableAutoRefresh()
     return client
   }
 

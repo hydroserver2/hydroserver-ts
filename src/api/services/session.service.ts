@@ -107,6 +107,7 @@ export class SessionService {
       password,
     })
     this._setSession(res)
+    return res
   }
 
   async signup(user: User) {
@@ -159,24 +160,6 @@ export class SessionService {
       this._client.emit('session:expired')
       this.logout()
     }
-  }
-
-  enableAutoRefresh() {
-    if (this.autoRefreshEnabled) return
-    const handler = () => this.checkExpiration()
-    window.addEventListener('focus', handler)
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible') handler()
-    })
-    this.autoRefreshEnabled = true
-  }
-
-  disableAutoRefresh() {
-    if (!this.autoRefreshEnabled) return
-    const handler = () => this.checkExpiration()
-    window.removeEventListener('focus', handler)
-    document.removeEventListener('visibilitychange', handler)
-    this.autoRefreshEnabled = false
   }
 
   /**
