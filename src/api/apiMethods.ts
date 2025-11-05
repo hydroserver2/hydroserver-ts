@@ -66,24 +66,34 @@ export const apiMethods = {
     return await limit(() => interceptedFetch(endpoint, options))
   },
 
-  async paginatedFetch<T>(
-    base: string,
-    pageSize?: number
-  ): Promise<ApiResponse> {
-    const size = pageSize ?? DEFAULT_PAGE_SIZE
-    const sep = base.includes('?') ? '&' : '?'
-    const url = `${base}${sep}page_size=${size}&page=1`
+  async paginatedFetch<T>(base: string): Promise<ApiResponse> {
+    const url = new URL(String(base), globalThis.location?.origin ?? undefined)
+    const urlAlreadyHasPage = url.searchParams.has('page')
+    if (!urlAlreadyHasPage) url.searchParams.set('page', '1')
+
+    if (url.searchParams.has('page_size'))
+      url.searchParams.set('page_size', String(DEFAULT_PAGE_SIZE))
 
     const opts = requestInterceptor({ method: 'GET' })
     const firstResponse = await limit(() => fetch(url, opts))
-    const totalPages = Number(firstResponse.headers.get('x-total-pages')) || 1
+    const totalPages = Number(firstResponse.headers.get('X-Total-Pages')) || 1
     const res = await responseInterceptor(firstResponse)
 
     const all: T[] = Array.isArray(res.data) ? [...res.data] : []
+    if (urlAlreadyHasPage)
+      return {
+        data: all,
+        status: res.status,
+        message: res.message,
+        meta: res.meta,
+        ok: res.ok,
+      }
 
     for (let p = 2; p <= totalPages; p++) {
-      const url = `${base}${sep}page_size=${size}&page=${p}`
-      const page = await limit(() => interceptedFetch(url, { method: 'GET' }))
+      url.searchParams.set('page', String(p))
+      const page = await limit(() =>
+        interceptedFetch(url.toString(), { method: 'GET' })
+      )
       all.push(...page.data)
     }
 
@@ -91,7 +101,7 @@ export const apiMethods = {
       data: all,
       status: res.status,
       message: res.message,
-      meta: res.message,
+      meta: res.meta,
       ok: res.ok,
     }
   },
