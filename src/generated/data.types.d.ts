@@ -669,11 +669,7 @@ export interface paths {
         delete: operations["sta_views_observation_delete_observation"];
         options?: never;
         head?: never;
-        /**
-         * Update Observation
-         * @description Update an Observation.
-         */
-        patch: operations["sta_views_observation_update_observation"];
+        patch?: never;
         trace?: never;
     };
     "/api/data/observed-properties": {
@@ -1641,7 +1637,7 @@ export interface components {
              * @description Select one or more fields to order the response by.
              * @default []
              */
-            order_by: ("name" | "samplingFeatureType" | "samplingFeatureCode" | "siteType" | "isPrivate" | "latitude" | "longitude" | "elevation_m" | "elevationDatum" | "state" | "county" | "country" | "-name" | "-samplingFeatureType" | "-samplingFeatureCode" | "-siteType" | "-isPrivate" | "-latitude" | "-longitude" | "-elevation_m" | "-elevationDatum" | "-state" | "-county" | "-country")[] | null;
+            order_by: ("name" | "samplingFeatureType" | "samplingFeatureCode" | "siteType" | "isPrivate" | "latitude" | "longitude" | "elevation_m" | "elevationDatum" | "adminArea1" | "adminArea2" | "country" | "-name" | "-samplingFeatureType" | "-samplingFeatureCode" | "-siteType" | "-isPrivate" | "-latitude" | "-longitude" | "-elevation_m" | "-elevationDatum" | "-adminArea1" | "-adminArea2" | "-country")[] | null;
             /**
              * Workspace Id
              * @description Filter things by workspace ID.
@@ -1655,17 +1651,17 @@ export interface components {
              */
             bbox: string[];
             /**
-             * State
-             * @description Filter things by state.
+             * Adminarea1
+             * @description Filter things by admin area 1.
              * @default []
              */
-            state: string[];
+            adminArea1: string[];
             /**
-             * County
-             * @description Filter things by county.
+             * Adminarea2
+             * @description Filter things by admin area 2.
              * @default []
              */
-            county: string[];
+            adminArea2: string[];
             /**
              * Country
              * @description Filter things by country.
@@ -1706,10 +1702,10 @@ export interface components {
             elevation_m?: number | null;
             /** Elevationdatum */
             elevationDatum?: string | null;
-            /** State */
-            state?: string | null;
-            /** County */
-            county?: string | null;
+            /** Adminarea1 */
+            adminArea1?: string | null;
+            /** Adminarea2 */
+            adminArea2?: string | null;
             /** Country */
             country?: string | null;
         };
@@ -1797,10 +1793,10 @@ export interface components {
             elevation_m?: number | null;
             /** Elevationdatum */
             elevationDatum?: string | null;
-            /** State */
-            state?: string | null;
-            /** County */
-            county?: string | null;
+            /** Adminarea1 */
+            adminArea1?: string | null;
+            /** Adminarea2 */
+            adminArea2?: string | null;
             /** Country */
             country?: string | null;
         };
@@ -1856,10 +1852,10 @@ export interface components {
             elevation_m?: number | null;
             /** Elevationdatum */
             elevationDatum?: string | null;
-            /** State */
-            state?: string | null;
-            /** County */
-            county?: string | null;
+            /** Adminarea1 */
+            adminArea1?: string | null;
+            /** Adminarea2 */
+            adminArea2?: string | null;
             /** Country */
             country?: string | null;
         };
@@ -2570,6 +2566,12 @@ export interface components {
              * @description Sets the minimum phenomenon time of filtered observations.
              */
             phenomenon_time_min?: string | null;
+            /**
+             * Result Qualifier Code
+             * @description Filter observations by result qualifier code.
+             * @default []
+             */
+            result_qualifier_code: string[];
         };
         /** ObservationColumnarResponse */
         ObservationColumnarResponse: {
@@ -2577,6 +2579,8 @@ export interface components {
             phenomenonTime: unknown[];
             /** Result */
             result: unknown[];
+            /** Resultqualifiercodes */
+            resultQualifierCodes: unknown[];
         };
         /** ObservationDetailResponse */
         ObservationDetailResponse: {
@@ -2584,6 +2588,11 @@ export interface components {
             phenomenonTime: string;
             /** Result */
             result: number;
+            /**
+             * Resultqualifiercodes
+             * @default []
+             */
+            resultQualifierCodes: string[];
             /**
              * Id
              * Format: uuid
@@ -2595,7 +2604,7 @@ export interface components {
         /** ObservationRowResponse */
         ObservationRowResponse: {
             /** Fields */
-            fields: ("phenomenonTime" | "result")[];
+            fields: ("phenomenonTime" | "result" | "resultQualifierCodes")[];
             /** Data */
             data: unknown[][];
         };
@@ -2605,6 +2614,11 @@ export interface components {
             phenomenonTime: string;
             /** Result */
             result: number;
+            /**
+             * Resultqualifiercodes
+             * @default []
+             */
+            resultQualifierCodes: string[];
             /**
              * Id
              * Format: uuid
@@ -2627,6 +2641,11 @@ export interface components {
             phenomenonTime: string;
             /** Result */
             result: number;
+            /**
+             * Resultqualifiercodes
+             * @default []
+             */
+            resultQualifierCodes: string[];
         };
         /** ObservationBulkPostQueryParameters */
         ObservationBulkPostQueryParameters: {
@@ -2639,7 +2658,7 @@ export interface components {
         /** ObservationBulkPostBody */
         ObservationBulkPostBody: {
             /** Fields */
-            fields: ("phenomenonTime" | "result")[];
+            fields: ("phenomenonTime" | "result" | "resultQualifierCodes")[];
             /** Data */
             data: unknown[][];
         };
@@ -2649,13 +2668,6 @@ export interface components {
             phenomenonTimeStart?: string | null;
             /** Phenomenontimeend */
             phenomenonTimeEnd?: string | null;
-        };
-        /** ObservationPatchBody */
-        ObservationPatchBody: {
-            /** Phenomenontime */
-            phenomenonTime?: string;
-            /** Result */
-            result?: number;
         };
         /** ObservedPropertyQueryParameters */
         ObservedPropertyQueryParameters: {
@@ -4424,15 +4436,15 @@ export interface operations {
                 page_size?: number | null;
                 expand_related?: boolean | null;
                 /** @description Select one or more fields to order the response by. */
-                order_by?: ("name" | "samplingFeatureType" | "samplingFeatureCode" | "siteType" | "isPrivate" | "latitude" | "longitude" | "elevation_m" | "elevationDatum" | "state" | "county" | "country" | "-name" | "-samplingFeatureType" | "-samplingFeatureCode" | "-siteType" | "-isPrivate" | "-latitude" | "-longitude" | "-elevation_m" | "-elevationDatum" | "-state" | "-county" | "-country")[] | null;
+                order_by?: ("name" | "samplingFeatureType" | "samplingFeatureCode" | "siteType" | "isPrivate" | "latitude" | "longitude" | "elevation_m" | "elevationDatum" | "adminArea1" | "adminArea2" | "country" | "-name" | "-samplingFeatureType" | "-samplingFeatureCode" | "-siteType" | "-isPrivate" | "-latitude" | "-longitude" | "-elevation_m" | "-elevationDatum" | "-adminArea1" | "-adminArea2" | "-country")[] | null;
                 /** @description Filter things by workspace ID. */
                 workspace_id?: string[];
                 /** @description Filter things by bounding box. Format bounding box as {min_lon},{min_lat},{max_lon},{max_lat} */
                 bbox?: string[];
-                /** @description Filter things by state. */
-                state?: string[];
-                /** @description Filter things by county. */
-                county?: string[];
+                /** @description Filter things by admin area 1. */
+                adminArea1?: string[];
+                /** @description Filter things by admin area 2. */
+                adminArea2?: string[];
                 /** @description Filter things by country. */
                 country?: string[];
                 /** @description Filter things by site type. */
@@ -5824,6 +5836,8 @@ export interface operations {
                 phenomenon_time_max?: string | null;
                 /** @description Sets the minimum phenomenon time of filtered observations. */
                 phenomenon_time_min?: string | null;
+                /** @description Filter observations by result qualifier code. */
+                result_qualifier_code?: string[];
             };
             header?: never;
             path: {
@@ -6095,71 +6109,6 @@ export interface operations {
             };
             /** @description Conflict */
             409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-        };
-    };
-    sta_views_observation_update_observation: {
-        parameters: {
-            query?: {
-                expand_related?: boolean | null;
-            };
-            header?: never;
-            path: {
-                datastream_id: string;
-                observation_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ObservationPatchBody"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObservationSummaryResponse"] | components["schemas"]["ObservationDetailResponse"];
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Unprocessable Entity */
-            422: {
                 headers: {
                     [name: string]: unknown;
                 };

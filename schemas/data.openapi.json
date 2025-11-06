@@ -30,7 +30,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -587,7 +587,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -867,7 +867,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -1364,7 +1364,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -1584,7 +1584,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -1619,8 +1619,8 @@
                       "longitude",
                       "elevation_m",
                       "elevationDatum",
-                      "state",
-                      "county",
+                      "adminArea1",
+                      "adminArea2",
                       "country",
                       "-name",
                       "-samplingFeatureType",
@@ -1631,8 +1631,8 @@
                       "-longitude",
                       "-elevation_m",
                       "-elevationDatum",
-                      "-state",
-                      "-county",
+                      "-adminArea1",
+                      "-adminArea2",
                       "-country"
                     ],
                     "type": "string"
@@ -1676,29 +1676,29 @@
           },
           {
             "in": "query",
-            "name": "state",
+            "name": "adminArea1",
             "schema": {
               "default": [],
-              "description": "Filter things by state.",
+              "description": "Filter things by admin area 1.",
               "items": { "type": "string" },
-              "title": "State",
+              "title": "Adminarea1",
               "type": "array"
             },
             "required": false,
-            "description": "Filter things by state."
+            "description": "Filter things by admin area 1."
           },
           {
             "in": "query",
-            "name": "county",
+            "name": "adminArea2",
             "schema": {
               "default": [],
-              "description": "Filter things by county.",
+              "description": "Filter things by admin area 2.",
               "items": { "type": "string" },
-              "title": "County",
+              "title": "Adminarea2",
               "type": "array"
             },
             "required": false,
-            "description": "Filter things by county."
+            "description": "Filter things by admin area 2."
           },
           {
             "in": "query",
@@ -1965,7 +1965,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -2029,7 +2029,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -3056,7 +3056,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -3588,7 +3588,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -3652,7 +3652,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -3716,7 +3716,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -4034,7 +4034,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -4116,6 +4116,19 @@
             },
             "required": false,
             "description": "Sets the minimum phenomenon time of filtered observations."
+          },
+          {
+            "in": "query",
+            "name": "result_qualifier_code",
+            "schema": {
+              "default": [],
+              "description": "Filter observations by result qualifier code.",
+              "items": { "type": "string" },
+              "title": "Result Qualifier Code",
+              "type": "array"
+            },
+            "required": false,
+            "description": "Filter observations by result qualifier code."
           }
         ],
         "responses": {
@@ -4465,106 +4478,6 @@
           { "APIKeyAuth": [] }
         ]
       },
-      "patch": {
-        "operationId": "sta_views_observation_update_observation",
-        "summary": "Update Observation",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "datastream_id",
-            "schema": {
-              "format": "uuid",
-              "title": "Datastream Id",
-              "type": "string"
-            },
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "observation_id",
-            "schema": {
-              "format": "uuid",
-              "title": "Observation Id",
-              "type": "string"
-            },
-            "required": true
-          },
-          {
-            "in": "query",
-            "name": "expand_related",
-            "schema": {
-              "anyOf": [{ "type": "boolean" }, { "type": "null" }],
-              "title": "Expand Related"
-            },
-            "required": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/components/schemas/ObservationSummaryResponse"
-                    },
-                    { "$ref": "#/components/schemas/ObservationDetailResponse" }
-                  ],
-                  "title": "Response"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": { "title": "Response", "type": "string" }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": { "title": "Response", "type": "string" }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": { "title": "Response", "type": "string" }
-              }
-            }
-          },
-          "422": {
-            "description": "Unprocessable Entity",
-            "content": {
-              "application/json": {
-                "schema": { "title": "Response", "type": "string" }
-              }
-            }
-          }
-        },
-        "description": "Update an Observation.",
-        "tags": ["Observations"],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": { "$ref": "#/components/schemas/ObservationPatchBody" }
-            }
-          },
-          "required": true
-        },
-        "security": [
-          { "SessionAuth": [] },
-          { "BearerAuth": [] },
-          { "APIKeyAuth": [] }
-        ]
-      },
       "delete": {
         "operationId": "sta_views_observation_delete_observation",
         "summary": "Delete Observation",
@@ -4650,7 +4563,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -4908,7 +4821,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -5186,7 +5099,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -5437,7 +5350,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -5705,7 +5618,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -5996,7 +5909,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -6060,7 +5973,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -6328,7 +6241,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -6784,7 +6697,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -7216,7 +7129,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -7652,7 +7565,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -8301,7 +8214,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -8938,7 +8851,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",
@@ -9151,7 +9064,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",
@@ -9239,7 +9152,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",
@@ -9544,7 +9457,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",
@@ -9611,7 +9524,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",
@@ -9635,8 +9548,8 @@
                     "longitude",
                     "elevation_m",
                     "elevationDatum",
-                    "state",
-                    "county",
+                    "adminArea1",
+                    "adminArea2",
                     "country",
                     "-name",
                     "-samplingFeatureType",
@@ -9647,8 +9560,8 @@
                     "-longitude",
                     "-elevation_m",
                     "-elevationDatum",
-                    "-state",
-                    "-county",
+                    "-adminArea1",
+                    "-adminArea2",
                     "-country"
                   ],
                   "type": "string"
@@ -9675,18 +9588,18 @@
             "title": "Bbox",
             "type": "array"
           },
-          "state": {
+          "adminArea1": {
             "default": [],
-            "description": "Filter things by state.",
+            "description": "Filter things by admin area 1.",
             "items": { "type": "string" },
-            "title": "State",
+            "title": "Adminarea1",
             "type": "array"
           },
-          "county": {
+          "adminArea2": {
             "default": [],
-            "description": "Filter things by county.",
+            "description": "Filter things by admin area 2.",
             "items": { "type": "string" },
-            "title": "County",
+            "title": "Adminarea2",
             "type": "array"
           },
           "country": {
@@ -9754,19 +9667,19 @@
             ],
             "title": "Elevationdatum"
           },
-          "state": {
+          "adminArea1": {
             "anyOf": [
               { "maxLength": 200, "type": "string" },
               { "type": "null" }
             ],
-            "title": "State"
+            "title": "Adminarea1"
           },
-          "county": {
+          "adminArea2": {
             "anyOf": [
               { "maxLength": 200, "type": "string" },
               { "type": "null" }
             ],
-            "title": "County"
+            "title": "Adminarea2"
           },
           "country": {
             "anyOf": [{ "maxLength": 2, "type": "string" }, { "type": "null" }],
@@ -9937,19 +9850,19 @@
             ],
             "title": "Elevationdatum"
           },
-          "state": {
+          "adminArea1": {
             "anyOf": [
               { "maxLength": 200, "type": "string" },
               { "type": "null" }
             ],
-            "title": "State"
+            "title": "Adminarea1"
           },
-          "county": {
+          "adminArea2": {
             "anyOf": [
               { "maxLength": 200, "type": "string" },
               { "type": "null" }
             ],
-            "title": "County"
+            "title": "Adminarea2"
           },
           "country": {
             "anyOf": [{ "maxLength": 2, "type": "string" }, { "type": "null" }],
@@ -10013,7 +9926,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",
@@ -10057,19 +9970,19 @@
             ],
             "title": "Elevationdatum"
           },
-          "state": {
+          "adminArea1": {
             "anyOf": [
               { "maxLength": 200, "type": "string" },
               { "type": "null" }
             ],
-            "title": "State"
+            "title": "Adminarea1"
           },
-          "county": {
+          "adminArea2": {
             "anyOf": [
               { "maxLength": 200, "type": "string" },
               { "type": "null" }
             ],
-            "title": "County"
+            "title": "Adminarea2"
           },
           "country": {
             "anyOf": [{ "maxLength": 2, "type": "string" }, { "type": "null" }],
@@ -10259,7 +10172,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",
@@ -11321,7 +11234,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",
@@ -11371,6 +11284,13 @@
             ],
             "description": "Sets the minimum phenomenon time of filtered observations.",
             "title": "Phenomenon Time Min"
+          },
+          "result_qualifier_code": {
+            "default": [],
+            "description": "Filter observations by result qualifier code.",
+            "items": { "type": "string" },
+            "title": "Result Qualifier Code",
+            "type": "array"
           }
         },
         "title": "ObservationQueryParameters",
@@ -11383,9 +11303,14 @@
             "title": "Phenomenontime",
             "type": "array"
           },
-          "result": { "items": {}, "title": "Result", "type": "array" }
+          "result": { "items": {}, "title": "Result", "type": "array" },
+          "resultQualifierCodes": {
+            "items": {},
+            "title": "Resultqualifiercodes",
+            "type": "array"
+          }
         },
-        "required": ["phenomenonTime", "result"],
+        "required": ["phenomenonTime", "result", "resultQualifierCodes"],
         "title": "ObservationColumnarResponse",
         "type": "object"
       },
@@ -11399,6 +11324,12 @@
             "title": "Phenomenontime"
           },
           "result": { "title": "Result", "type": "number" },
+          "resultQualifierCodes": {
+            "default": [],
+            "items": { "type": "string" },
+            "title": "Resultqualifiercodes",
+            "type": "array"
+          },
           "id": { "format": "uuid", "title": "Id", "type": "string" },
           "workspace": {
             "$ref": "#/components/schemas/WorkspaceSummaryResponse"
@@ -11420,7 +11351,10 @@
       "ObservationRowResponse": {
         "properties": {
           "fields": {
-            "items": { "enum": ["phenomenonTime", "result"], "type": "string" },
+            "items": {
+              "enum": ["phenomenonTime", "result", "resultQualifierCodes"],
+              "type": "string"
+            },
             "title": "Fields",
             "type": "array"
           },
@@ -11444,6 +11378,12 @@
             "title": "Phenomenontime"
           },
           "result": { "title": "Result", "type": "number" },
+          "resultQualifierCodes": {
+            "default": [],
+            "items": { "type": "string" },
+            "title": "Resultqualifiercodes",
+            "type": "array"
+          },
           "id": { "format": "uuid", "title": "Id", "type": "string" },
           "workspaceId": {
             "format": "uuid",
@@ -11475,7 +11415,13 @@
             ],
             "title": "Phenomenontime"
           },
-          "result": { "title": "Result", "type": "number" }
+          "result": { "title": "Result", "type": "number" },
+          "resultQualifierCodes": {
+            "default": [],
+            "items": { "type": "string" },
+            "title": "Resultqualifiercodes",
+            "type": "array"
+          }
         },
         "required": ["phenomenonTime", "result"],
         "title": "ObservationPostBody",
@@ -11501,7 +11447,10 @@
       "ObservationBulkPostBody": {
         "properties": {
           "fields": {
-            "items": { "enum": ["phenomenonTime", "result"], "type": "string" },
+            "items": {
+              "enum": ["phenomenonTime", "result", "resultQualifierCodes"],
+              "type": "string"
+            },
             "title": "Fields",
             "type": "array"
           },
@@ -11537,20 +11486,6 @@
         "title": "ObservationBulkDeleteBody",
         "type": "object"
       },
-      "ObservationPatchBody": {
-        "properties": {
-          "phenomenonTime": {
-            "anyOf": [
-              { "type": "string" },
-              { "format": "date-time", "type": "string" }
-            ],
-            "title": "Phenomenontime"
-          },
-          "result": { "title": "Result", "type": "number" }
-        },
-        "title": "ObservationPatchBody",
-        "type": "object"
-      },
       "ObservedPropertyQueryParameters": {
         "properties": {
           "page": {
@@ -11560,7 +11495,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",
@@ -11705,7 +11640,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",
@@ -11839,7 +11774,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",
@@ -12147,7 +12082,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",
@@ -12279,7 +12214,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",
@@ -12407,7 +12342,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",
@@ -12521,7 +12456,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",
