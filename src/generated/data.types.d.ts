@@ -1757,7 +1757,7 @@ export interface components {
              * @description Select one or more fields to order the response by.
              * @default []
              */
-            order_by: ("name" | "samplingFeatureType" | "samplingFeatureCode" | "siteType" | "isPrivate" | "latitude" | "longitude" | "elevation_m" | "elevationDatum" | "state" | "county" | "country" | "-name" | "-samplingFeatureType" | "-samplingFeatureCode" | "-siteType" | "-isPrivate" | "-latitude" | "-longitude" | "-elevation_m" | "-elevationDatum" | "-state" | "-county" | "-country")[] | null;
+            order_by: ("name" | "samplingFeatureType" | "samplingFeatureCode" | "siteType" | "isPrivate" | "latitude" | "longitude" | "elevation_m" | "elevationDatum" | "adminArea1" | "adminArea2" | "country" | "-name" | "-samplingFeatureType" | "-samplingFeatureCode" | "-siteType" | "-isPrivate" | "-latitude" | "-longitude" | "-elevation_m" | "-elevationDatum" | "-adminArea1" | "-adminArea2" | "-country")[] | null;
             /**
              * Workspace Id
              * @description Filter things by workspace ID.
@@ -1771,17 +1771,17 @@ export interface components {
              */
             bbox: string[];
             /**
-             * State
-             * @description Filter things by state.
+             * Adminarea1
+             * @description Filter things by admin area 1.
              * @default []
              */
-            state: string[];
+            adminArea1: string[];
             /**
-             * County
-             * @description Filter things by county.
+             * Adminarea2
+             * @description Filter things by admin area 2.
              * @default []
              */
-            county: string[];
+            adminArea2: string[];
             /**
              * Country
              * @description Filter things by country.
@@ -1831,10 +1831,10 @@ export interface components {
             elevation_m?: number | null;
             /** Elevationdatum */
             elevationDatum?: string | null;
-            /** State */
-            state?: string | null;
-            /** County */
-            county?: string | null;
+            /** Adminarea1 */
+            adminArea1?: string | null;
+            /** Adminarea2 */
+            adminArea2?: string | null;
             /** Country */
             country?: string | null;
         };
@@ -1915,10 +1915,10 @@ export interface components {
             elevation_m?: number | null;
             /** Elevationdatum */
             elevationDatum?: string | null;
-            /** State */
-            state?: string | null;
-            /** County */
-            county?: string | null;
+            /** Adminarea1 */
+            adminArea1?: string | null;
+            /** Adminarea2 */
+            adminArea2?: string | null;
             /** Country */
             country?: string | null;
         };
@@ -1974,10 +1974,10 @@ export interface components {
             elevation_m?: number | null;
             /** Elevationdatum */
             elevationDatum?: string | null;
-            /** State */
-            state?: string | null;
-            /** County */
-            county?: string | null;
+            /** Adminarea1 */
+            adminArea1?: string | null;
+            /** Adminarea2 */
+            adminArea2?: string | null;
             /** Country */
             country?: string | null;
         };
@@ -4566,15 +4566,15 @@ export interface operations {
                 page_size?: number | null;
                 expand_related?: boolean | null;
                 /** @description Select one or more fields to order the response by. */
-                order_by?: ("name" | "samplingFeatureType" | "samplingFeatureCode" | "siteType" | "isPrivate" | "latitude" | "longitude" | "elevation_m" | "elevationDatum" | "state" | "county" | "country" | "-name" | "-samplingFeatureType" | "-samplingFeatureCode" | "-siteType" | "-isPrivate" | "-latitude" | "-longitude" | "-elevation_m" | "-elevationDatum" | "-state" | "-county" | "-country")[] | null;
+                order_by?: ("name" | "samplingFeatureType" | "samplingFeatureCode" | "siteType" | "isPrivate" | "latitude" | "longitude" | "elevation_m" | "elevationDatum" | "adminArea1" | "adminArea2" | "country" | "-name" | "-samplingFeatureType" | "-samplingFeatureCode" | "-siteType" | "-isPrivate" | "-latitude" | "-longitude" | "-elevation_m" | "-elevationDatum" | "-adminArea1" | "-adminArea2" | "-country")[] | null;
                 /** @description Filter things by workspace ID. */
                 workspace_id?: string[];
                 /** @description Filter things by bounding box. Format bounding box as {min_lon},{min_lat},{max_lon},{max_lat} */
                 bbox?: string[];
-                /** @description Filter things by state. */
-                state?: string[];
-                /** @description Filter things by county. */
-                county?: string[];
+                /** @description Filter things by admin area 1. */
+                adminArea1?: string[];
+                /** @description Filter things by admin area 2. */
+                adminArea2?: string[];
                 /** @description Filter things by country. */
                 country?: string[];
                 /** @description Filter things by site type. */

@@ -76,14 +76,14 @@ export class Location {
   longitude?: number | ''
   elevation_m?: number | ''
   elevationDatum: string
-  state: string
-  county: string
+  adminArea1: string
+  adminArea2: string
   country: string
 
   constructor() {
     this.elevationDatum = 'WGS84'
-    this.state = ''
-    this.county = ''
+    this.adminArea1 = ''
+    this.adminArea2 = ''
     this.country = ''
   }
 }

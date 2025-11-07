@@ -1619,8 +1619,8 @@
                       "longitude",
                       "elevation_m",
                       "elevationDatum",
-                      "state",
-                      "county",
+                      "adminArea1",
+                      "adminArea2",
                       "country",
                       "-name",
                       "-samplingFeatureType",
@@ -1631,8 +1631,8 @@
                       "-longitude",
                       "-elevation_m",
                       "-elevationDatum",
-                      "-state",
-                      "-county",
+                      "-adminArea1",
+                      "-adminArea2",
                       "-country"
                     ],
                     "type": "string"
@@ -1676,29 +1676,29 @@
           },
           {
             "in": "query",
-            "name": "state",
+            "name": "adminArea1",
             "schema": {
               "default": [],
-              "description": "Filter things by state.",
+              "description": "Filter things by admin area 1.",
               "items": { "type": "string" },
-              "title": "State",
+              "title": "Adminarea1",
               "type": "array"
             },
             "required": false,
-            "description": "Filter things by state."
+            "description": "Filter things by admin area 1."
           },
           {
             "in": "query",
-            "name": "county",
+            "name": "adminArea2",
             "schema": {
               "default": [],
-              "description": "Filter things by county.",
+              "description": "Filter things by admin area 2.",
               "items": { "type": "string" },
-              "title": "County",
+              "title": "Adminarea2",
               "type": "array"
             },
             "required": false,
-            "description": "Filter things by county."
+            "description": "Filter things by admin area 2."
           },
           {
             "in": "query",
@@ -10240,8 +10240,8 @@
                     "longitude",
                     "elevation_m",
                     "elevationDatum",
-                    "state",
-                    "county",
+                    "adminArea1",
+                    "adminArea2",
                     "country",
                     "-name",
                     "-samplingFeatureType",
@@ -10252,8 +10252,8 @@
                     "-longitude",
                     "-elevation_m",
                     "-elevationDatum",
-                    "-state",
-                    "-county",
+                    "-adminArea1",
+                    "-adminArea2",
                     "-country"
                   ],
                   "type": "string"
@@ -10280,18 +10280,18 @@
             "title": "Bbox",
             "type": "array"
           },
-          "state": {
+          "adminArea1": {
             "default": [],
-            "description": "Filter things by state.",
+            "description": "Filter things by admin area 1.",
             "items": { "type": "string" },
-            "title": "State",
+            "title": "Adminarea1",
             "type": "array"
           },
-          "county": {
+          "adminArea2": {
             "default": [],
-            "description": "Filter things by county.",
+            "description": "Filter things by admin area 2.",
             "items": { "type": "string" },
-            "title": "County",
+            "title": "Adminarea2",
             "type": "array"
           },
           "country": {
@@ -10372,19 +10372,19 @@
             ],
             "title": "Elevationdatum"
           },
-          "state": {
+          "adminArea1": {
             "anyOf": [
               { "maxLength": 200, "type": "string" },
               { "type": "null" }
             ],
-            "title": "State"
+            "title": "Adminarea1"
           },
-          "county": {
+          "adminArea2": {
             "anyOf": [
               { "maxLength": 200, "type": "string" },
               { "type": "null" }
             ],
-            "title": "County"
+            "title": "Adminarea2"
           },
           "country": {
             "anyOf": [{ "maxLength": 2, "type": "string" }, { "type": "null" }],
@@ -10550,19 +10550,19 @@
             ],
             "title": "Elevationdatum"
           },
-          "state": {
+          "adminArea1": {
             "anyOf": [
               { "maxLength": 200, "type": "string" },
               { "type": "null" }
             ],
-            "title": "State"
+            "title": "Adminarea1"
           },
-          "county": {
+          "adminArea2": {
             "anyOf": [
               { "maxLength": 200, "type": "string" },
               { "type": "null" }
             ],
-            "title": "County"
+            "title": "Adminarea2"
           },
           "country": {
             "anyOf": [{ "maxLength": 2, "type": "string" }, { "type": "null" }],
@@ -10670,19 +10670,19 @@
             ],
             "title": "Elevationdatum"
           },
-          "state": {
+          "adminArea1": {
             "anyOf": [
               { "maxLength": 200, "type": "string" },
               { "type": "null" }
             ],
-            "title": "State"
+            "title": "Adminarea1"
           },
-          "county": {
+          "adminArea2": {
             "anyOf": [
               { "maxLength": 200, "type": "string" },
               { "type": "null" }
             ],
-            "title": "County"
+            "title": "Adminarea2"
           },
           "country": {
             "anyOf": [{ "maxLength": 2, "type": "string" }, { "type": "null" }],
