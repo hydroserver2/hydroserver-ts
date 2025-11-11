@@ -37,7 +37,7 @@
               "anyOf": [
                 {
                   "maximum": 100000,
-                  "minimum": 1,
+                  "minimum": 0,
                   "type": "integer"
                 },
                 {
@@ -792,7 +792,7 @@
               "anyOf": [
                 {
                   "maximum": 100000,
-                  "minimum": 1,
+                  "minimum": 0,
                   "type": "integer"
                 },
                 {
@@ -1152,7 +1152,7 @@
               "anyOf": [
                 {
                   "maximum": 100000,
-                  "minimum": 1,
+                  "minimum": 0,
                   "type": "integer"
                 },
                 {
@@ -1800,7 +1800,7 @@
               "anyOf": [
                 {
                   "maximum": 100000,
-                  "minimum": 1,
+                  "minimum": 0,
                   "type": "integer"
                 },
                 {
@@ -2093,7 +2093,7 @@
               "anyOf": [
                 {
                   "maximum": 100000,
-                  "minimum": 1,
+                  "minimum": 0,
                   "type": "integer"
                 },
                 {
@@ -2139,8 +2139,8 @@
                       "longitude",
                       "elevation_m",
                       "elevationDatum",
-                      "state",
-                      "county",
+                      "adminArea1",
+                      "adminArea2",
                       "country",
                       "-name",
                       "-samplingFeatureType",
@@ -2151,8 +2151,8 @@
                       "-longitude",
                       "-elevation_m",
                       "-elevationDatum",
-                      "-state",
-                      "-county",
+                      "-adminArea1",
+                      "-adminArea2",
                       "-country"
                     ],
                     "type": "string"
@@ -2203,33 +2203,33 @@
           },
           {
             "in": "query",
-            "name": "state",
+            "name": "adminArea1",
             "schema": {
               "default": [],
-              "description": "Filter things by state.",
+              "description": "Filter things by admin area 1.",
               "items": {
                 "type": "string"
               },
-              "title": "State",
+              "title": "Adminarea1",
               "type": "array"
             },
             "required": false,
-            "description": "Filter things by state."
+            "description": "Filter things by admin area 1."
           },
           {
             "in": "query",
-            "name": "county",
+            "name": "adminArea2",
             "schema": {
               "default": [],
-              "description": "Filter things by county.",
+              "description": "Filter things by admin area 2.",
               "items": {
                 "type": "string"
               },
-              "title": "County",
+              "title": "Adminarea2",
               "type": "array"
             },
             "required": false,
-            "description": "Filter things by county."
+            "description": "Filter things by admin area 2."
           },
           {
             "in": "query",
@@ -2462,8 +2462,8 @@
     },
     "/api/data/things/tags/keys": {
       "get": {
-        "operationId": "sta_views_thing_get_tag_keys",
-        "summary": "Get Tag Keys",
+        "operationId": "sta_views_thing_get_thing_tag_keys",
+        "summary": "Get Thing Tag Keys",
         "parameters": [
           {
             "in": "query",
@@ -2530,7 +2530,7 @@
             }
           }
         },
-        "description": "Get all existing unique tag keys.",
+        "description": "Get all existing unique thing tag keys.",
         "tags": ["Things"],
         "security": [
           {
@@ -2576,7 +2576,7 @@
               "anyOf": [
                 {
                   "maximum": 100000,
-                  "minimum": 1,
+                  "minimum": 0,
                   "type": "integer"
                 },
                 {
@@ -2660,7 +2660,7 @@
               "anyOf": [
                 {
                   "maximum": 100000,
-                  "minimum": 1,
+                  "minimum": 0,
                   "type": "integer"
                 },
                 {
@@ -2710,6 +2710,90 @@
           }
         },
         "description": "Get sampling feature types.",
+        "tags": ["Things"]
+      }
+    },
+    "/api/data/things/file-attachment-types": {
+      "get": {
+        "operationId": "sta_views_thing_get_file_attachment_types",
+        "summary": "Get File Attachment Types",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "anyOf": [
+                {
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Page number (1-based).",
+              "title": "Page"
+            },
+            "required": false,
+            "description": "Page number (1-based)."
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 100000,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The number of items per page.",
+              "title": "Page Size"
+            },
+            "required": false,
+            "description": "The number of items per page."
+          },
+          {
+            "in": "query",
+            "name": "order_desc",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": false,
+              "description": "Sort terms by descending.",
+              "title": "Order Desc"
+            },
+            "required": false,
+            "description": "Sort terms by descending."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get file attachment types.",
         "tags": ["Things"]
       }
     },
@@ -2979,8 +3063,8 @@
     },
     "/api/data/things/{thing_id}/tags": {
       "get": {
-        "operationId": "sta_views_thing_get_tags",
-        "summary": "Get Tags",
+        "operationId": "sta_views_thing_get_thing_tags",
+        "summary": "Get Thing Tags",
         "parameters": [
           {
             "in": "path",
@@ -3046,8 +3130,8 @@
         ]
       },
       "post": {
-        "operationId": "sta_views_thing_add_tag",
-        "summary": "Add Tag",
+        "operationId": "sta_views_thing_add_thing_tag",
+        "summary": "Add Thing Tag",
         "parameters": [
           {
             "in": "path",
@@ -3141,8 +3225,8 @@
         ]
       },
       "put": {
-        "operationId": "sta_views_thing_edit_tag",
-        "summary": "Edit Tag",
+        "operationId": "sta_views_thing_edit_thing_tag",
+        "summary": "Edit Thing Tag",
         "parameters": [
           {
             "in": "path",
@@ -3236,8 +3320,8 @@
         ]
       },
       "delete": {
-        "operationId": "sta_views_thing_remove_tag",
-        "summary": "Remove Tag",
+        "operationId": "sta_views_thing_remove_thing_tag",
+        "summary": "Remove Thing Tag",
         "parameters": [
           {
             "in": "path",
@@ -3324,10 +3408,10 @@
         ]
       }
     },
-    "/api/data/things/{thing_id}/photos": {
+    "/api/data/things/{thing_id}/file-attachments": {
       "get": {
-        "operationId": "sta_views_thing_get_photos",
-        "summary": "Get Photos",
+        "operationId": "sta_views_thing_get_thing_file_attachments",
+        "summary": "Get Thing File Attachments",
         "parameters": [
           {
             "in": "path",
@@ -3347,7 +3431,7 @@
               "application/json": {
                 "schema": {
                   "items": {
-                    "$ref": "#/components/schemas/PhotoGetResponse"
+                    "$ref": "#/components/schemas/FileAttachmentGetResponse"
                   },
                   "title": "Response",
                   "type": "array"
@@ -3378,7 +3462,7 @@
             }
           }
         },
-        "description": "Get all photos associated with a Thing.",
+        "description": "Get all file attachments associated with a Thing.",
         "tags": ["Things"],
         "security": [
           {
@@ -3393,8 +3477,8 @@
         ]
       },
       "post": {
-        "operationId": "sta_views_thing_add_photo",
-        "summary": "Add Photo",
+        "operationId": "sta_views_thing_add_thing_file_attachment",
+        "summary": "Add Thing File Attachment",
         "parameters": [
           {
             "in": "path",
@@ -3413,7 +3497,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PhotoGetResponse"
+                  "$ref": "#/components/schemas/FileAttachmentGetResponse"
                 }
               }
             }
@@ -3474,22 +3558,26 @@
             }
           }
         },
-        "description": "Add a photo to a thing.",
+        "description": "Add a file attachment to a thing.",
         "tags": ["Things"],
         "requestBody": {
           "content": {
             "multipart/form-data": {
               "schema": {
+                "title": "MultiPartBodyParams",
+                "type": "object",
                 "properties": {
+                  "file_attachment_type": {
+                    "title": "File Attachment Type",
+                    "type": "string"
+                  },
                   "file": {
                     "format": "binary",
                     "title": "File",
                     "type": "string"
                   }
                 },
-                "required": ["file"],
-                "title": "FileParams",
-                "type": "object"
+                "required": ["file_attachment_type", "file"]
               }
             }
           },
@@ -3508,8 +3596,8 @@
         ]
       },
       "delete": {
-        "operationId": "sta_views_thing_remove_photo",
-        "summary": "Remove Photo",
+        "operationId": "sta_views_thing_remove_thing_file_attachment",
+        "summary": "Remove Thing File Attachment",
         "parameters": [
           {
             "in": "path",
@@ -3571,13 +3659,13 @@
             }
           }
         },
-        "description": "Remove a photo from a thing.",
+        "description": "Remove a file attachment from a thing.",
         "tags": ["Things"],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PhotoDeleteBody"
+                "$ref": "#/components/schemas/FileAttachmentDeleteBody"
               }
             }
           },
@@ -3995,7 +4083,7 @@
               "anyOf": [
                 {
                   "maximum": 100000,
-                  "minimum": 1,
+                  "minimum": 0,
                   "type": "integer"
                 },
                 {
@@ -4168,6 +4256,22 @@
           },
           {
             "in": "query",
+            "name": "result_qualifier_id",
+            "schema": {
+              "default": [],
+              "description": "Filter datastreams by observation result qualifier ID.",
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "title": "Result Qualifier Id",
+              "type": "array"
+            },
+            "required": false,
+            "description": "Filter datastreams by observation result qualifier ID."
+          },
+          {
+            "in": "query",
             "name": "data_source_id",
             "schema": {
               "default": [],
@@ -4318,6 +4422,9 @@
             "schema": {
               "anyOf": [
                 {
+                  "type": "string"
+                },
+                {
                   "format": "date-time",
                   "type": "string"
                 },
@@ -4336,6 +4443,9 @@
             "name": "phenomenon_begin_time_min",
             "schema": {
               "anyOf": [
+                {
+                  "type": "string"
+                },
                 {
                   "format": "date-time",
                   "type": "string"
@@ -4356,6 +4466,9 @@
             "schema": {
               "anyOf": [
                 {
+                  "type": "string"
+                },
+                {
                   "format": "date-time",
                   "type": "string"
                 },
@@ -4374,6 +4487,9 @@
             "name": "phenomenon_end_time_min",
             "schema": {
               "anyOf": [
+                {
+                  "type": "string"
+                },
                 {
                   "format": "date-time",
                   "type": "string"
@@ -4394,6 +4510,9 @@
             "schema": {
               "anyOf": [
                 {
+                  "type": "string"
+                },
+                {
                   "format": "date-time",
                   "type": "string"
                 },
@@ -4412,6 +4531,9 @@
             "name": "result_begin_time_min",
             "schema": {
               "anyOf": [
+                {
+                  "type": "string"
+                },
                 {
                   "format": "date-time",
                   "type": "string"
@@ -4432,6 +4554,9 @@
             "schema": {
               "anyOf": [
                 {
+                  "type": "string"
+                },
+                {
                   "format": "date-time",
                   "type": "string"
                 },
@@ -4450,6 +4575,9 @@
             "name": "result_end_time_min",
             "schema": {
               "anyOf": [
+                {
+                  "type": "string"
+                },
                 {
                   "format": "date-time",
                   "type": "string"
@@ -4626,6 +4754,91 @@
         ]
       }
     },
+    "/api/data/datastreams/tags/keys": {
+      "get": {
+        "operationId": "sta_views_datastream_get_datastream_tag_keys",
+        "summary": "Get Datastream Tag Keys",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "workspace_id",
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workspace Id"
+            },
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "datastream_id",
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Datastream Id"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get all existing unique datastream tag keys.",
+        "tags": ["Datastreams"],
+        "security": [
+          {
+            "SessionAuth": []
+          },
+          {
+            "BearerAuth": []
+          },
+          {
+            "APIKeyAuth": []
+          }
+        ]
+      }
+    },
     "/api/data/datastreams/aggregation-statistics": {
       "get": {
         "operationId": "sta_views_datastream_get_datastream_aggregation_statistics",
@@ -4657,7 +4870,7 @@
               "anyOf": [
                 {
                   "maximum": 100000,
-                  "minimum": 1,
+                  "minimum": 0,
                   "type": "integer"
                 },
                 {
@@ -4741,7 +4954,7 @@
               "anyOf": [
                 {
                   "maximum": 100000,
-                  "minimum": 1,
+                  "minimum": 0,
                   "type": "integer"
                 },
                 {
@@ -4825,7 +5038,7 @@
               "anyOf": [
                 {
                   "maximum": 100000,
-                  "minimum": 1,
+                  "minimum": 0,
                   "type": "integer"
                 },
                 {
@@ -4875,6 +5088,90 @@
           }
         },
         "description": "Get datastream sampled mediums.",
+        "tags": ["Datastreams"]
+      }
+    },
+    "/api/data/datastreams/file-attachment-types": {
+      "get": {
+        "operationId": "sta_views_datastream_get_file_attachment_types",
+        "summary": "Get File Attachment Types",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "anyOf": [
+                {
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Page number (1-based).",
+              "title": "Page"
+            },
+            "required": false,
+            "description": "Page number (1-based)."
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 100000,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The number of items per page.",
+              "title": "Page Size"
+            },
+            "required": false,
+            "description": "The number of items per page."
+          },
+          {
+            "in": "query",
+            "name": "order_desc",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": false,
+              "description": "Sort terms by descending.",
+              "title": "Order Desc"
+            },
+            "required": false,
+            "description": "Sort terms by descending."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get file attachment types.",
         "tags": ["Datastreams"]
       }
     },
@@ -5142,6 +5439,629 @@
         ]
       }
     },
+    "/api/data/datastreams/{datastream_id}/tags": {
+      "get": {
+        "operationId": "sta_views_datastream_get_datastream_tags",
+        "summary": "Get Datastream Tags",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "datastream_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Datastream Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/TagGetResponse"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get all tags associated with a Datastream.",
+        "tags": ["Datastreams"],
+        "security": [
+          {
+            "SessionAuth": []
+          },
+          {
+            "BearerAuth": []
+          },
+          {
+            "APIKeyAuth": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "sta_views_datastream_add_datastream_tag",
+        "summary": "Add Datastream Tag",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "datastream_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Datastream Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TagGetResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Add a tag to a Datastream.",
+        "tags": ["Datastreams"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TagPostBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          },
+          {
+            "BearerAuth": []
+          },
+          {
+            "APIKeyAuth": []
+          }
+        ]
+      },
+      "put": {
+        "operationId": "sta_views_datastream_edit_datastream_tag",
+        "summary": "Edit Datastream Tag",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "datastream_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Datastream Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TagGetResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Edit a tag of a Datastream.",
+        "tags": ["Datastreams"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TagPostBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          },
+          {
+            "BearerAuth": []
+          },
+          {
+            "APIKeyAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "sta_views_datastream_remove_datastream_tag",
+        "summary": "Remove Datastream Tag",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "datastream_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Datastream Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Remove a tag from a Datastream.",
+        "tags": ["Datastreams"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TagDeleteBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          },
+          {
+            "BearerAuth": []
+          },
+          {
+            "APIKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/data/datastreams/{datastream_id}/file-attachments": {
+      "get": {
+        "operationId": "sta_views_datastream_get_datastream_file_attachments",
+        "summary": "Get Datastream File Attachments",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "datastream_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Datastream Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/FileAttachmentGetResponse"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get all file attachments associated with a Datastream.",
+        "tags": ["Datastreams"],
+        "security": [
+          {
+            "SessionAuth": []
+          },
+          {
+            "BearerAuth": []
+          },
+          {
+            "APIKeyAuth": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "sta_views_datastream_add_datastream_file_attachment",
+        "summary": "Add Datastream File Attachment",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "datastream_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Datastream Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileAttachmentGetResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Request Entity Too Large",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Add a file attachment to a datastream.",
+        "tags": ["Datastreams"],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "title": "MultiPartBodyParams",
+                "type": "object",
+                "properties": {
+                  "file_attachment_type": {
+                    "title": "File Attachment Type",
+                    "type": "string"
+                  },
+                  "file": {
+                    "format": "binary",
+                    "title": "File",
+                    "type": "string"
+                  }
+                },
+                "required": ["file_attachment_type", "file"]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          },
+          {
+            "BearerAuth": []
+          },
+          {
+            "APIKeyAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "sta_views_datastream_remove_datastream_file_attachment",
+        "summary": "Remove Datastream File Attachment",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "datastream_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Datastream Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Remove a file attachment from a datastream.",
+        "tags": ["Datastreams"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FileAttachmentDeleteBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          },
+          {
+            "BearerAuth": []
+          },
+          {
+            "APIKeyAuth": []
+          }
+        ]
+      }
+    },
     "/api/data/datastreams/{datastream_id}/csv": {
       "get": {
         "operationId": "sta_views_datastream_get_datastream_csv",
@@ -5241,7 +6161,7 @@
               "anyOf": [
                 {
                   "maximum": 100000,
-                  "minimum": 1,
+                  "minimum": 0,
                   "type": "integer"
                 },
                 {
@@ -5318,6 +6238,9 @@
             "schema": {
               "anyOf": [
                 {
+                  "type": "string"
+                },
+                {
                   "format": "date-time",
                   "type": "string"
                 },
@@ -5337,6 +6260,9 @@
             "schema": {
               "anyOf": [
                 {
+                  "type": "string"
+                },
+                {
                   "format": "date-time",
                   "type": "string"
                 },
@@ -5349,6 +6275,21 @@
             },
             "required": false,
             "description": "Sets the minimum phenomenon time of filtered observations."
+          },
+          {
+            "in": "query",
+            "name": "result_qualifier_code",
+            "schema": {
+              "default": [],
+              "description": "Filter observations by result qualifier code.",
+              "items": {
+                "type": "string"
+              },
+              "title": "Result Qualifier Code",
+              "type": "array"
+            },
+            "required": false,
+            "description": "Filter observations by result qualifier code."
           }
         ],
         "responses": {
@@ -5792,135 +6733,6 @@
           }
         ]
       },
-      "patch": {
-        "operationId": "sta_views_observation_update_observation",
-        "summary": "Update Observation",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "datastream_id",
-            "schema": {
-              "format": "uuid",
-              "title": "Datastream Id",
-              "type": "string"
-            },
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "observation_id",
-            "schema": {
-              "format": "uuid",
-              "title": "Observation Id",
-              "type": "string"
-            },
-            "required": true
-          },
-          {
-            "in": "query",
-            "name": "expand_related",
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "boolean"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Expand Related"
-            },
-            "required": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/components/schemas/ObservationSummaryResponse"
-                    },
-                    {
-                      "$ref": "#/components/schemas/ObservationDetailResponse"
-                    }
-                  ],
-                  "title": "Response"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "title": "Response",
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "title": "Response",
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "title": "Response",
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Unprocessable Entity",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "title": "Response",
-                  "type": "string"
-                }
-              }
-            }
-          }
-        },
-        "description": "Update an Observation.",
-        "tags": ["Observations"],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ObservationPatchBody"
-              }
-            }
-          },
-          "required": true
-        },
-        "security": [
-          {
-            "SessionAuth": []
-          },
-          {
-            "BearerAuth": []
-          },
-          {
-            "APIKeyAuth": []
-          }
-        ]
-      },
       "delete": {
         "operationId": "sta_views_observation_delete_observation",
         "summary": "Delete Observation",
@@ -6030,7 +6842,7 @@
               "anyOf": [
                 {
                   "maximum": 100000,
-                  "minimum": 1,
+                  "minimum": 0,
                   "type": "integer"
                 },
                 {
@@ -6114,8 +6926,17 @@
               "default": [],
               "description": "Filter observed properties by thing ID.",
               "items": {
-                "format": "uuid",
-                "type": "string"
+                "anyOf": [
+                  {
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  {
+                    "const": "null",
+                    "enum": ["null"],
+                    "type": "string"
+                  }
+                ]
               },
               "title": "Thing Id",
               "type": "array"
@@ -6130,8 +6951,17 @@
               "default": [],
               "description": "Filter observed properties by datastream ID.",
               "items": {
-                "format": "uuid",
-                "type": "string"
+                "anyOf": [
+                  {
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  {
+                    "const": "null",
+                    "enum": ["null"],
+                    "type": "string"
+                  }
+                ]
               },
               "title": "Datastream Id",
               "type": "array"
@@ -6347,7 +7177,7 @@
               "anyOf": [
                 {
                   "maximum": 100000,
-                  "minimum": 1,
+                  "minimum": 0,
                   "type": "integer"
                 },
                 {
@@ -6706,7 +7536,7 @@
               "anyOf": [
                 {
                   "maximum": 100000,
-                  "minimum": 1,
+                  "minimum": 0,
                   "type": "integer"
                 },
                 {
@@ -6797,8 +7627,17 @@
               "default": [],
               "description": "Filter units by thing ID.",
               "items": {
-                "format": "uuid",
-                "type": "string"
+                "anyOf": [
+                  {
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  {
+                    "const": "null",
+                    "enum": ["null"],
+                    "type": "string"
+                  }
+                ]
               },
               "title": "Thing Id",
               "type": "array"
@@ -6813,8 +7652,17 @@
               "default": [],
               "description": "Filter units by datastream ID.",
               "items": {
-                "format": "uuid",
-                "type": "string"
+                "anyOf": [
+                  {
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  {
+                    "const": "null",
+                    "enum": ["null"],
+                    "type": "string"
+                  }
+                ]
               },
               "title": "Datastream Id",
               "type": "array"
@@ -6824,14 +7672,14 @@
           },
           {
             "in": "query",
-            "name": "unit_type",
+            "name": "type",
             "schema": {
               "default": [],
               "description": "Filter units by type",
               "items": {
                 "type": "string"
               },
-              "title": "Unit Type",
+              "title": "Type",
               "type": "array"
             },
             "required": false,
@@ -7019,7 +7867,7 @@
               "anyOf": [
                 {
                   "maximum": 100000,
-                  "minimum": 1,
+                  "minimum": 0,
                   "type": "integer"
                 },
                 {
@@ -7378,7 +8226,7 @@
               "anyOf": [
                 {
                   "maximum": 100000,
-                  "minimum": 1,
+                  "minimum": 0,
                   "type": "integer"
                 },
                 {
@@ -7475,8 +8323,17 @@
               "default": [],
               "description": "Filter sensors by thing ID.",
               "items": {
-                "format": "uuid",
-                "type": "string"
+                "anyOf": [
+                  {
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  {
+                    "const": "null",
+                    "enum": ["null"],
+                    "type": "string"
+                  }
+                ]
               },
               "title": "Thing Id",
               "type": "array"
@@ -7491,8 +8348,17 @@
               "default": [],
               "description": "Filter sensors by datastream ID.",
               "items": {
-                "format": "uuid",
-                "type": "string"
+                "anyOf": [
+                  {
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  {
+                    "const": "null",
+                    "enum": ["null"],
+                    "type": "string"
+                  }
+                ]
               },
               "title": "Datastream Id",
               "type": "array"
@@ -7738,7 +8604,7 @@
               "anyOf": [
                 {
                   "maximum": 100000,
-                  "minimum": 1,
+                  "minimum": 0,
                   "type": "integer"
                 },
                 {
@@ -7822,7 +8688,7 @@
               "anyOf": [
                 {
                   "maximum": 100000,
-                  "minimum": 1,
+                  "minimum": 0,
                   "type": "integer"
                 },
                 {
@@ -8181,7 +9047,7 @@
               "anyOf": [
                 {
                   "maximum": 100000,
-                  "minimum": 1,
+                  "minimum": 0,
                   "type": "integer"
                 },
                 {
@@ -8265,8 +9131,17 @@
               "default": [],
               "description": "Filter processing levels by thing ID.",
               "items": {
-                "format": "uuid",
-                "type": "string"
+                "anyOf": [
+                  {
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  {
+                    "const": "null",
+                    "enum": ["null"],
+                    "type": "string"
+                  }
+                ]
               },
               "title": "Thing Id",
               "type": "array"
@@ -8281,8 +9156,17 @@
               "default": [],
               "description": "Filter processing levels by datastream ID.",
               "items": {
-                "format": "uuid",
-                "type": "string"
+                "anyOf": [
+                  {
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  {
+                    "const": "null",
+                    "enum": ["null"],
+                    "type": "string"
+                  }
+                ]
               },
               "title": "Datastream Id",
               "type": "array"
@@ -8758,7 +9642,7 @@
               "anyOf": [
                 {
                   "maximum": 100000,
-                  "minimum": 1,
+                  "minimum": 0,
                   "type": "integer"
                 },
                 {
@@ -8834,6 +9718,56 @@
             },
             "required": false,
             "description": "Filter sensors by workspace ID."
+          },
+          {
+            "in": "query",
+            "name": "thing_id",
+            "schema": {
+              "default": [],
+              "description": "Filter result qualifiers by thing ID.",
+              "items": {
+                "anyOf": [
+                  {
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  {
+                    "const": "null",
+                    "enum": ["null"],
+                    "type": "string"
+                  }
+                ]
+              },
+              "title": "Thing Id",
+              "type": "array"
+            },
+            "required": false,
+            "description": "Filter result qualifiers by thing ID."
+          },
+          {
+            "in": "query",
+            "name": "datastream_id",
+            "schema": {
+              "default": [],
+              "description": "Filter result qualifiers by datastream ID.",
+              "items": {
+                "anyOf": [
+                  {
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  {
+                    "const": "null",
+                    "enum": ["null"],
+                    "type": "string"
+                  }
+                ]
+              },
+              "title": "Datastream Id",
+              "type": "array"
+            },
+            "required": false,
+            "description": "Filter result qualifiers by datastream ID."
           }
         ],
         "responses": {
@@ -9270,7 +10204,7 @@
               "anyOf": [
                 {
                   "maximum": 100000,
-                  "minimum": 1,
+                  "minimum": 0,
                   "type": "integer"
                 },
                 {
@@ -9830,7 +10764,7 @@
               "anyOf": [
                 {
                   "maximum": 100000,
-                  "minimum": 1,
+                  "minimum": 0,
                   "type": "integer"
                 },
                 {
@@ -9961,6 +10895,9 @@
             "schema": {
               "anyOf": [
                 {
+                  "type": "string"
+                },
+                {
                   "format": "date-time",
                   "type": "string"
                 },
@@ -9979,6 +10916,9 @@
             "name": "last_run_min",
             "schema": {
               "anyOf": [
+                {
+                  "type": "string"
+                },
                 {
                   "format": "date-time",
                   "type": "string"
@@ -9999,6 +10939,9 @@
             "schema": {
               "anyOf": [
                 {
+                  "type": "string"
+                },
+                {
                   "format": "date-time",
                   "type": "string"
                 },
@@ -10017,6 +10960,9 @@
             "name": "next_run_min",
             "schema": {
               "anyOf": [
+                {
+                  "type": "string"
+                },
                 {
                   "format": "date-time",
                   "type": "string"
@@ -10674,7 +11620,7 @@
               "anyOf": [
                 {
                   "maximum": 100000,
-                  "minimum": 1,
+                  "minimum": 0,
                   "type": "integer"
                 },
                 {
@@ -10805,6 +11751,9 @@
             "schema": {
               "anyOf": [
                 {
+                  "type": "string"
+                },
+                {
                   "format": "date-time",
                   "type": "string"
                 },
@@ -10823,6 +11772,9 @@
             "name": "last_run_min",
             "schema": {
               "anyOf": [
+                {
+                  "type": "string"
+                },
                 {
                   "format": "date-time",
                   "type": "string"
@@ -10843,6 +11795,9 @@
             "schema": {
               "anyOf": [
                 {
+                  "type": "string"
+                },
+                {
                   "format": "date-time",
                   "type": "string"
                 },
@@ -10861,6 +11816,9 @@
             "name": "next_run_min",
             "schema": {
               "anyOf": [
+                {
+                  "type": "string"
+                },
                 {
                   "format": "date-time",
                   "type": "string"
@@ -11509,7 +12467,7 @@
             "anyOf": [
               {
                 "maximum": 100000,
-                "minimum": 1,
+                "minimum": 0,
                 "type": "integer"
               },
               {
@@ -11646,7 +12604,7 @@
       },
       "PermissionDetailResponse": {
         "properties": {
-          "resourceType": {
+          "resource": {
             "enum": [
               "*",
               "APIKey",
@@ -11664,7 +12622,7 @@
               "Unit",
               "ResultQualifier"
             ],
-            "title": "Resourcetype",
+            "title": "Resource",
             "type": "string"
           },
           "action": {
@@ -11673,7 +12631,7 @@
             "type": "string"
           }
         },
-        "required": ["resourceType", "action"],
+        "required": ["resource", "action"],
         "title": "PermissionDetailResponse",
         "type": "object"
       },
@@ -11858,7 +12816,7 @@
             "anyOf": [
               {
                 "maximum": 100000,
-                "minimum": 1,
+                "minimum": 0,
                 "type": "integer"
               },
               {
@@ -11999,7 +12957,7 @@
             "anyOf": [
               {
                 "maximum": 100000,
-                "minimum": 1,
+                "minimum": 0,
                 "type": "integer"
               },
               {
@@ -12083,6 +13041,9 @@
           "expiresAt": {
             "anyOf": [
               {
+                "type": "string"
+              },
+              {
                 "format": "date-time",
                 "type": "string"
               },
@@ -12093,12 +13054,22 @@
             "title": "Expiresat"
           },
           "createdAt": {
-            "format": "date-time",
-            "title": "Createdat",
-            "type": "string"
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "format": "date-time",
+                "type": "string"
+              }
+            ],
+            "title": "Createdat"
           },
           "lastUsed": {
             "anyOf": [
+              {
+                "type": "string"
+              },
               {
                 "format": "date-time",
                 "type": "string"
@@ -12158,6 +13129,9 @@
           "expiresAt": {
             "anyOf": [
               {
+                "type": "string"
+              },
+              {
                 "format": "date-time",
                 "type": "string"
               },
@@ -12168,12 +13142,22 @@
             "title": "Expiresat"
           },
           "createdAt": {
-            "format": "date-time",
-            "title": "Createdat",
-            "type": "string"
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "format": "date-time",
+                "type": "string"
+              }
+            ],
+            "title": "Createdat"
           },
           "lastUsed": {
             "anyOf": [
+              {
+                "type": "string"
+              },
               {
                 "format": "date-time",
                 "type": "string"
@@ -12237,6 +13221,9 @@
           "expiresAt": {
             "anyOf": [
               {
+                "type": "string"
+              },
+              {
                 "format": "date-time",
                 "type": "string"
               },
@@ -12247,12 +13234,22 @@
             "title": "Expiresat"
           },
           "createdAt": {
-            "format": "date-time",
-            "title": "Createdat",
-            "type": "string"
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "format": "date-time",
+                "type": "string"
+              }
+            ],
+            "title": "Createdat"
           },
           "lastUsed": {
             "anyOf": [
+              {
+                "type": "string"
+              },
               {
                 "format": "date-time",
                 "type": "string"
@@ -12318,6 +13315,9 @@
           "expiresAt": {
             "anyOf": [
               {
+                "type": "string"
+              },
+              {
                 "format": "date-time",
                 "type": "string"
               },
@@ -12328,12 +13328,22 @@
             "title": "Expiresat"
           },
           "createdAt": {
-            "format": "date-time",
-            "title": "Createdat",
-            "type": "string"
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "format": "date-time",
+                "type": "string"
+              }
+            ],
+            "title": "Createdat"
           },
           "lastUsed": {
             "anyOf": [
+              {
+                "type": "string"
+              },
               {
                 "format": "date-time",
                 "type": "string"
@@ -12403,6 +13413,9 @@
           "expiresAt": {
             "anyOf": [
               {
+                "type": "string"
+              },
+              {
                 "format": "date-time",
                 "type": "string"
               },
@@ -12446,6 +13459,9 @@
           },
           "expiresAt": {
             "anyOf": [
+              {
+                "type": "string"
+              },
               {
                 "format": "date-time",
                 "type": "string"
@@ -12491,7 +13507,7 @@
             "anyOf": [
               {
                 "maximum": 100000,
-                "minimum": 1,
+                "minimum": 0,
                 "type": "integer"
               },
               {
@@ -12602,7 +13618,7 @@
             "anyOf": [
               {
                 "maximum": 100000,
-                "minimum": 1,
+                "minimum": 0,
                 "type": "integer"
               },
               {
@@ -12637,8 +13653,8 @@
                     "longitude",
                     "elevation_m",
                     "elevationDatum",
-                    "state",
-                    "county",
+                    "adminArea1",
+                    "adminArea2",
                     "country",
                     "-name",
                     "-samplingFeatureType",
@@ -12649,8 +13665,8 @@
                     "-longitude",
                     "-elevation_m",
                     "-elevationDatum",
-                    "-state",
-                    "-county",
+                    "-adminArea1",
+                    "-adminArea2",
                     "-country"
                   ],
                   "type": "string"
@@ -12684,22 +13700,22 @@
             "title": "Bbox",
             "type": "array"
           },
-          "state": {
+          "adminArea1": {
             "default": [],
-            "description": "Filter things by state.",
+            "description": "Filter things by admin area 1.",
             "items": {
               "type": "string"
             },
-            "title": "State",
+            "title": "Adminarea1",
             "type": "array"
           },
-          "county": {
+          "adminArea2": {
             "default": [],
-            "description": "Filter things by county.",
+            "description": "Filter things by admin area 2.",
             "items": {
               "type": "string"
             },
-            "title": "County",
+            "title": "Adminarea2",
             "type": "array"
           },
           "country": {
@@ -12754,6 +13770,25 @@
         "title": "ThingQueryParameters",
         "type": "object"
       },
+      "FileAttachmentGetResponse": {
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "link": {
+            "title": "Link",
+            "type": "string"
+          },
+          "fileAttachmentType": {
+            "title": "Fileattachmenttype",
+            "type": "string"
+          }
+        },
+        "required": ["name", "link", "fileAttachmentType"],
+        "title": "FileAttachmentGetResponse",
+        "type": "object"
+      },
       "LocationDetailResponse": {
         "properties": {
           "latitude": {
@@ -12793,7 +13828,7 @@
             ],
             "title": "Elevationdatum"
           },
-          "state": {
+          "adminArea1": {
             "anyOf": [
               {
                 "maxLength": 200,
@@ -12803,9 +13838,9 @@
                 "type": "null"
               }
             ],
-            "title": "State"
+            "title": "Adminarea1"
           },
-          "county": {
+          "adminArea2": {
             "anyOf": [
               {
                 "maxLength": 200,
@@ -12815,7 +13850,7 @@
                 "type": "null"
               }
             ],
-            "title": "County"
+            "title": "Adminarea2"
           },
           "country": {
             "anyOf": [
@@ -12832,21 +13867,6 @@
         },
         "required": ["latitude", "longitude"],
         "title": "LocationDetailResponse",
-        "type": "object"
-      },
-      "PhotoGetResponse": {
-        "properties": {
-          "name": {
-            "title": "Name",
-            "type": "string"
-          },
-          "link": {
-            "title": "Link",
-            "type": "string"
-          }
-        },
-        "required": ["name", "link"],
-        "title": "PhotoGetResponse",
         "type": "object"
       },
       "TagGetResponse": {
@@ -12923,11 +13943,11 @@
             "title": "Tags",
             "type": "array"
           },
-          "photos": {
+          "fileAttachments": {
             "items": {
-              "$ref": "#/components/schemas/PhotoGetResponse"
+              "$ref": "#/components/schemas/FileAttachmentGetResponse"
             },
-            "title": "Photos",
+            "title": "Fileattachments",
             "type": "array"
           }
         },
@@ -12942,7 +13962,7 @@
           "workspace",
           "location",
           "tags",
-          "photos"
+          "fileAttachments"
         ],
         "title": "ThingDetailResponse",
         "type": "object"
@@ -13008,11 +14028,11 @@
             "title": "Tags",
             "type": "array"
           },
-          "photos": {
+          "fileAttachments": {
             "items": {
-              "$ref": "#/components/schemas/PhotoGetResponse"
+              "$ref": "#/components/schemas/FileAttachmentGetResponse"
             },
-            "title": "Photos",
+            "title": "Fileattachments",
             "type": "array"
           }
         },
@@ -13027,7 +14047,7 @@
           "workspaceId",
           "location",
           "tags",
-          "photos"
+          "fileAttachments"
         ],
         "title": "ThingSummaryResponse",
         "type": "object"
@@ -13071,7 +14091,7 @@
             ],
             "title": "Elevationdatum"
           },
-          "state": {
+          "adminArea1": {
             "anyOf": [
               {
                 "maxLength": 200,
@@ -13081,9 +14101,9 @@
                 "type": "null"
               }
             ],
-            "title": "State"
+            "title": "Adminarea1"
           },
-          "county": {
+          "adminArea2": {
             "anyOf": [
               {
                 "maxLength": 200,
@@ -13093,7 +14113,7 @@
                 "type": "null"
               }
             ],
-            "title": "County"
+            "title": "Adminarea2"
           },
           "country": {
             "anyOf": [
@@ -13194,7 +14214,7 @@
             "anyOf": [
               {
                 "maximum": 100000,
-                "minimum": 1,
+                "minimum": 0,
                 "type": "integer"
               },
               {
@@ -13260,7 +14280,7 @@
             ],
             "title": "Elevationdatum"
           },
-          "state": {
+          "adminArea1": {
             "anyOf": [
               {
                 "maxLength": 200,
@@ -13270,9 +14290,9 @@
                 "type": "null"
               }
             ],
-            "title": "State"
+            "title": "Adminarea1"
           },
-          "county": {
+          "adminArea2": {
             "anyOf": [
               {
                 "maxLength": 200,
@@ -13282,7 +14302,7 @@
                 "type": "null"
               }
             ],
-            "title": "County"
+            "title": "Adminarea2"
           },
           "country": {
             "anyOf": [
@@ -13342,10 +14362,16 @@
             "type": "boolean"
           },
           "location": {
-            "$ref": "#/components/schemas/LocationPatchBody"
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LocationPatchBody"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
-        "required": ["location"],
         "title": "ThingPatchBody",
         "type": "object"
       },
@@ -13386,7 +14412,7 @@
         "title": "TagDeleteBody",
         "type": "object"
       },
-      "PhotoDeleteBody": {
+      "FileAttachmentDeleteBody": {
         "properties": {
           "name": {
             "title": "Name",
@@ -13394,7 +14420,7 @@
           }
         },
         "required": ["name"],
-        "title": "PhotoDeleteBody",
+        "title": "FileAttachmentDeleteBody",
         "type": "object"
       },
       "HydroShareArchivalDetailResponse": {
@@ -13604,7 +14630,7 @@
             "anyOf": [
               {
                 "maximum": 100000,
-                "minimum": 1,
+                "minimum": 0,
                 "type": "integer"
               },
               {
@@ -13725,6 +14751,16 @@
             "title": "Unit Id",
             "type": "array"
           },
+          "result_qualifier_id": {
+            "default": [],
+            "description": "Filter datastreams by observation result qualifier ID.",
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "title": "Result Qualifier Id",
+            "type": "array"
+          },
           "data_source_id": {
             "default": [],
             "description": "Filter datastreams by data source ID.",
@@ -13820,6 +14856,9 @@
           "phenomenon_begin_time_max": {
             "anyOf": [
               {
+                "type": "string"
+              },
+              {
                 "format": "date-time",
                 "type": "string"
               },
@@ -13832,6 +14871,9 @@
           },
           "phenomenon_begin_time_min": {
             "anyOf": [
+              {
+                "type": "string"
+              },
               {
                 "format": "date-time",
                 "type": "string"
@@ -13846,6 +14888,9 @@
           "phenomenon_end_time_max": {
             "anyOf": [
               {
+                "type": "string"
+              },
+              {
                 "format": "date-time",
                 "type": "string"
               },
@@ -13858,6 +14903,9 @@
           },
           "phenomenon_end_time_min": {
             "anyOf": [
+              {
+                "type": "string"
+              },
               {
                 "format": "date-time",
                 "type": "string"
@@ -13872,6 +14920,9 @@
           "result_begin_time_max": {
             "anyOf": [
               {
+                "type": "string"
+              },
+              {
                 "format": "date-time",
                 "type": "string"
               },
@@ -13884,6 +14935,9 @@
           },
           "result_begin_time_min": {
             "anyOf": [
+              {
+                "type": "string"
+              },
               {
                 "format": "date-time",
                 "type": "string"
@@ -13898,6 +14952,9 @@
           "result_end_time_max": {
             "anyOf": [
               {
+                "type": "string"
+              },
+              {
                 "format": "date-time",
                 "type": "string"
               },
@@ -13910,6 +14967,9 @@
           },
           "result_end_time_min": {
             "anyOf": [
+              {
+                "type": "string"
+              },
               {
                 "format": "date-time",
                 "type": "string"
@@ -14049,6 +15109,9 @@
           "phenomenonBeginTime": {
             "anyOf": [
               {
+                "type": "string"
+              },
+              {
                 "format": "date-time",
                 "type": "string"
               },
@@ -14060,6 +15123,9 @@
           },
           "phenomenonEndTime": {
             "anyOf": [
+              {
+                "type": "string"
+              },
               {
                 "format": "date-time",
                 "type": "string"
@@ -14073,6 +15139,9 @@
           "resultBeginTime": {
             "anyOf": [
               {
+                "type": "string"
+              },
+              {
                 "format": "date-time",
                 "type": "string"
               },
@@ -14084,6 +15153,9 @@
           },
           "resultEndTime": {
             "anyOf": [
+              {
+                "type": "string"
+              },
               {
                 "format": "date-time",
                 "type": "string"
@@ -14164,6 +15236,20 @@
           },
           "unit": {
             "$ref": "#/components/schemas/UnitSummaryResponse"
+          },
+          "tags": {
+            "items": {
+              "$ref": "#/components/schemas/TagGetResponse"
+            },
+            "title": "Tags",
+            "type": "array"
+          },
+          "fileAttachments": {
+            "items": {
+              "$ref": "#/components/schemas/FileAttachmentGetResponse"
+            },
+            "title": "Fileattachments",
+            "type": "array"
           }
         },
         "required": [
@@ -14183,7 +15269,9 @@
           "sensor",
           "observedProperty",
           "processingLevel",
-          "unit"
+          "unit",
+          "tags",
+          "fileAttachments"
         ],
         "title": "DatastreamDetailResponse",
         "type": "object"
@@ -14291,6 +15379,9 @@
           "phenomenonBeginTime": {
             "anyOf": [
               {
+                "type": "string"
+              },
+              {
                 "format": "date-time",
                 "type": "string"
               },
@@ -14302,6 +15393,9 @@
           },
           "phenomenonEndTime": {
             "anyOf": [
+              {
+                "type": "string"
+              },
               {
                 "format": "date-time",
                 "type": "string"
@@ -14315,6 +15409,9 @@
           "resultBeginTime": {
             "anyOf": [
               {
+                "type": "string"
+              },
+              {
                 "format": "date-time",
                 "type": "string"
               },
@@ -14326,6 +15423,9 @@
           },
           "resultEndTime": {
             "anyOf": [
+              {
+                "type": "string"
+              },
               {
                 "format": "date-time",
                 "type": "string"
@@ -14383,6 +15483,20 @@
             "format": "uuid",
             "title": "Workspace Id",
             "type": "string"
+          },
+          "tags": {
+            "items": {
+              "$ref": "#/components/schemas/TagGetResponse"
+            },
+            "title": "Tags",
+            "type": "array"
+          },
+          "fileAttachments": {
+            "items": {
+              "$ref": "#/components/schemas/FileAttachmentGetResponse"
+            },
+            "title": "Fileattachments",
+            "type": "array"
           }
         },
         "required": [
@@ -14401,7 +15515,9 @@
           "resultType",
           "timeAggregationIntervalUnit",
           "id",
-          "workspace_id"
+          "workspace_id",
+          "tags",
+          "fileAttachments"
         ],
         "title": "DatastreamSummaryResponse",
         "type": "object"
@@ -14494,6 +15610,9 @@
           "startTime": {
             "anyOf": [
               {
+                "type": "string"
+              },
+              {
                 "format": "date-time",
                 "type": "string"
               },
@@ -14505,6 +15624,9 @@
           },
           "endTime": {
             "anyOf": [
+              {
+                "type": "string"
+              },
               {
                 "format": "date-time",
                 "type": "string"
@@ -14547,6 +15669,9 @@
           "lastRun": {
             "anyOf": [
               {
+                "type": "string"
+              },
+              {
                 "format": "date-time",
                 "type": "string"
               },
@@ -14558,6 +15683,9 @@
           },
           "nextRun": {
             "anyOf": [
+              {
+                "type": "string"
+              },
               {
                 "format": "date-time",
                 "type": "string"
@@ -14897,6 +16025,9 @@
           "phenomenonBeginTime": {
             "anyOf": [
               {
+                "type": "string"
+              },
+              {
                 "format": "date-time",
                 "type": "string"
               },
@@ -14908,6 +16039,9 @@
           },
           "phenomenonEndTime": {
             "anyOf": [
+              {
+                "type": "string"
+              },
               {
                 "format": "date-time",
                 "type": "string"
@@ -14921,6 +16055,9 @@
           "resultBeginTime": {
             "anyOf": [
               {
+                "type": "string"
+              },
+              {
                 "format": "date-time",
                 "type": "string"
               },
@@ -14932,6 +16069,9 @@
           },
           "resultEndTime": {
             "anyOf": [
+              {
+                "type": "string"
+              },
               {
                 "format": "date-time",
                 "type": "string"
@@ -15103,6 +16243,9 @@
           "phenomenonBeginTime": {
             "anyOf": [
               {
+                "type": "string"
+              },
+              {
                 "format": "date-time",
                 "type": "string"
               },
@@ -15114,6 +16257,9 @@
           },
           "phenomenonEndTime": {
             "anyOf": [
+              {
+                "type": "string"
+              },
               {
                 "format": "date-time",
                 "type": "string"
@@ -15127,6 +16273,9 @@
           "resultBeginTime": {
             "anyOf": [
               {
+                "type": "string"
+              },
+              {
                 "format": "date-time",
                 "type": "string"
               },
@@ -15138,6 +16287,9 @@
           },
           "resultEndTime": {
             "anyOf": [
+              {
+                "type": "string"
+              },
               {
                 "format": "date-time",
                 "type": "string"
@@ -15207,7 +16359,7 @@
             "anyOf": [
               {
                 "maximum": 100000,
-                "minimum": 1,
+                "minimum": 0,
                 "type": "integer"
               },
               {
@@ -15261,6 +16413,9 @@
           "phenomenon_time_max": {
             "anyOf": [
               {
+                "type": "string"
+              },
+              {
                 "format": "date-time",
                 "type": "string"
               },
@@ -15274,6 +16429,9 @@
           "phenomenon_time_min": {
             "anyOf": [
               {
+                "type": "string"
+              },
+              {
                 "format": "date-time",
                 "type": "string"
               },
@@ -15283,6 +16441,15 @@
             ],
             "description": "Sets the minimum phenomenon time of filtered observations.",
             "title": "Phenomenon Time Min"
+          },
+          "result_qualifier_code": {
+            "default": [],
+            "description": "Filter observations by result qualifier code.",
+            "items": {
+              "type": "string"
+            },
+            "title": "Result Qualifier Code",
+            "type": "array"
           }
         },
         "title": "ObservationQueryParameters",
@@ -15299,22 +16466,42 @@
             "items": {},
             "title": "Result",
             "type": "array"
+          },
+          "resultQualifierCodes": {
+            "items": {},
+            "title": "Resultqualifiercodes",
+            "type": "array"
           }
         },
-        "required": ["phenomenonTime", "result"],
+        "required": ["phenomenonTime", "result", "resultQualifierCodes"],
         "title": "ObservationColumnarResponse",
         "type": "object"
       },
       "ObservationDetailResponse": {
         "properties": {
           "phenomenonTime": {
-            "format": "date-time",
-            "title": "Phenomenontime",
-            "type": "string"
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "format": "date-time",
+                "type": "string"
+              }
+            ],
+            "title": "Phenomenontime"
           },
           "result": {
             "title": "Result",
             "type": "number"
+          },
+          "resultQualifierCodes": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Resultqualifiercodes",
+            "type": "array"
           },
           "id": {
             "format": "uuid",
@@ -15342,7 +16529,7 @@
         "properties": {
           "fields": {
             "items": {
-              "enum": ["phenomenonTime", "result"],
+              "enum": ["phenomenonTime", "result", "resultQualifierCodes"],
               "type": "string"
             },
             "title": "Fields",
@@ -15364,22 +16551,37 @@
       "ObservationSummaryResponse": {
         "properties": {
           "phenomenonTime": {
-            "format": "date-time",
-            "title": "Phenomenontime",
-            "type": "string"
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "format": "date-time",
+                "type": "string"
+              }
+            ],
+            "title": "Phenomenontime"
           },
           "result": {
             "title": "Result",
             "type": "number"
+          },
+          "resultQualifierCodes": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Resultqualifiercodes",
+            "type": "array"
           },
           "id": {
             "format": "uuid",
             "title": "Id",
             "type": "string"
           },
-          "workspace_id": {
+          "workspaceId": {
             "format": "uuid",
-            "title": "Workspace Id",
+            "title": "Workspaceid",
             "type": "string"
           },
           "datastreamId": {
@@ -15392,7 +16594,7 @@
           "phenomenonTime",
           "result",
           "id",
-          "workspace_id",
+          "workspaceId",
           "datastreamId"
         ],
         "title": "ObservationSummaryResponse",
@@ -15401,13 +16603,28 @@
       "ObservationPostBody": {
         "properties": {
           "phenomenonTime": {
-            "format": "date-time",
-            "title": "Phenomenontime",
-            "type": "string"
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "format": "date-time",
+                "type": "string"
+              }
+            ],
+            "title": "Phenomenontime"
           },
           "result": {
             "title": "Result",
             "type": "number"
+          },
+          "resultQualifierCodes": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Resultqualifiercodes",
+            "type": "array"
           }
         },
         "required": ["phenomenonTime", "result"],
@@ -15437,7 +16654,7 @@
         "properties": {
           "fields": {
             "items": {
-              "enum": ["phenomenonTime", "result"],
+              "enum": ["phenomenonTime", "result", "resultQualifierCodes"],
               "type": "string"
             },
             "title": "Fields",
@@ -15461,6 +16678,9 @@
           "phenomenonTimeStart": {
             "anyOf": [
               {
+                "type": "string"
+              },
+              {
                 "format": "date-time",
                 "type": "string"
               },
@@ -15473,6 +16693,9 @@
           "phenomenonTimeEnd": {
             "anyOf": [
               {
+                "type": "string"
+              },
+              {
                 "format": "date-time",
                 "type": "string"
               },
@@ -15484,21 +16707,6 @@
           }
         },
         "title": "ObservationBulkDeleteBody",
-        "type": "object"
-      },
-      "ObservationPatchBody": {
-        "properties": {
-          "phenomenonTime": {
-            "format": "date-time",
-            "title": "Phenomenontime",
-            "type": "string"
-          },
-          "result": {
-            "title": "Result",
-            "type": "number"
-          }
-        },
-        "title": "ObservationPatchBody",
         "type": "object"
       },
       "ObservedPropertyQueryParameters": {
@@ -15520,7 +16728,7 @@
             "anyOf": [
               {
                 "maximum": 100000,
-                "minimum": 1,
+                "minimum": 0,
                 "type": "integer"
               },
               {
@@ -15581,8 +16789,17 @@
             "default": [],
             "description": "Filter observed properties by thing ID.",
             "items": {
-              "format": "uuid",
-              "type": "string"
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "const": "null",
+                  "enum": ["null"],
+                  "type": "string"
+                }
+              ]
             },
             "title": "Thing Id",
             "type": "array"
@@ -15591,8 +16808,17 @@
             "default": [],
             "description": "Filter observed properties by datastream ID.",
             "items": {
-              "format": "uuid",
-              "type": "string"
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "const": "null",
+                  "enum": ["null"],
+                  "type": "string"
+                }
+              ]
             },
             "title": "Datastream Id",
             "type": "array"
@@ -15760,7 +16986,7 @@
             "anyOf": [
               {
                 "maximum": 100000,
-                "minimum": 1,
+                "minimum": 0,
                 "type": "integer"
               },
               {
@@ -15828,8 +17054,17 @@
             "default": [],
             "description": "Filter units by thing ID.",
             "items": {
-              "format": "uuid",
-              "type": "string"
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "const": "null",
+                  "enum": ["null"],
+                  "type": "string"
+                }
+              ]
             },
             "title": "Thing Id",
             "type": "array"
@@ -15838,19 +17073,28 @@
             "default": [],
             "description": "Filter units by datastream ID.",
             "items": {
-              "format": "uuid",
-              "type": "string"
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "const": "null",
+                  "enum": ["null"],
+                  "type": "string"
+                }
+              ]
             },
             "title": "Datastream Id",
             "type": "array"
           },
-          "unit_type": {
+          "type": {
             "default": [],
             "description": "Filter units by type",
             "items": {
               "type": "string"
             },
-            "title": "Unit Type",
+            "title": "Type",
             "type": "array"
           }
         },
@@ -15980,7 +17224,7 @@
             "anyOf": [
               {
                 "maximum": 100000,
-                "minimum": 1,
+                "minimum": 0,
                 "type": "integer"
               },
               {
@@ -16054,8 +17298,17 @@
             "default": [],
             "description": "Filter sensors by thing ID.",
             "items": {
-              "format": "uuid",
-              "type": "string"
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "const": "null",
+                  "enum": ["null"],
+                  "type": "string"
+                }
+              ]
             },
             "title": "Thing Id",
             "type": "array"
@@ -16064,8 +17317,17 @@
             "default": [],
             "description": "Filter sensors by datastream ID.",
             "items": {
-              "format": "uuid",
-              "type": "string"
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "const": "null",
+                  "enum": ["null"],
+                  "type": "string"
+                }
+              ]
             },
             "title": "Datastream Id",
             "type": "array"
@@ -16429,7 +17691,7 @@
             "anyOf": [
               {
                 "maximum": 100000,
-                "minimum": 1,
+                "minimum": 0,
                 "type": "integer"
               },
               {
@@ -16490,8 +17752,17 @@
             "default": [],
             "description": "Filter processing levels by thing ID.",
             "items": {
-              "format": "uuid",
-              "type": "string"
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "const": "null",
+                  "enum": ["null"],
+                  "type": "string"
+                }
+              ]
             },
             "title": "Thing Id",
             "type": "array"
@@ -16500,8 +17771,17 @@
             "default": [],
             "description": "Filter processing levels by datastream ID.",
             "items": {
-              "format": "uuid",
-              "type": "string"
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "const": "null",
+                  "enum": ["null"],
+                  "type": "string"
+                }
+              ]
             },
             "title": "Datastream Id",
             "type": "array"
@@ -16657,7 +17937,7 @@
             "anyOf": [
               {
                 "maximum": 100000,
-                "minimum": 1,
+                "minimum": 0,
                 "type": "integer"
               },
               {
@@ -16712,6 +17992,44 @@
               ]
             },
             "title": "Workspace Id",
+            "type": "array"
+          },
+          "thing_id": {
+            "default": [],
+            "description": "Filter result qualifiers by thing ID.",
+            "items": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "const": "null",
+                  "enum": ["null"],
+                  "type": "string"
+                }
+              ]
+            },
+            "title": "Thing Id",
+            "type": "array"
+          },
+          "datastream_id": {
+            "default": [],
+            "description": "Filter result qualifiers by datastream ID.",
+            "items": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "const": "null",
+                  "enum": ["null"],
+                  "type": "string"
+                }
+              ]
+            },
+            "title": "Datastream Id",
             "type": "array"
           }
         },
@@ -16844,7 +18162,7 @@
             "anyOf": [
               {
                 "maximum": 100000,
-                "minimum": 1,
+                "minimum": 0,
                 "type": "integer"
               },
               {
@@ -17044,7 +18362,7 @@
             "anyOf": [
               {
                 "maximum": 100000,
-                "minimum": 1,
+                "minimum": 0,
                 "type": "integer"
               },
               {
@@ -17134,6 +18452,9 @@
           "last_run_max": {
             "anyOf": [
               {
+                "type": "string"
+              },
+              {
                 "format": "date-time",
                 "type": "string"
               },
@@ -17146,6 +18467,9 @@
           },
           "last_run_min": {
             "anyOf": [
+              {
+                "type": "string"
+              },
               {
                 "format": "date-time",
                 "type": "string"
@@ -17160,6 +18484,9 @@
           "next_run_max": {
             "anyOf": [
               {
+                "type": "string"
+              },
+              {
                 "format": "date-time",
                 "type": "string"
               },
@@ -17172,6 +18499,9 @@
           },
           "next_run_min": {
             "anyOf": [
+              {
+                "type": "string"
+              },
               {
                 "format": "date-time",
                 "type": "string"
@@ -17366,6 +18696,9 @@
           "startTime": {
             "anyOf": [
               {
+                "type": "string"
+              },
+              {
                 "format": "date-time",
                 "type": "string"
               },
@@ -17377,6 +18710,9 @@
           },
           "endTime": {
             "anyOf": [
+              {
+                "type": "string"
+              },
               {
                 "format": "date-time",
                 "type": "string"
@@ -17419,6 +18755,9 @@
           "lastRun": {
             "anyOf": [
               {
+                "type": "string"
+              },
+              {
                 "format": "date-time",
                 "type": "string"
               },
@@ -17430,6 +18769,9 @@
           },
           "nextRun": {
             "anyOf": [
+              {
+                "type": "string"
+              },
               {
                 "format": "date-time",
                 "type": "string"
@@ -17544,6 +18886,9 @@
           "startTime": {
             "anyOf": [
               {
+                "type": "string"
+              },
+              {
                 "format": "date-time",
                 "type": "string"
               },
@@ -17555,6 +18900,9 @@
           },
           "endTime": {
             "anyOf": [
+              {
+                "type": "string"
+              },
               {
                 "format": "date-time",
                 "type": "string"
@@ -17597,6 +18945,9 @@
           "lastRun": {
             "anyOf": [
               {
+                "type": "string"
+              },
+              {
                 "format": "date-time",
                 "type": "string"
               },
@@ -17608,6 +18959,9 @@
           },
           "nextRun": {
             "anyOf": [
+              {
+                "type": "string"
+              },
               {
                 "format": "date-time",
                 "type": "string"
