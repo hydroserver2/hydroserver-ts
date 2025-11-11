@@ -71,7 +71,7 @@ export class PostHydroShareArchive extends HydroShareArchive {
   }
 }
 
-export class Location {
+export class SiteLocation {
   latitude?: number | ''
   longitude?: number | ''
   elevation_m?: number | ''
@@ -92,7 +92,7 @@ export class Thing {
   id: string
   workspaceId: string
   name: string
-  location: Location = new Location()
+  location: SiteLocation = new SiteLocation()
   tags: Tag[]
   hydroShareArchive?: HydroShareArchive | null
   siteType: string
