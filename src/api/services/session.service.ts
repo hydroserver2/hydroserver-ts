@@ -111,8 +111,7 @@ export class SessionService {
   }
 
   async signup(user: User) {
-    const res = await apiMethods.post(this._client.authBase, user)
-    this._setSession(res)
+    return this._client.user.create(user)
   }
 
   private _loggingOut = false

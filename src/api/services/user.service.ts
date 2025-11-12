@@ -24,14 +24,22 @@ export class UserService {
 
   get = async (): Promise<ApiResponse<User>> =>
     apiMethods.fetch(this.accountBase)
-  create = async (user: User): Promise<ApiResponse<User>> =>
-    apiMethods.post(this.accountBase, user)
+
+  create = async (user: User): Promise<ApiResponse<User>> => {
+    const res = await apiMethods.post(this.accountBase, user)
+    this._client.session._setSession(res)
+    this._client.session.unverifiedEmail = user.email
+    return res
+  }
+
   update = async (user: User, oldUser?: User): Promise<ApiResponse<User>> =>
     apiMethods.patch(this.accountBase, user, oldUser)
+
   updateItem = async (user: User, oldUser?: User): Promise<User | null> => {
     const res = await apiMethods.patch(this.accountBase, user, oldUser)
     return res.ok ? res.data : null
   }
+
   delete = async () => apiMethods.delete(this.accountBase)
 
   /* ---------------------------- Email verification --------------------------- */
@@ -40,7 +48,11 @@ export class UserService {
   }
 
   async verifyEmailWithCode(key: string) {
-    return apiMethods.post(`${this.accountBase}/email/verify`, { key })
+    const res = await apiMethods.post(`${this.accountBase}/email/verify`, {
+      key,
+    })
+    this._client.session._setSession(res)
+    return res
   }
 
   /* ---------------------------- Password helpers --------------------------- */
