@@ -7,6 +7,7 @@ import {
 import type * as Data from '../../generated/data.types'
 import type { ApiResponse } from '../responseInterceptor'
 import { Datastream as M } from '../../types'
+import JSZip from 'jszip'
 
 type WithId = { id: string }
 
@@ -119,10 +120,8 @@ export class DatastreamService extends HydroServerBaseService<typeof C, M> {
     datastreams: Array<string | WithId>,
     zipName = 'datastreams.zip'
   ): Promise<void> {
-    const { default: JSZip } = await import('jszip')
     const zip = new JSZip()
 
-    // Sequential avoids hammering the API; parallelize if your server allows.
     for (const ds of datastreams) {
       const id = typeof ds === 'string' ? ds : ds.id
       const res = await this.fetchCsvBlob(id)
