@@ -24,21 +24,17 @@ export class WorkspaceService extends HydroServerBaseService<typeof C, M> {
 
   addCollaborator(workspaceId: string, email: string, roleId: string) {
     const url = `${this._route}/${workspaceId}/collaborators`
-    return apiMethods.post(url, { email, role: roleId })
+    return apiMethods.post(url, { email, roleId })
   }
 
   updateCollaboratorRole(workspaceId: string, email: string, roleId: string) {
     const url = `${this._route}/${workspaceId}/collaborators`
-    return apiMethods.patch(url, { email, role: roleId }, null)
+    return apiMethods.put(url, { email, roleId })
   }
 
   removeCollaborator(workspaceId: string, email: string) {
-    const url = new URL(
-      `${this._route}/${workspaceId}/collaborators`,
-      globalThis.location?.origin ?? undefined
-    )
-    url.searchParams.set('email', email)
-    return apiMethods.delete(url.toString())
+    const url = new URL(`${this._route}/${workspaceId}/collaborators`)
+    return apiMethods.delete(url.toString(), { email })
   }
 
   // ---------- sub-resources: ownership transfer ----------

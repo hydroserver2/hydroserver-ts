@@ -374,6 +374,7 @@ export enum PermissionResource {
   ObservedProperty = 'ObservedProperty',
   ProcessingLevel = 'ProcessingLevel',
   Observation = 'Observation',
+  ApiKey = 'ApiKey',
 }
 
 export interface Permission {
