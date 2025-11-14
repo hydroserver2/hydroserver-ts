@@ -37,7 +37,6 @@ export class SessionService {
 
   private _client: HydroServer
   private snapshot: SessionSnapshot = { ...DEFAULT_SESSION_SNAPSHOT }
-  private autoRefreshEnabled = false
 
   constructor(client: HydroServer) {
     this._client = client
@@ -208,8 +207,14 @@ export class SessionService {
   fetchConnectedProviders = async () =>
     apiMethods.fetch(`${this._client.providerBase}/connections`)
 
-  providerSignup = async (user: User) =>
-    apiMethods.post(`${this._client.providerBase}/signup`, user)
+  providerSignup = async (user: User) => {
+    const res = await apiMethods.post(
+      `${this._client.providerBase}/signup`,
+      user
+    )
+    this._setSession(res.data)
+    return res
+  }
 
   deleteProvider = async (provider: string, account: string) =>
     apiMethods.delete(`${this._client.providerBase}/connections`, {

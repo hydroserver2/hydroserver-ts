@@ -52,11 +52,6 @@ export class HydroServer {
     return client
   }
 
-  async providerSignup(user: User) {
-    const res = await apiMethods.post(this.providerBase, user)
-    this.session._setSession(res.data)
-  }
-
   private listeners: Record<string, Array<(...args: any[]) => void>> = {}
 
   public on(eventName: string, callback: (...args: any[]) => void): void {
