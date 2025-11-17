@@ -100,6 +100,8 @@ export class SessionService {
     this._setSession(res)
   }
 
+  get = async () => apiMethods.fetch(this.sessionBase)
+
   async login(email: string, password: string) {
     const res = await apiMethods.post(this.sessionBase, {
       email,
@@ -212,6 +214,7 @@ export class SessionService {
       `${this._client.providerBase}/signup`,
       user
     )
+    console.log('provider signup', res)
     this._setSession(res.data)
     return res
   }

@@ -93,11 +93,6 @@ export class UserService {
     return apiMethods.fetch(url)
   }
 
-  providerSignup(payload: unknown) {
-    const url = `${this.providerBase}/signup`
-    return apiMethods.post(url, payload)
-  }
-
   async can(
     action: PermissionAction,
     resource: PermissionResource,
