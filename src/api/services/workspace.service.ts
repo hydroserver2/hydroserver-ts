@@ -32,10 +32,10 @@ export class WorkspaceService extends HydroServerBaseService<typeof C, M> {
     return apiMethods.put(url, { email, roleId })
   }
 
-  removeCollaborator(workspaceId: string, email: string) {
-    const url = new URL(`${this._route}/${workspaceId}/collaborators`)
-    return apiMethods.delete(url.toString(), { email })
-  }
+  removeCollaborator = (workspaceId: string, email: string) =>
+    apiMethods.delete(`${this._route}/${workspaceId}/collaborators`, {
+      email,
+    })
 
   // ---------- sub-resources: ownership transfer ----------
   transferOwnership = (workspaceId: string, newOwner: string) =>
