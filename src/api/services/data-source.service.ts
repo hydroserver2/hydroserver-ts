@@ -1,7 +1,7 @@
 import { HydroServerBaseService, PatchBody } from './base'
 import { apiMethods } from '../apiMethods'
 import { DataSourceContract as C } from '../../generated/contracts'
-import { type Datastream } from '../../index'
+import { ApiResponse, type Datastream } from '../../index'
 import { Timestamp } from '../../types/timestamp'
 import { OrchestrationSystem } from './orchestration-system.service'
 
@@ -326,16 +326,14 @@ export class DataSourceService extends HydroServerBaseService<
   static writableKeys = C.writableKeys
   static Model = DataSource
 
-  protected convertDataSourceToPostObject(dataSource: DataSource) {
-    return {
-      name: dataSource.name,
-      settings: dataSource.settings,
-      workspaceId: dataSource.workspaceId,
-      orchestrationSystemId: dataSource.orchestrationSystem.id,
-      schedule: dataSource.schedule,
-      status: dataSource.status,
-    }
-  }
+  create = async (body: DataSource): Promise<ApiResponse<DataSource>> =>
+    apiMethods.post(this._route, this.toPostObject(body))
+
+  update = async (body: Partial<DataSource> & Pick<DataSource, 'id'>) =>
+    apiMethods.patch(
+      `${this._route}/${body.id}`,
+      this.toPostObject(body as DataSource)
+    )
 
   linkDatastream = async (dataSourceId: string, datastreamId: string) => {
     const url = `${this._route}/${encodeURIComponent(
