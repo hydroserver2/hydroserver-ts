@@ -38,18 +38,14 @@ export class WorkspaceService extends HydroServerBaseService<typeof C, M> {
   }
 
   // ---------- sub-resources: ownership transfer ----------
-  transferOwnership(workspaceId: string, email: string) {
-    const url = `${this._route}/${workspaceId}/ownership/transfer`
-    return apiMethods.post(url, { email })
-  }
+  transferOwnership = (workspaceId: string, newOwner: string) =>
+    apiMethods.post(`${this._route}/${workspaceId}/transfer`, { newOwner })
 
-  acceptOwnershipTransfer(workspaceId: string) {
-    const url = `${this._route}/${workspaceId}/ownership/accept`
-    return apiMethods.post(url, {})
-  }
+  acceptOwnershipTransfer = (workspaceId: string) =>
+    apiMethods.put(`${this._route}/${workspaceId}/transfer`)
 
-  rejectWorkspaceTransfer = (id: string) =>
-    apiMethods.delete(`${this.removeCollaborator}/${id}/transfer`)
+  rejectOwnershipTransfer = (id: string) =>
+    apiMethods.delete(`${this._route}/${id}/transfer`)
 
   // ---------- sub-resources: keys/roles ----------
   getApiKeys(workspaceId: string) {
