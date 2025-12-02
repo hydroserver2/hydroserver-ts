@@ -39,9 +39,9 @@ export const CSV_DELIMITER_OPTIONS = [
 ] as const
 export type CSVDelimiterType = (typeof CSV_DELIMITER_OPTIONS)[number]['value']
 
-export interface PerPayloadPlaceholder {
+export interface PerTaskPlaceholder {
   name: string
-  type: 'perPayload'
+  type: 'perTask'
 }
 
 export interface RunTimePlaceholder {
@@ -51,7 +51,7 @@ export interface RunTimePlaceholder {
   timestamp: Timestamp
 }
 
-export type PlaceholderVariable = PerPayloadPlaceholder | RunTimePlaceholder
+export type PlaceholderVariable = PerTaskPlaceholder | RunTimePlaceholder
 
 export const EXTRACTOR_OPTIONS = ['HTTP', 'local'] as const
 export type ExtractorType = (typeof EXTRACTOR_OPTIONS)[number]

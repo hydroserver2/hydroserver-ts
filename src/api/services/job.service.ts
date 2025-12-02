@@ -1,6 +1,6 @@
 import { HydroServerBaseService } from './base'
 import { apiMethods } from '../apiMethods'
-import { JobContract as C } from '../../generated/etl-contracts'
+import { EtlJobContract as C } from '../../generated/contracts'
 import { ApiResponse } from '../../index'
 import { Job as M } from '../Models/job.model'
 
@@ -9,9 +9,9 @@ export class JobService extends HydroServerBaseService<typeof C, M> {
   static writableKeys = C.writableKeys
   static Model = M
 
-  protected override getBaseUrl() {
-    return this._client.etlBase
-  }
+  // protected override getBaseUrl() {
+  //   return this._client.etlBase
+  // }
 
   create = async (body: M): Promise<ApiResponse<M>> =>
     apiMethods.post(this._route, this.toPostObject(body))

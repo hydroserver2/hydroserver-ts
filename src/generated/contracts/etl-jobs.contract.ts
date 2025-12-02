@@ -1,12 +1,12 @@
 /* AUTO-GENERATED. DO NOT EDIT.
-   Generated from schemas/etl.openapi.json */
-import type * as Data from '../etl.types'
+   Generated from schemas/data.openapi.json */
+import type * as Data from '../data.types'
 
-export namespace JobContract {
-  export const route = 'jobs' as const
-  export type QueryParameters = Data.components['schemas']['JobQueryParameters']
-  export type SummaryResponse = Data.components['schemas']['JobSummaryResponse']
-  export type DetailResponse  = Data.components['schemas']['JobDetailResponse']
+export namespace EtlJobContract {
+  export const route = 'etl-jobs' as const
+  export type QueryParameters = {}
+  export type SummaryResponse = never
+  export type DetailResponse  = never
   export type PostBody        = Data.components['schemas']['JobPostBody']
   export type PatchBody       = Data.components['schemas']['JobPatchBody']
   export type DeleteBody      = never

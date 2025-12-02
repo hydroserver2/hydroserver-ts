@@ -15,6 +15,11 @@ const resources = [
   'processing-levels',
   'result-qualifiers',
   'observations',
+
+  // ETL
+  'etl-jobs',
+  'etl-tasks',
+  'etl-orchestration-systems',
 ]
 
 generateContracts({

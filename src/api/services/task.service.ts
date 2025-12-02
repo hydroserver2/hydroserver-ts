@@ -1,12 +1,11 @@
 import { HydroServerBaseService } from './base'
-import { TaskContract as C } from '../../generated/etl-contracts'
+import { EtlTaskContract as C } from '../../generated/contracts'
 import { Task as M } from '../Models/task.model'
 
 export class TaskService extends HydroServerBaseService<typeof C, M> {
   static route = C.route
   static writableKeys = C.writableKeys
   static Model = M
-  protected override getBaseUrl = () => this._client.etlBase
 
   addMapping(task: M) {
     task.mappings.push({

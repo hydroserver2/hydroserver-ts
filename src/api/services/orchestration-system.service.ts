@@ -1,5 +1,5 @@
 import { HydroServerBaseService } from './base'
-import { OrchestrationSystemContract as C } from '../../generated/etl-contracts'
+import { EtlOrchestrationSystemContract as C } from '../../generated/contracts'
 
 export interface OrchestrationSystem {
   name: string
