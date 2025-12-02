@@ -1,6 +1,6 @@
 /* AUTO-GENERATED. DO NOT EDIT.
-   Generated from schemas/data.openapi.json */
-import type * as Data from '../data.types'
+   Generated from schemas/etl.openapi.json */
+import type * as Data from '../etl.types'
 
 export namespace OrchestrationSystemContract {
   export const route = 'orchestration-systems' as const

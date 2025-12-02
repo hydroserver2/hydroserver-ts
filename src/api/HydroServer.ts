@@ -1,6 +1,4 @@
-import type { User } from '../types'
 import { UserService, SessionService, WorkspaceService } from './services'
-import { apiMethods } from './apiMethods'
 import { ThingService } from './services/thing.service'
 import { ObservedPropertyService } from './services/observed-property.service'
 import { UnitService } from './services/unit.service'
@@ -9,8 +7,8 @@ import { ResultQualifierService } from './services/result-qualifier.service'
 import { DatastreamService } from './services/datastream.service'
 import { SensorService } from './services/sensor.service'
 import { OrchestrationSystemService } from './services/orchestration-system.service'
-import { DataSourceService } from './services/data-source.service'
-import { DataArchiveService } from './services/data-archive.service'
+import { JobService } from './services/job.service'
+import { TaskService } from './services/task.service'
 
 export type AuthTuple = [string, string]
 
@@ -22,6 +20,7 @@ export class HydroServer {
   readonly host: string
   readonly baseRoute: string
   readonly authBase: string
+  readonly etlBase: string
   readonly providerBase: string
 
   private _workspaces?: WorkspaceService
@@ -33,16 +32,18 @@ export class HydroServer {
   private _sensors?: SensorService
   private _datastreams?: DatastreamService
   private _orchestrationSystems?: OrchestrationSystemService
-  private _dataSources?: DataSourceService
-  private _dataArchives?: DataArchiveService
   private _session?: SessionService
   private _user?: UserService
+
+  private _jobs?: JobService
+  private _tasks?: TaskService
 
   constructor(opts: HydroServerOptions) {
     const { host } = opts
     this.host = host.trim().replace(/\/+$/, '')
     this.baseRoute = `${this.host}/api/data`
     this.authBase = `${this.host}/api/auth`
+    this.etlBase = `${this.host}/api/etl`
     this.providerBase = `${this.authBase}/browser/provider`
   }
 
@@ -91,11 +92,11 @@ export class HydroServer {
   get orchestrationSystems(): OrchestrationSystemService {
     return (this._orchestrationSystems ??= new OrchestrationSystemService(this))
   }
-  get dataSources(): DataSourceService {
-    return (this._dataSources ??= new DataSourceService(this))
+  get jobs(): JobService {
+    return (this._jobs ??= new JobService(this))
   }
-  get dataArchives(): DataArchiveService {
-    return (this._dataArchives ??= new DataArchiveService(this))
+  get tasks(): TaskService {
+    return (this._tasks ??= new TaskService(this))
   }
   get session(): SessionService {
     return (this._session ??= new SessionService(this))

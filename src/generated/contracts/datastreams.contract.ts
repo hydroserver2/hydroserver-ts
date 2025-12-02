@@ -10,7 +10,7 @@ export namespace DatastreamContract {
   export type PostBody        = Data.components['schemas']['DatastreamPostBody']
   export type PatchBody       = Data.components['schemas']['DatastreamPatchBody']
   export type DeleteBody      = never
-  export const writableKeys = ["dataSourceId","thingId","sensorId","observedPropertyId","processingLevelId","unitId","name","description","observationType","sampledMedium","noDataValue","aggregationStatistic","timeAggregationInterval","status","resultType","valueCount","phenomenonBeginTime","phenomenonEndTime","resultBeginTime","resultEndTime","isPrivate","isVisible","timeAggregationIntervalUnit","intendedTimeSpacing","intendedTimeSpacingUnit"] as const
+  export const writableKeys = ["thingId","sensorId","observedPropertyId","processingLevelId","unitId","name","description","observationType","sampledMedium","noDataValue","aggregationStatistic","timeAggregationInterval","status","resultType","valueCount","phenomenonBeginTime","phenomenonEndTime","resultBeginTime","resultEndTime","isPrivate","isVisible","timeAggregationIntervalUnit","intendedTimeSpacing","intendedTimeSpacingUnit"] as const
   export declare const __types: {
     SummaryResponse: SummaryResponse
     DetailResponse: DetailResponse

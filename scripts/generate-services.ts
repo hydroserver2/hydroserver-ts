@@ -185,9 +185,6 @@ function buildMethod(
   }`
 }
 
-/** GROUP paths by resource and emit a base service per resource */
-const dataBasePrefix = '/api/data/' // adjust if your server prefix differs
-
 // resources you already emit contracts for (keep in sync with contracts generator)
 const resources = [
   'workspaces',

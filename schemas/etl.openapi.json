@@ -1,0 +1,4619 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "HydroServer ETL API",
+    "version": "1.3.0",
+    "description": ""
+  },
+  "paths": {
+    "/api/etl/jobs": {
+      "get": {
+        "operationId": "etl_views_job_get_jobs",
+        "summary": "Get Jobs",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "anyOf": [
+                {
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Page number (1-based).",
+              "title": "Page"
+            },
+            "required": false,
+            "description": "Page number (1-based)."
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 100000,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The number of items per page.",
+              "title": "Page Size"
+            },
+            "required": false,
+            "description": "The number of items per page."
+          },
+          {
+            "in": "query",
+            "name": "order_by",
+            "schema": {
+              "anyOf": [
+                {
+                  "items": {
+                    "enum": [
+                      "name",
+                      "type",
+                      "extractorType",
+                      "transformerType",
+                      "loaderType",
+                      "-name",
+                      "-type",
+                      "-extractorType",
+                      "-transformerType",
+                      "-loaderType"
+                    ],
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": [],
+              "description": "Select one or more fields to order the response by.",
+              "title": "Order By"
+            },
+            "required": false,
+            "description": "Select one or more fields to order the response by."
+          },
+          {
+            "in": "query",
+            "name": "workspace_id",
+            "schema": {
+              "default": [],
+              "description": "Filter by workspace ID.",
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "title": "Workspace Id",
+              "type": "array"
+            },
+            "required": false,
+            "description": "Filter by workspace ID."
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "default": [],
+              "description": "Filters by the type of the job.",
+              "items": {
+                "type": "string"
+              },
+              "title": "Type",
+              "type": "array"
+            },
+            "required": false,
+            "description": "Filters by the type of the job."
+          },
+          {
+            "in": "query",
+            "name": "extractor_type",
+            "schema": {
+              "default": [],
+              "description": "Filters by the extractor type of the job.",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "const": "null",
+                    "enum": ["null"],
+                    "type": "string"
+                  }
+                ]
+              },
+              "title": "Extractor Type",
+              "type": "array"
+            },
+            "required": false,
+            "description": "Filters by the extractor type of the job."
+          },
+          {
+            "in": "query",
+            "name": "transformer_type",
+            "schema": {
+              "default": [],
+              "description": "Filters by the transformer type of the job.",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "const": "null",
+                    "enum": ["null"],
+                    "type": "string"
+                  }
+                ]
+              },
+              "title": "Transformer Type",
+              "type": "array"
+            },
+            "required": false,
+            "description": "Filters by the transformer type of the job."
+          },
+          {
+            "in": "query",
+            "name": "loader_type",
+            "schema": {
+              "default": [],
+              "description": "Filters by the loader type of the job.",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "const": "null",
+                    "enum": ["null"],
+                    "type": "string"
+                  }
+                ]
+              },
+              "title": "Loader Type",
+              "type": "array"
+            },
+            "required": false,
+            "description": "Filters by the loader type of the job."
+          },
+          {
+            "in": "query",
+            "name": "expand_related",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Expand Related"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "items": {
+                        "$ref": "#/components/schemas/JobSummaryResponse"
+                      },
+                      "type": "array"
+                    },
+                    {
+                      "items": {
+                        "$ref": "#/components/schemas/JobDetailResponse"
+                      },
+                      "type": "array"
+                    }
+                  ],
+                  "title": "Response"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get ETL Jobs associated with the authenticated user.",
+        "tags": ["ETL Jobs"],
+        "security": [
+          {
+            "SessionAuth": []
+          },
+          {
+            "BearerAuth": []
+          },
+          {
+            "APIKeyAuth": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "etl_views_job_create_job",
+        "summary": "Create Job",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobDetailResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Create a new ETL Job.",
+        "tags": ["ETL Jobs"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JobPostBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          },
+          {
+            "BearerAuth": []
+          },
+          {
+            "APIKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/etl/jobs/{job_id}": {
+      "get": {
+        "operationId": "etl_views_job_get_job",
+        "summary": "Get Job",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Job Id",
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "expand_related",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Expand Related"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/JobSummaryResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/JobDetailResponse"
+                    }
+                  ],
+                  "title": "Response"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get an ETL Job.",
+        "tags": ["ETL Jobs"],
+        "security": [
+          {
+            "SessionAuth": []
+          },
+          {
+            "BearerAuth": []
+          },
+          {
+            "APIKeyAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "etl_views_job_update_job",
+        "summary": "Update Job",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Job Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobDetailResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Update a ETL Job.",
+        "tags": ["ETL Jobs"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JobPatchBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          },
+          {
+            "BearerAuth": []
+          },
+          {
+            "APIKeyAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "etl_views_job_delete_job",
+        "summary": "Delete Job",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Job Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Delete an ETL Job.",
+        "tags": ["ETL Jobs"],
+        "security": [
+          {
+            "SessionAuth": []
+          },
+          {
+            "BearerAuth": []
+          },
+          {
+            "APIKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/etl/tasks": {
+      "get": {
+        "operationId": "etl_views_task_get_tasks",
+        "summary": "Get Tasks",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "anyOf": [
+                {
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Page number (1-based).",
+              "title": "Page"
+            },
+            "required": false,
+            "description": "Page number (1-based)."
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 100000,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The number of items per page.",
+              "title": "Page Size"
+            },
+            "required": false,
+            "description": "The number of items per page."
+          },
+          {
+            "in": "query",
+            "name": "order_by",
+            "schema": {
+              "anyOf": [
+                {
+                  "items": {
+                    "enum": [
+                      "orchestrationSystemType",
+                      "latestRunStatus",
+                      "latestRunStartedAt",
+                      "latestRunFinishedAt",
+                      "nextRunAt",
+                      "paused",
+                      "startTime",
+                      "jobType",
+                      "jobExtractorType",
+                      "jobTransformerType",
+                      "jobLoaderType",
+                      "-orchestrationSystemType",
+                      "-latestRunStatus",
+                      "-latestRunStartedAt",
+                      "-latestRunFinishedAt",
+                      "-nextRunAt",
+                      "-paused",
+                      "-startTime",
+                      "-jobType",
+                      "-jobExtractorType",
+                      "-jobTransformerType",
+                      "-jobLoaderType"
+                    ],
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": [],
+              "description": "Select one or more fields to order the response by.",
+              "title": "Order By"
+            },
+            "required": false,
+            "description": "Select one or more fields to order the response by."
+          },
+          {
+            "in": "query",
+            "name": "job_id",
+            "schema": {
+              "default": [],
+              "description": "Filter by job ID.",
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "title": "Job Id",
+              "type": "array"
+            },
+            "required": false,
+            "description": "Filter by job ID."
+          },
+          {
+            "in": "query",
+            "name": "orchestration_system_id",
+            "schema": {
+              "default": [],
+              "description": "Filter by orchestration system ID.",
+              "items": {
+                "anyOf": [
+                  {
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  {
+                    "const": "null",
+                    "enum": ["null"],
+                    "type": "string"
+                  }
+                ]
+              },
+              "title": "Orchestration System Id",
+              "type": "array"
+            },
+            "required": false,
+            "description": "Filter by orchestration system ID."
+          },
+          {
+            "in": "query",
+            "name": "orchestration_system__type",
+            "schema": {
+              "default": [],
+              "description": "Filter by orchestration system type.",
+              "items": {
+                "type": "string"
+              },
+              "title": "Orchestration System  Type",
+              "type": "array"
+            },
+            "required": false,
+            "description": "Filter by orchestration system type."
+          },
+          {
+            "in": "query",
+            "name": "workspace_id",
+            "schema": {
+              "default": [],
+              "description": "Filter by workspace ID.",
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "title": "Workspace Id",
+              "type": "array"
+            },
+            "required": false,
+            "description": "Filter by workspace ID."
+          },
+          {
+            "in": "query",
+            "name": "latest_run_status",
+            "schema": {
+              "default": [],
+              "description": "Filters tasks by the status of their most recent run.",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "const": "null",
+                    "enum": ["null"],
+                    "type": "string"
+                  }
+                ]
+              },
+              "title": "Latest Run Status",
+              "type": "array"
+            },
+            "required": false,
+            "description": "Filters tasks by the status of their most recent run."
+          },
+          {
+            "in": "query",
+            "name": "latest_run_started_at_max",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filters for tasks whose most recent run started on or before this date and time.",
+              "title": "Latest Run Started At Max"
+            },
+            "required": false,
+            "description": "Filters for tasks whose most recent run started on or before this date and time."
+          },
+          {
+            "in": "query",
+            "name": "latest_run_started_at_min",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filters for tasks whose most recent run started on or after this date and time.",
+              "title": "Latest Run Started At Min"
+            },
+            "required": false,
+            "description": "Filters for tasks whose most recent run started on or after this date and time."
+          },
+          {
+            "in": "query",
+            "name": "latest_run_finished_at_max",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filters for tasks whose most recent run finished on or before this date and time.",
+              "title": "Latest Run Finished At Max"
+            },
+            "required": false,
+            "description": "Filters for tasks whose most recent run finished on or before this date and time."
+          },
+          {
+            "in": "query",
+            "name": "latest_run_finished_at_min",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filters for tasks whose most recent run finished on or after this date and time.",
+              "title": "Latest Run Finished At Min"
+            },
+            "required": false,
+            "description": "Filters for tasks whose most recent run finished on or after this date and time."
+          },
+          {
+            "in": "query",
+            "name": "next_run_at_max",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filters for scheduled tasks with a next run on or before this value.",
+              "title": "Next Run At Max"
+            },
+            "required": false,
+            "description": "Filters for scheduled tasks with a next run on or before this value."
+          },
+          {
+            "in": "query",
+            "name": "next_run_at_min",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filters for scheduled tasks with a next run on or after this value.",
+              "title": "Next Run At Min"
+            },
+            "required": false,
+            "description": "Filters for scheduled tasks with a next run on or after this value."
+          },
+          {
+            "in": "query",
+            "name": "paused",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filters by the paused status of the task.",
+              "title": "Paused"
+            },
+            "required": false,
+            "description": "Filters by the paused status of the task."
+          },
+          {
+            "in": "query",
+            "name": "start_time_max",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filters for scheduled tasks with a start time on or before this value.",
+              "title": "Start Time Max"
+            },
+            "required": false,
+            "description": "Filters for scheduled tasks with a start time on or before this value."
+          },
+          {
+            "in": "query",
+            "name": "start_time_min",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filters for scheduled tasks with a start time on or after this value.",
+              "title": "Start Time Min"
+            },
+            "required": false,
+            "description": "Filters for scheduled tasks with a start time on or after this value."
+          },
+          {
+            "in": "query",
+            "name": "job_type",
+            "schema": {
+              "default": [],
+              "description": "Filters by the type of the job.",
+              "items": {
+                "type": "string"
+              },
+              "title": "Job Type",
+              "type": "array"
+            },
+            "required": false,
+            "description": "Filters by the type of the job."
+          },
+          {
+            "in": "query",
+            "name": "extractor_type",
+            "schema": {
+              "default": [],
+              "description": "Filters by the extractor type of the job.",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "const": "null",
+                    "enum": ["null"],
+                    "type": "string"
+                  }
+                ]
+              },
+              "title": "Extractor Type",
+              "type": "array"
+            },
+            "required": false,
+            "description": "Filters by the extractor type of the job."
+          },
+          {
+            "in": "query",
+            "name": "transformer_type",
+            "schema": {
+              "default": [],
+              "description": "Filters by the transformer type of the job.",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "const": "null",
+                    "enum": ["null"],
+                    "type": "string"
+                  }
+                ]
+              },
+              "title": "Transformer Type",
+              "type": "array"
+            },
+            "required": false,
+            "description": "Filters by the transformer type of the job."
+          },
+          {
+            "in": "query",
+            "name": "loader_type",
+            "schema": {
+              "default": [],
+              "description": "Filters by the loader type of the job.",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "const": "null",
+                    "enum": ["null"],
+                    "type": "string"
+                  }
+                ]
+              },
+              "title": "Loader Type",
+              "type": "array"
+            },
+            "required": false,
+            "description": "Filters by the loader type of the job."
+          },
+          {
+            "in": "query",
+            "name": "source_identifier",
+            "schema": {
+              "default": [],
+              "description": "Filters by source identifiers associated with the task.",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "const": "null",
+                    "enum": ["null"],
+                    "type": "string"
+                  }
+                ]
+              },
+              "title": "Source Identifier",
+              "type": "array"
+            },
+            "required": false,
+            "description": "Filters by source identifiers associated with the task."
+          },
+          {
+            "in": "query",
+            "name": "target_identifier",
+            "schema": {
+              "default": [],
+              "description": "Filters by target identifiers associated with the task.",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "const": "null",
+                    "enum": ["null"],
+                    "type": "string"
+                  }
+                ]
+              },
+              "title": "Target Identifier",
+              "type": "array"
+            },
+            "required": false,
+            "description": "Filters by target identifiers associated with the task."
+          },
+          {
+            "in": "query",
+            "name": "expand_related",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Expand Related"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "items": {
+                        "$ref": "#/components/schemas/TaskSummaryResponse"
+                      },
+                      "type": "array"
+                    },
+                    {
+                      "items": {
+                        "$ref": "#/components/schemas/TaskDetailResponse"
+                      },
+                      "type": "array"
+                    }
+                  ],
+                  "title": "Response"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get ETL Tasks associated with the authenticated user.",
+        "tags": ["ETL Tasks"],
+        "security": [
+          {
+            "SessionAuth": []
+          },
+          {
+            "BearerAuth": []
+          },
+          {
+            "APIKeyAuth": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "etl_views_task_create_task",
+        "summary": "Create Task",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskDetailResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Create a new ETL Task.",
+        "tags": ["ETL Tasks"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskPostBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          },
+          {
+            "BearerAuth": []
+          },
+          {
+            "APIKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/etl/tasks/{task_id}": {
+      "get": {
+        "operationId": "etl_views_task_get_task",
+        "summary": "Get Task",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "task_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Task Id",
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "expand_related",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Expand Related"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/TaskSummaryResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TaskDetailResponse"
+                    }
+                  ],
+                  "title": "Response"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get an ETL Task.",
+        "tags": ["ETL Tasks"],
+        "security": [
+          {
+            "SessionAuth": []
+          },
+          {
+            "BearerAuth": []
+          },
+          {
+            "APIKeyAuth": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "etl_views_task_run_task",
+        "summary": "Run Task",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "task_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Task Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskRunResponse"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskRunResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Run an ETL Task.",
+        "tags": ["ETL Tasks"],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "properties": {
+                  "file": {
+                    "anyOf": [
+                      {
+                        "format": "binary",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "File"
+                  }
+                },
+                "title": "FileParams",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          },
+          {
+            "BearerAuth": []
+          },
+          {
+            "APIKeyAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "etl_views_task_update_task",
+        "summary": "Update Task",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "task_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Task Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskDetailResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Update an ETL Task.",
+        "tags": ["ETL Tasks"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskPatchBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          },
+          {
+            "BearerAuth": []
+          },
+          {
+            "APIKeyAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "etl_views_task_delete_task",
+        "summary": "Delete Task",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "task_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Task Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Delete an ETL Task.",
+        "tags": ["ETL Tasks"],
+        "security": [
+          {
+            "SessionAuth": []
+          },
+          {
+            "BearerAuth": []
+          },
+          {
+            "APIKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/etl/tasks/{task_id}/runs": {
+      "get": {
+        "operationId": "etl_views_run_get_task_runs",
+        "summary": "Get Task Runs",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "task_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Task Id",
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "anyOf": [
+                {
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Page number (1-based).",
+              "title": "Page"
+            },
+            "required": false,
+            "description": "Page number (1-based)."
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 100000,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The number of items per page.",
+              "title": "Page Size"
+            },
+            "required": false,
+            "description": "The number of items per page."
+          },
+          {
+            "in": "query",
+            "name": "order_by",
+            "schema": {
+              "anyOf": [
+                {
+                  "items": {
+                    "enum": [
+                      "status",
+                      "startedAt",
+                      "finishedAt",
+                      "-status",
+                      "-startedAt",
+                      "-finishedAt"
+                    ],
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": [],
+              "description": "Select one or more fields to order the response by.",
+              "title": "Order By"
+            },
+            "required": false,
+            "description": "Select one or more fields to order the response by."
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "default": [],
+              "description": "Filters task runs by their status.",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "const": "null",
+                    "enum": ["null"],
+                    "type": "string"
+                  }
+                ]
+              },
+              "title": "Status",
+              "type": "array"
+            },
+            "required": false,
+            "description": "Filters task runs by their status."
+          },
+          {
+            "in": "query",
+            "name": "latest_run_date_created_max",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filters for task runs created on or before this date and time.",
+              "title": "Latest Run Date Created Max"
+            },
+            "required": false,
+            "description": "Filters for task runs created on or before this date and time."
+          },
+          {
+            "in": "query",
+            "name": "latest_run_date_created_min",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filters for task runs created on or after this date and time.",
+              "title": "Latest Run Date Created Min"
+            },
+            "required": false,
+            "description": "Filters for task runs created on or after this date and time."
+          },
+          {
+            "in": "query",
+            "name": "latest_run_finished_at_max",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filters for task runs finished on or before this date and time.",
+              "title": "Latest Run Finished At Max"
+            },
+            "required": false,
+            "description": "Filters for task runs finished on or before this date and time."
+          },
+          {
+            "in": "query",
+            "name": "latest_run_finished_at_min",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filters for task runs finished on or after this date and time.",
+              "title": "Latest Run Finished At Min"
+            },
+            "required": false,
+            "description": "Filters for task runs finished on or after this date and time."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/TaskRunResponse"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get all runs for an ETL Task.",
+        "tags": ["ETL Task Runs"],
+        "security": [
+          {
+            "SessionAuth": []
+          },
+          {
+            "BearerAuth": []
+          },
+          {
+            "APIKeyAuth": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "etl_views_run_create_task_run",
+        "summary": "Create Task Run",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "task_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Task Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskRunResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Create a new ETL Task run.",
+        "tags": ["ETL Task Runs"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskRunPostBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          },
+          {
+            "BearerAuth": []
+          },
+          {
+            "APIKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/etl/tasks/{task_id}/runs/{run_id}": {
+      "get": {
+        "operationId": "etl_views_run_get_task_run",
+        "summary": "Get Task Run",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "task_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Task Id",
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "run_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Run Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskRunResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get an ETL Job.",
+        "tags": ["ETL Task Runs"],
+        "security": [
+          {
+            "SessionAuth": []
+          },
+          {
+            "BearerAuth": []
+          },
+          {
+            "APIKeyAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "etl_views_run_update_task_run",
+        "summary": "Update Task Run",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "task_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Task Id",
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "run_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Run Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskRunResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Update an ETL Task run.",
+        "tags": ["ETL Task Runs"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskRunPatchBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          },
+          {
+            "BearerAuth": []
+          },
+          {
+            "APIKeyAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "etl_views_run_delete_task_run",
+        "summary": "Delete Task Run",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "task_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Task Id",
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "run_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Run Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Delete an ETL Task run.",
+        "tags": ["ETL Task Runs"],
+        "security": [
+          {
+            "SessionAuth": []
+          },
+          {
+            "BearerAuth": []
+          },
+          {
+            "APIKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/etl/orchestration-systems": {
+      "get": {
+        "operationId": "etl_views_orchestration_system_get_orchestration_systems",
+        "summary": "Get Orchestration Systems",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "anyOf": [
+                {
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Page number (1-based).",
+              "title": "Page"
+            },
+            "required": false,
+            "description": "Page number (1-based)."
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 100000,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The number of items per page.",
+              "title": "Page Size"
+            },
+            "required": false,
+            "description": "The number of items per page."
+          },
+          {
+            "in": "query",
+            "name": "expand_related",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Expand Related"
+            },
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "order_by",
+            "schema": {
+              "anyOf": [
+                {
+                  "items": {
+                    "enum": ["name", "type", "-name", "-type"],
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": [],
+              "description": "Select one or more fields to order the response by.",
+              "title": "Order By"
+            },
+            "required": false,
+            "description": "Select one or more fields to order the response by."
+          },
+          {
+            "in": "query",
+            "name": "workspace_id",
+            "schema": {
+              "default": [],
+              "description": "Filter sensors by workspace ID.",
+              "items": {
+                "anyOf": [
+                  {
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  {
+                    "const": "null",
+                    "enum": ["null"],
+                    "type": "string"
+                  }
+                ]
+              },
+              "title": "Workspace Id",
+              "type": "array"
+            },
+            "required": false,
+            "description": "Filter sensors by workspace ID."
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "default": [],
+              "description": "Filter orchestration systems by type.",
+              "items": {
+                "type": "string"
+              },
+              "title": "Type",
+              "type": "array"
+            },
+            "required": false,
+            "description": "Filter orchestration systems by type."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "items": {
+                        "$ref": "#/components/schemas/OrchestrationSystemSummaryResponse"
+                      },
+                      "type": "array"
+                    },
+                    {
+                      "items": {
+                        "$ref": "#/components/schemas/OrchestrationSystemDetailResponse"
+                      },
+                      "type": "array"
+                    }
+                  ],
+                  "title": "Response"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get ETL Orchestration Systems associated with the authenticated user.",
+        "tags": ["ETL Orchestration Systems"],
+        "security": [
+          {
+            "SessionAuth": []
+          },
+          {
+            "BearerAuth": []
+          },
+          {
+            "APIKeyAuth": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "etl_views_orchestration_system_create_orchestration_system",
+        "summary": "Create Orchestration System",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrchestrationSystemDetailResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Create a new ETL Orchestration System.",
+        "tags": ["ETL Orchestration Systems"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrchestrationSystemPostBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          },
+          {
+            "BearerAuth": []
+          },
+          {
+            "APIKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/etl/orchestration-systems/{orchestration_system_id}": {
+      "get": {
+        "operationId": "etl_views_orchestration_system_get_orchestration_system",
+        "summary": "Get Orchestration System",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "orchestration_system_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Orchestration System Id",
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "expand_related",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Expand Related"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/OrchestrationSystemSummaryResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/OrchestrationSystemDetailResponse"
+                    }
+                  ],
+                  "title": "Response"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get an ETL Orchestration System.",
+        "tags": ["ETL Orchestration Systems"],
+        "security": [
+          {
+            "SessionAuth": []
+          },
+          {
+            "BearerAuth": []
+          },
+          {
+            "APIKeyAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "etl_views_orchestration_system_update_orchestration_system",
+        "summary": "Update Orchestration System",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "orchestration_system_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Orchestration System Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrchestrationSystemDetailResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Update a ETL Orchestration System.",
+        "tags": ["ETL Orchestration Systems"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrchestrationSystemPatchBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          },
+          {
+            "BearerAuth": []
+          },
+          {
+            "APIKeyAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "etl_views_orchestration_system_delete_orchestration_system",
+        "summary": "Delete Orchestration System",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "orchestration_system_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Orchestration System Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": "Delete an ETL Orchestration System.",
+        "tags": ["ETL Orchestration Systems"],
+        "security": [
+          {
+            "SessionAuth": []
+          },
+          {
+            "BearerAuth": []
+          },
+          {
+            "APIKeyAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "JobQueryParameters": {
+        "properties": {
+          "page": {
+            "anyOf": [
+              {
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Page number (1-based).",
+            "title": "Page"
+          },
+          "page_size": {
+            "anyOf": [
+              {
+                "maximum": 100000,
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The number of items per page.",
+            "title": "Page Size"
+          },
+          "order_by": {
+            "anyOf": [
+              {
+                "items": {
+                  "enum": [
+                    "name",
+                    "type",
+                    "extractorType",
+                    "transformerType",
+                    "loaderType",
+                    "-name",
+                    "-type",
+                    "-extractorType",
+                    "-transformerType",
+                    "-loaderType"
+                  ],
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": [],
+            "description": "Select one or more fields to order the response by.",
+            "title": "Order By"
+          },
+          "workspace_id": {
+            "default": [],
+            "description": "Filter by workspace ID.",
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "title": "Workspace Id",
+            "type": "array"
+          },
+          "type": {
+            "default": [],
+            "description": "Filters by the type of the job.",
+            "items": {
+              "type": "string"
+            },
+            "title": "Type",
+            "type": "array"
+          },
+          "extractor_type": {
+            "default": [],
+            "description": "Filters by the extractor type of the job.",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "const": "null",
+                  "enum": ["null"],
+                  "type": "string"
+                }
+              ]
+            },
+            "title": "Extractor Type",
+            "type": "array"
+          },
+          "transformer_type": {
+            "default": [],
+            "description": "Filters by the transformer type of the job.",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "const": "null",
+                  "enum": ["null"],
+                  "type": "string"
+                }
+              ]
+            },
+            "title": "Transformer Type",
+            "type": "array"
+          },
+          "loader_type": {
+            "default": [],
+            "description": "Filters by the loader type of the job.",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "const": "null",
+                  "enum": ["null"],
+                  "type": "string"
+                }
+              ]
+            },
+            "title": "Loader Type",
+            "type": "array"
+          },
+          "expand_related": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expand Related"
+          }
+        },
+        "title": "JobQueryParameters",
+        "type": "object"
+      },
+      "JobDetailResponse": {
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "type": {
+            "title": "Type",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "workspace": {
+            "$ref": "#/components/schemas/WorkspaceSummaryResponse"
+          },
+          "extractor": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JobSettingsResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "transformer": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JobSettingsResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "loader": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JobSettingsResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": ["name", "type", "id", "workspace"],
+        "title": "JobDetailResponse",
+        "type": "object"
+      },
+      "JobSettingsResponse": {
+        "properties": {
+          "type": {
+            "title": "Type",
+            "type": "string"
+          },
+          "settings": {
+            "title": "Settings",
+            "type": "object"
+          }
+        },
+        "required": ["type", "settings"],
+        "title": "JobSettingsResponse",
+        "type": "object"
+      },
+      "JobSummaryResponse": {
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "type": {
+            "title": "Type",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "workspaceId": {
+            "format": "uuid",
+            "title": "Workspaceid",
+            "type": "string"
+          },
+          "extractor": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JobSettingsResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "transformer": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JobSettingsResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "loader": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JobSettingsResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": ["name", "type", "id", "workspaceId"],
+        "title": "JobSummaryResponse",
+        "type": "object"
+      },
+      "WorkspaceSummaryResponse": {
+        "properties": {
+          "name": {
+            "maxLength": 255,
+            "title": "Name",
+            "type": "string"
+          },
+          "isPrivate": {
+            "title": "Isprivate",
+            "type": "boolean"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          }
+        },
+        "required": ["name", "isPrivate", "id"],
+        "title": "WorkspaceSummaryResponse",
+        "type": "object"
+      },
+      "JobPostBody": {
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "type": {
+            "title": "Type",
+            "type": "string"
+          },
+          "workspaceId": {
+            "format": "uuid",
+            "title": "Workspaceid",
+            "type": "string"
+          },
+          "extractor": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JobSettingsPostBody"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "transformer": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JobSettingsPostBody"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "loader": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JobSettingsPostBody"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": ["name", "type", "workspaceId"],
+        "title": "JobPostBody",
+        "type": "object"
+      },
+      "JobSettingsPostBody": {
+        "properties": {
+          "type": {
+            "title": "Type",
+            "type": "string"
+          },
+          "settings": {
+            "title": "Settings",
+            "type": "object"
+          }
+        },
+        "required": ["type", "settings"],
+        "title": "JobSettingsPostBody",
+        "type": "object"
+      },
+      "JobPatchBody": {
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "type": {
+            "title": "Type",
+            "type": "string"
+          },
+          "extractor": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JobSettingsPatchBody"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "transformer": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JobSettingsPatchBody"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "loader": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JobSettingsPatchBody"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "title": "JobPatchBody",
+        "type": "object"
+      },
+      "JobSettingsPatchBody": {
+        "properties": {
+          "type": {
+            "title": "Type",
+            "type": "string"
+          },
+          "settings": {
+            "title": "Settings",
+            "type": "object"
+          }
+        },
+        "title": "JobSettingsPatchBody",
+        "type": "object"
+      },
+      "TaskQueryParameters": {
+        "properties": {
+          "page": {
+            "anyOf": [
+              {
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Page number (1-based).",
+            "title": "Page"
+          },
+          "page_size": {
+            "anyOf": [
+              {
+                "maximum": 100000,
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The number of items per page.",
+            "title": "Page Size"
+          },
+          "order_by": {
+            "anyOf": [
+              {
+                "items": {
+                  "enum": [
+                    "orchestrationSystemType",
+                    "latestRunStatus",
+                    "latestRunStartedAt",
+                    "latestRunFinishedAt",
+                    "nextRunAt",
+                    "paused",
+                    "startTime",
+                    "jobType",
+                    "jobExtractorType",
+                    "jobTransformerType",
+                    "jobLoaderType",
+                    "-orchestrationSystemType",
+                    "-latestRunStatus",
+                    "-latestRunStartedAt",
+                    "-latestRunFinishedAt",
+                    "-nextRunAt",
+                    "-paused",
+                    "-startTime",
+                    "-jobType",
+                    "-jobExtractorType",
+                    "-jobTransformerType",
+                    "-jobLoaderType"
+                  ],
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": [],
+            "description": "Select one or more fields to order the response by.",
+            "title": "Order By"
+          },
+          "job_id": {
+            "default": [],
+            "description": "Filter by job ID.",
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "title": "Job Id",
+            "type": "array"
+          },
+          "orchestration_system_id": {
+            "default": [],
+            "description": "Filter by orchestration system ID.",
+            "items": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "const": "null",
+                  "enum": ["null"],
+                  "type": "string"
+                }
+              ]
+            },
+            "title": "Orchestration System Id",
+            "type": "array"
+          },
+          "orchestration_system__type": {
+            "default": [],
+            "description": "Filter by orchestration system type.",
+            "items": {
+              "type": "string"
+            },
+            "title": "Orchestration System  Type",
+            "type": "array"
+          },
+          "workspace_id": {
+            "default": [],
+            "description": "Filter by workspace ID.",
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "title": "Workspace Id",
+            "type": "array"
+          },
+          "latest_run_status": {
+            "default": [],
+            "description": "Filters tasks by the status of their most recent run.",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "const": "null",
+                  "enum": ["null"],
+                  "type": "string"
+                }
+              ]
+            },
+            "title": "Latest Run Status",
+            "type": "array"
+          },
+          "latest_run_started_at_max": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Filters for tasks whose most recent run started on or before this date and time.",
+            "title": "Latest Run Started At Max"
+          },
+          "latest_run_started_at_min": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Filters for tasks whose most recent run started on or after this date and time.",
+            "title": "Latest Run Started At Min"
+          },
+          "latest_run_finished_at_max": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Filters for tasks whose most recent run finished on or before this date and time.",
+            "title": "Latest Run Finished At Max"
+          },
+          "latest_run_finished_at_min": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Filters for tasks whose most recent run finished on or after this date and time.",
+            "title": "Latest Run Finished At Min"
+          },
+          "next_run_at_max": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Filters for scheduled tasks with a next run on or before this value.",
+            "title": "Next Run At Max"
+          },
+          "next_run_at_min": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Filters for scheduled tasks with a next run on or after this value.",
+            "title": "Next Run At Min"
+          },
+          "paused": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Filters by the paused status of the task.",
+            "title": "Paused"
+          },
+          "start_time_max": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Filters for scheduled tasks with a start time on or before this value.",
+            "title": "Start Time Max"
+          },
+          "start_time_min": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Filters for scheduled tasks with a start time on or after this value.",
+            "title": "Start Time Min"
+          },
+          "job_type": {
+            "default": [],
+            "description": "Filters by the type of the job.",
+            "items": {
+              "type": "string"
+            },
+            "title": "Job Type",
+            "type": "array"
+          },
+          "extractor_type": {
+            "default": [],
+            "description": "Filters by the extractor type of the job.",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "const": "null",
+                  "enum": ["null"],
+                  "type": "string"
+                }
+              ]
+            },
+            "title": "Extractor Type",
+            "type": "array"
+          },
+          "transformer_type": {
+            "default": [],
+            "description": "Filters by the transformer type of the job.",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "const": "null",
+                  "enum": ["null"],
+                  "type": "string"
+                }
+              ]
+            },
+            "title": "Transformer Type",
+            "type": "array"
+          },
+          "loader_type": {
+            "default": [],
+            "description": "Filters by the loader type of the job.",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "const": "null",
+                  "enum": ["null"],
+                  "type": "string"
+                }
+              ]
+            },
+            "title": "Loader Type",
+            "type": "array"
+          },
+          "source_identifier": {
+            "default": [],
+            "description": "Filters by source identifiers associated with the task.",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "const": "null",
+                  "enum": ["null"],
+                  "type": "string"
+                }
+              ]
+            },
+            "title": "Source Identifier",
+            "type": "array"
+          },
+          "target_identifier": {
+            "default": [],
+            "description": "Filters by target identifiers associated with the task.",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "const": "null",
+                  "enum": ["null"],
+                  "type": "string"
+                }
+              ]
+            },
+            "title": "Target Identifier",
+            "type": "array"
+          },
+          "expand_related": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expand Related"
+          }
+        },
+        "title": "TaskQueryParameters",
+        "type": "object"
+      },
+      "OrchestrationSystemSummaryResponse": {
+        "properties": {
+          "name": {
+            "maxLength": 255,
+            "title": "Name",
+            "type": "string"
+          },
+          "type": {
+            "maxLength": 255,
+            "title": "Type",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "workspaceId": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Workspaceid"
+          }
+        },
+        "required": ["name", "type", "id", "workspaceId"],
+        "title": "OrchestrationSystemSummaryResponse",
+        "type": "object"
+      },
+      "TaskDetailResponse": {
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "paused": {
+            "default": false,
+            "title": "Paused",
+            "type": "boolean"
+          },
+          "nextRunAt": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nextrunat"
+          },
+          "extractorVariables": {
+            "title": "Extractorvariables",
+            "type": "object"
+          },
+          "transformerVariables": {
+            "title": "Transformervariables",
+            "type": "object"
+          },
+          "loaderVariables": {
+            "title": "Loadervariables",
+            "type": "object"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "workspace": {
+            "$ref": "#/components/schemas/WorkspaceSummaryResponse"
+          },
+          "job": {
+            "$ref": "#/components/schemas/JobSummaryResponse"
+          },
+          "orchestrationSystem": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OrchestrationSystemSummaryResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "schedule": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TaskScheduleResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "latestRun": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TaskRunResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "mappings": {
+            "items": {
+              "$ref": "#/components/schemas/TaskMappingResponse"
+            },
+            "title": "Mappings",
+            "type": "array"
+          }
+        },
+        "required": ["name", "id", "workspace", "job", "mappings"],
+        "title": "TaskDetailResponse",
+        "type": "object"
+      },
+      "TaskMappingPathResponse": {
+        "properties": {
+          "targetIdentifier": {
+            "title": "Targetidentifier",
+            "type": "string"
+          },
+          "transformations": {
+            "title": "Transformations",
+            "type": "object"
+          }
+        },
+        "required": ["targetIdentifier"],
+        "title": "TaskMappingPathResponse",
+        "type": "object"
+      },
+      "TaskMappingResponse": {
+        "properties": {
+          "sourceIdentifier": {
+            "title": "Sourceidentifier",
+            "type": "string"
+          },
+          "paths": {
+            "items": {
+              "$ref": "#/components/schemas/TaskMappingPathResponse"
+            },
+            "title": "Paths",
+            "type": "array"
+          }
+        },
+        "required": ["sourceIdentifier", "paths"],
+        "title": "TaskMappingResponse",
+        "type": "object"
+      },
+      "TaskRunResponse": {
+        "properties": {
+          "status": {
+            "enum": ["RUNNING", "SUCCESS", "FAILURE"],
+            "title": "Status",
+            "type": "string"
+          },
+          "result": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Result"
+          },
+          "startedAt": {
+            "format": "date-time",
+            "title": "Startedat",
+            "type": "string"
+          },
+          "finishedAt": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finishedat"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          }
+        },
+        "required": ["status", "startedAt", "id"],
+        "title": "TaskRunResponse",
+        "type": "object"
+      },
+      "TaskScheduleResponse": {
+        "properties": {
+          "paused": {
+            "title": "Paused",
+            "type": "boolean"
+          },
+          "startTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Starttime"
+          },
+          "nextRunAt": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nextrunat"
+          },
+          "crontab": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Crontab"
+          },
+          "interval": {
+            "anyOf": [
+              {
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Interval"
+          },
+          "intervalPeriod": {
+            "anyOf": [
+              {
+                "enum": ["minutes", "hours", "days"],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Intervalperiod"
+          }
+        },
+        "required": ["paused"],
+        "title": "TaskScheduleResponse",
+        "type": "object"
+      },
+      "TaskSummaryResponse": {
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "paused": {
+            "default": false,
+            "title": "Paused",
+            "type": "boolean"
+          },
+          "nextRunAt": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nextrunat"
+          },
+          "extractorVariables": {
+            "title": "Extractorvariables",
+            "type": "object"
+          },
+          "transformerVariables": {
+            "title": "Transformervariables",
+            "type": "object"
+          },
+          "loaderVariables": {
+            "title": "Loadervariables",
+            "type": "object"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "workspace_id": {
+            "format": "uuid",
+            "title": "Workspace Id",
+            "type": "string"
+          },
+          "jobId": {
+            "format": "uuid",
+            "title": "Jobid",
+            "type": "string"
+          },
+          "schedule": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TaskScheduleResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "latestRun": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TaskRunResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": ["name", "id", "workspace_id", "jobId"],
+        "title": "TaskSummaryResponse",
+        "type": "object"
+      },
+      "TaskMappingPathPostBody": {
+        "properties": {
+          "targetIdentifier": {
+            "title": "Targetidentifier",
+            "type": "string"
+          },
+          "transformations": {
+            "title": "Transformations",
+            "type": "object"
+          }
+        },
+        "required": ["targetIdentifier"],
+        "title": "TaskMappingPathPostBody",
+        "type": "object"
+      },
+      "TaskMappingPostBody": {
+        "properties": {
+          "sourceIdentifier": {
+            "title": "Sourceidentifier",
+            "type": "string"
+          },
+          "paths": {
+            "items": {
+              "$ref": "#/components/schemas/TaskMappingPathPostBody"
+            },
+            "title": "Paths",
+            "type": "array"
+          }
+        },
+        "required": ["sourceIdentifier", "paths"],
+        "title": "TaskMappingPostBody",
+        "type": "object"
+      },
+      "TaskPostBody": {
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "paused": {
+            "default": false,
+            "title": "Paused",
+            "type": "boolean"
+          },
+          "nextRunAt": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nextrunat"
+          },
+          "extractorVariables": {
+            "title": "Extractorvariables",
+            "type": "object"
+          },
+          "transformerVariables": {
+            "title": "Transformervariables",
+            "type": "object"
+          },
+          "loaderVariables": {
+            "title": "Loadervariables",
+            "type": "object"
+          },
+          "jobId": {
+            "format": "uuid",
+            "title": "Jobid",
+            "type": "string"
+          },
+          "orchestrationSystemId": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Orchestrationsystemid"
+          },
+          "schedule": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TaskSchedulePostBody"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "mappings": {
+            "items": {
+              "$ref": "#/components/schemas/TaskMappingPostBody"
+            },
+            "title": "Mappings",
+            "type": "array"
+          }
+        },
+        "required": ["name", "jobId", "mappings"],
+        "title": "TaskPostBody",
+        "type": "object"
+      },
+      "TaskSchedulePostBody": {
+        "properties": {
+          "paused": {
+            "title": "Paused",
+            "type": "boolean"
+          },
+          "startTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Starttime"
+          },
+          "nextRunAt": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nextrunat"
+          },
+          "crontab": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Crontab"
+          },
+          "interval": {
+            "anyOf": [
+              {
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Interval"
+          },
+          "intervalPeriod": {
+            "anyOf": [
+              {
+                "enum": ["minutes", "hours", "days"],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Intervalperiod"
+          }
+        },
+        "required": ["paused"],
+        "title": "TaskSchedulePostBody",
+        "type": "object"
+      },
+      "TaskPatchBody": {
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "paused": {
+            "title": "Paused",
+            "type": "boolean"
+          },
+          "nextRunAt": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nextrunat"
+          },
+          "extractorVariables": {
+            "title": "Extractorvariables",
+            "type": "object"
+          },
+          "transformerVariables": {
+            "title": "Transformervariables",
+            "type": "object"
+          },
+          "loaderVariables": {
+            "title": "Loadervariables",
+            "type": "object"
+          },
+          "jobId": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jobid"
+          },
+          "orchestrationSystemId": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Orchestrationsystemid"
+          },
+          "schedule": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TaskSchedulePatchBody"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "mappings": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/TaskMappingPostBody"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mappings"
+          }
+        },
+        "title": "TaskPatchBody",
+        "type": "object"
+      },
+      "TaskSchedulePatchBody": {
+        "properties": {
+          "paused": {
+            "title": "Paused",
+            "type": "boolean"
+          },
+          "startTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Starttime"
+          },
+          "nextRunAt": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nextrunat"
+          },
+          "crontab": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Crontab"
+          },
+          "interval": {
+            "anyOf": [
+              {
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Interval"
+          },
+          "intervalPeriod": {
+            "anyOf": [
+              {
+                "enum": ["minutes", "hours", "days"],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Intervalperiod"
+          }
+        },
+        "title": "TaskSchedulePatchBody",
+        "type": "object"
+      },
+      "TaskRunQueryParameters": {
+        "properties": {
+          "page": {
+            "anyOf": [
+              {
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Page number (1-based).",
+            "title": "Page"
+          },
+          "page_size": {
+            "anyOf": [
+              {
+                "maximum": 100000,
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The number of items per page.",
+            "title": "Page Size"
+          },
+          "order_by": {
+            "anyOf": [
+              {
+                "items": {
+                  "enum": [
+                    "status",
+                    "startedAt",
+                    "finishedAt",
+                    "-status",
+                    "-startedAt",
+                    "-finishedAt"
+                  ],
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": [],
+            "description": "Select one or more fields to order the response by.",
+            "title": "Order By"
+          },
+          "status": {
+            "default": [],
+            "description": "Filters task runs by their status.",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "const": "null",
+                  "enum": ["null"],
+                  "type": "string"
+                }
+              ]
+            },
+            "title": "Status",
+            "type": "array"
+          },
+          "latest_run_date_created_max": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Filters for task runs created on or before this date and time.",
+            "title": "Latest Run Date Created Max"
+          },
+          "latest_run_date_created_min": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Filters for task runs created on or after this date and time.",
+            "title": "Latest Run Date Created Min"
+          },
+          "latest_run_finished_at_max": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Filters for task runs finished on or before this date and time.",
+            "title": "Latest Run Finished At Max"
+          },
+          "latest_run_finished_at_min": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Filters for task runs finished on or after this date and time.",
+            "title": "Latest Run Finished At Min"
+          }
+        },
+        "title": "TaskRunQueryParameters",
+        "type": "object"
+      },
+      "TaskRunPostBody": {
+        "properties": {
+          "status": {
+            "enum": ["RUNNING", "SUCCESS", "FAILURE"],
+            "title": "Status",
+            "type": "string"
+          },
+          "result": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Result"
+          },
+          "startedAt": {
+            "format": "date-time",
+            "title": "Startedat",
+            "type": "string"
+          },
+          "finishedAt": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finishedat"
+          }
+        },
+        "required": ["status", "startedAt"],
+        "title": "TaskRunPostBody",
+        "type": "object"
+      },
+      "TaskRunPatchBody": {
+        "properties": {
+          "status": {
+            "enum": ["RUNNING", "SUCCESS", "FAILURE"],
+            "title": "Status",
+            "type": "string"
+          },
+          "result": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Result"
+          },
+          "startedAt": {
+            "format": "date-time",
+            "title": "Startedat",
+            "type": "string"
+          },
+          "finishedAt": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finishedat"
+          }
+        },
+        "title": "TaskRunPatchBody",
+        "type": "object"
+      },
+      "OrchestrationSystemQueryParameters": {
+        "properties": {
+          "page": {
+            "anyOf": [
+              {
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Page number (1-based).",
+            "title": "Page"
+          },
+          "page_size": {
+            "anyOf": [
+              {
+                "maximum": 100000,
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The number of items per page.",
+            "title": "Page Size"
+          },
+          "expand_related": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expand Related"
+          },
+          "order_by": {
+            "anyOf": [
+              {
+                "items": {
+                  "enum": ["name", "type", "-name", "-type"],
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": [],
+            "description": "Select one or more fields to order the response by.",
+            "title": "Order By"
+          },
+          "workspace_id": {
+            "default": [],
+            "description": "Filter sensors by workspace ID.",
+            "items": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "const": "null",
+                  "enum": ["null"],
+                  "type": "string"
+                }
+              ]
+            },
+            "title": "Workspace Id",
+            "type": "array"
+          },
+          "type": {
+            "default": [],
+            "description": "Filter orchestration systems by type.",
+            "items": {
+              "type": "string"
+            },
+            "title": "Type",
+            "type": "array"
+          }
+        },
+        "title": "OrchestrationSystemQueryParameters",
+        "type": "object"
+      },
+      "OrchestrationSystemDetailResponse": {
+        "properties": {
+          "name": {
+            "maxLength": 255,
+            "title": "Name",
+            "type": "string"
+          },
+          "type": {
+            "maxLength": 255,
+            "title": "Type",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "workspace": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/WorkspaceSummaryResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": ["name", "type", "id", "workspace"],
+        "title": "OrchestrationSystemDetailResponse",
+        "type": "object"
+      },
+      "OrchestrationSystemPostBody": {
+        "properties": {
+          "name": {
+            "maxLength": 255,
+            "title": "Name",
+            "type": "string"
+          },
+          "type": {
+            "maxLength": 255,
+            "title": "Type",
+            "type": "string"
+          },
+          "workspaceId": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Workspaceid"
+          }
+        },
+        "required": ["name", "type"],
+        "title": "OrchestrationSystemPostBody",
+        "type": "object"
+      },
+      "OrchestrationSystemPatchBody": {
+        "properties": {
+          "name": {
+            "maxLength": 255,
+            "title": "Name",
+            "type": "string"
+          },
+          "type": {
+            "maxLength": 255,
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "title": "OrchestrationSystemPatchBody",
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "SessionAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "hs_session"
+      },
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      },
+      "APIKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-Api-Key"
+      }
+    }
+  },
+  "servers": []
+}
