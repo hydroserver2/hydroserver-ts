@@ -8,9 +8,9 @@ export class Task {
   transformerVariables = {}
   loaderVariables = {}
   mappings: Mapping[] = []
-  workspace_id = ''
-  job_id = ''
-  schedule? = undefined
+  workspaceId = ''
+  jobId = ''
+  schedule? = null
 
   constructor(init?: Partial<Task>) {
     Object.assign(this, init)

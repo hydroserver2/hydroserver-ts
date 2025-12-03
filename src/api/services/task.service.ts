@@ -14,6 +14,15 @@ export class TaskService extends HydroServerBaseService<typeof C, M> {
     })
   }
 
+  /**  Remove mapping path if datastream id is targetId. Remove mappings that now have no paths. */
+  removeTarget(task: M, id: string | number): void {
+    const key = String(id)
+    for (const m of task.mappings) {
+      m.paths = m.paths.filter((p) => String(p.targetIdentifier) !== key)
+    }
+    task.mappings = task.mappings.filter((m) => m.paths.length > 0)
+  }
+
   // TODO: I don't think we'll need these functions anymore since the backend handles
   // Task runs and their statuses. Just fetch from there
 
