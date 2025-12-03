@@ -10,11 +10,22 @@ export class Task {
   mappings: Mapping[] = []
   workspaceId = ''
   jobId = ''
-  schedule? = null
+  schedule: TaskSchedule | null = null
 
   constructor(init?: Partial<Task>) {
     Object.assign(this, init)
   }
+}
+
+export type IntervalPeriod = 'minutes' | 'hours' | 'days'
+
+export type TaskSchedule = {
+  paused: boolean
+  startTime: string | null
+  nextRunAt: string | null
+  crontab: string | null
+  interval: number | null
+  intervalPeriod: IntervalPeriod | null
 }
 
 export interface ExpressionDataTransformation {
