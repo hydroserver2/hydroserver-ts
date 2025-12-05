@@ -2,14 +2,15 @@ export class Task {
   id = ''
   name = ''
   paused = true
-  nextRunAt? = undefined
-  latestRun? = undefined
+  nextRunAt?: TaskRun = undefined
+  latestRun?: TaskRun = undefined
   extractorVariables = {}
   transformerVariables = {}
   loaderVariables = {}
   mappings: Mapping[] = []
   workspaceId = ''
   jobId = ''
+  orchestrationSystemId = ''
   schedule: TaskSchedule | null = null
 
   constructor(init?: Partial<Task>) {
@@ -18,6 +19,14 @@ export class Task {
 }
 
 export type IntervalPeriod = 'minutes' | 'hours' | 'days'
+
+export type TaskRun = {
+  status: string
+  result: {}
+  startedAt?: string
+  finishedAt?: string
+  id: string
+}
 
 export type TaskSchedule = {
   paused: boolean
@@ -52,7 +61,7 @@ export interface Mapping {
   paths: MappingPath[]
 }
 
-export const JOB_STATUS_OPTIONS = [
+export const STATUS_OPTIONS = [
   { color: 'green', title: 'OK' },
   { color: 'blue', title: 'Pending' },
   { color: 'red', title: 'Needs attention' },
@@ -60,7 +69,7 @@ export const JOB_STATUS_OPTIONS = [
   { color: 'gray', title: 'Unknown' },
   { color: 'gray', title: 'Loading paused' },
 ] as const
-export type StatusType = (typeof JOB_STATUS_OPTIONS)[number]['title']
+export type StatusType = (typeof STATUS_OPTIONS)[number]['title']
 
 export interface Status {
   lastRunSuccessful?: boolean

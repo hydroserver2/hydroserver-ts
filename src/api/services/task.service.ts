@@ -1,6 +1,6 @@
 import { HydroServerBaseService } from './base'
 import { EtlTaskContract as C } from '../../generated/contracts'
-import { Task as M } from '../Models/task.model'
+import { Task as M, StatusType, TaskRun } from '../Models/task.model'
 
 export class TaskService extends HydroServerBaseService<typeof C, M> {
   static route = C.route
@@ -23,15 +23,7 @@ export class TaskService extends HydroServerBaseService<typeof C, M> {
     task.mappings = task.mappings.filter((m) => m.paths.length > 0)
   }
 
-  // TODO: I don't think we'll need these functions anymore since the backend handles
-  // Task runs and their statuses. Just fetch from there
-
-  // getStatusText({
-  //   lastRun,
-  //   lastRunSuccessful,
-  //   nextRun,
-  //   paused,
-  // }: Status): StatusType {
+  // getStatusText({ status, startedAt, finishedAt }: TaskRun): StatusType {
   //   if (paused) return 'Loading paused'
   //   if (!lastRun) return 'Pending'
   //   if (!lastRunSuccessful) return 'Needs attention'
@@ -44,20 +36,18 @@ export class TaskService extends HydroServerBaseService<typeof C, M> {
   //   return 'Unknown'
   // }
 
-  // getBadCountText(statusArray: Status[]) {
-  //   const badCount = statusArray.filter(
-  //     (s) => getStatusText(s) === 'Needs attention'
-  //   ).length
-  //   if (!badCount) return ''
-  //   if (badCount === 1) return '1 error'
-  //   return `${badCount} errors`
-  // }
+  getBadCountText(statusArray: TaskRun[]) {
+    const badCount = statusArray.filter((s) => s.status === 'FAILED').length
+    if (!badCount) return ''
+    if (badCount === 1) return '1 error'
+    return `${badCount} errors`
+  }
 
-  // getBehindScheduleCountText(statusArray: Status[]) {
-  //   const behindCount = statusArray.filter(
-  //     (s) => getStatusText(s) === 'Behind schedule'
-  //   ).length
-  //   if (!behindCount) return ''
-  //   return `${behindCount} behind schedule`
-  // }
+  getBehindScheduleCountText(statusArray: TaskRun[]) {
+    const behindCount = statusArray.filter(
+      (s) => s.status === 'Behind schedule'
+    ).length
+    if (!behindCount) return ''
+    return `${behindCount} behind schedule`
+  }
 }

@@ -14,8 +14,4 @@ export class OrchestrationSystemService extends HydroServerBaseService<
 > {
   static route = C.route
   static writableKeys = C.writableKeys
-
-  protected override getBaseUrl() {
-    return this._client.etlBase
-  }
 }
