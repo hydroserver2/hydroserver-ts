@@ -36,7 +36,7 @@ export class JobService extends HydroServerBaseService<typeof C, M> {
   //   return apiMethods.delete(url)
   // }
 
-  toPostObject(m: M) {
+  private toPostObject(m: M) {
     return {
       name: m.name,
       type: m.type,
