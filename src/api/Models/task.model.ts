@@ -1,3 +1,7 @@
+import type { Workspace } from '../../types'
+import type { OrchestrationSystem } from '../services'
+import type { Job } from './job.model'
+
 export class Task {
   id = ''
   name = ''
@@ -16,6 +20,22 @@ export class Task {
   constructor(init?: Partial<Task>) {
     Object.assign(this, init)
   }
+}
+
+export interface TaskExpanded {
+  id: string
+  name: string
+  paused: boolean
+  nextRunAt?: TaskRun
+  latestRun?: TaskRun
+  extractorVariables: Record<string, any>
+  transformerVariables: Record<string, any>
+  loaderVariables: Record<string, any>
+  mappings: Mapping[]
+  workspace: Workspace
+  job: Job
+  orchestrationSystem: OrchestrationSystem
+  schedule: TaskSchedule | null
 }
 
 export type IntervalPeriod = 'minutes' | 'hours' | 'days'
