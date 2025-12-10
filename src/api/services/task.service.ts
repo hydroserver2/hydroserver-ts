@@ -1,6 +1,11 @@
 import { HydroServerBaseService } from './base'
 import { EtlTaskContract as C } from '../../generated/contracts'
-import { Task as M, StatusType, TaskRun } from '../Models/task.model'
+import {
+  Task as M,
+  StatusType,
+  TaskExpanded,
+  TaskRun,
+} from '../Models/task.model'
 
 export class TaskService extends HydroServerBaseService<typeof C, M> {
   static route = C.route
@@ -23,18 +28,20 @@ export class TaskService extends HydroServerBaseService<typeof C, M> {
     task.mappings = task.mappings.filter((m) => m.paths.length > 0)
   }
 
-  // getStatusText({ status, startedAt, finishedAt }: TaskRun): StatusType {
-  //   if (paused) return 'Loading paused'
-  //   if (!lastRun) return 'Pending'
-  //   if (!lastRunSuccessful) return 'Needs attention'
+  getStatusText(task: TaskExpanded): StatusType {
+    const { latestRun, schedule } = task
+    if (schedule?.paused) return 'Loading paused'
+    if (!latestRun) return 'Pending'
+    if (latestRun.status === 'FAILURE') return 'Needs attention'
 
-  //   const next = nextRun ? new Date(nextRun) : undefined
-  //   if (next && !Number.isNaN(next.valueOf())) {
-  //     return next.getTime() < Date.now() ? 'Behind schedule' : 'OK'
-  //   }
+    const { nextRunAt } = schedule!
+    const next = nextRunAt ? new Date(nextRunAt) : undefined
+    if (next && !Number.isNaN(next.valueOf())) {
+      return next.getTime() < Date.now() ? 'Behind schedule' : 'OK'
+    }
 
-  //   return 'Unknown'
-  // }
+    return 'Unknown'
+  }
 
   getBadCountText(statusArray: TaskRun[]) {
     const badCount = statusArray.filter((s) => s.status === 'FAILED').length

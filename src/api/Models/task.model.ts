@@ -26,12 +26,11 @@ export interface TaskExpanded {
   id: string
   name: string
   paused: boolean
-  nextRunAt?: TaskRun
-  latestRun?: TaskRun
   extractorVariables: Record<string, any>
   transformerVariables: Record<string, any>
   loaderVariables: Record<string, any>
   mappings: Mapping[]
+  latestRun?: TaskRun
   workspace: Workspace
   job: Job
   orchestrationSystem: OrchestrationSystem
@@ -81,7 +80,7 @@ export interface Mapping {
   paths: MappingPath[]
 }
 
-export const STATUS_OPTIONS = [
+export const TASK_STATUS_OPTIONS = [
   { color: 'green', title: 'OK' },
   { color: 'blue', title: 'Pending' },
   { color: 'red', title: 'Needs attention' },
@@ -89,7 +88,7 @@ export const STATUS_OPTIONS = [
   { color: 'gray', title: 'Unknown' },
   { color: 'gray', title: 'Loading paused' },
 ] as const
-export type StatusType = (typeof STATUS_OPTIONS)[number]['title']
+export type StatusType = (typeof TASK_STATUS_OPTIONS)[number]['title']
 
 export interface Status {
   lastRunSuccessful?: boolean
