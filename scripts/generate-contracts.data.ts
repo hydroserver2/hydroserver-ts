@@ -19,6 +19,7 @@ const resources = [
   // ETL
   'etl-jobs',
   'etl-tasks',
+  'runs',
   'etl-orchestration-systems',
 ]
 

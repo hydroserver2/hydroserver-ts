@@ -1,16 +1,52 @@
 import { HydroServerBaseService } from './base'
-import { EtlTaskContract as C } from '../../generated/contracts'
+import { EtlTaskContract as C, RunContract } from '../../generated/contracts'
 import {
   Task as M,
   StatusType,
   TaskExpanded,
   TaskRun,
 } from '../Models/task.model'
+import { apiMethods } from '../apiMethods'
 
 export class TaskService extends HydroServerBaseService<typeof C, M> {
   static route = C.route
   static writableKeys = C.writableKeys
   static Model = M
+
+  /* ----------------------- Sub-resources: Task Runs ----------------------- */
+
+  getTaskRuns(taskId: string, params?: RunContract.QueryParameters) {
+    const url = this.withQuery(`${this._route}/${taskId}/runs`, params)
+    return apiMethods.paginatedFetch(url)
+  }
+
+  createTaskRun(taskId: string, body: RunContract.PostBody) {
+    const url = `${this._route}/${taskId}/runs`
+    return apiMethods.post(url, body)
+  }
+
+  getTaskRun(taskId: string, runId: string) {
+    const url = `${this._route}/${taskId}/runs/${runId}`
+    return apiMethods.fetch(url)
+  }
+
+  // Task runs are generated and never touched by users & devs
+  // updateTaskRun(
+  //   taskId: string,
+  //   runId: string,
+  //   body: RunContract.PatchBody,
+  //   originalBody?: RunContract.PatchBody
+  // ) {
+  //   const url = `${this._route}/${taskId}/runs/${runId}`
+  //   return apiMethods.patch(url, body, originalBody ?? null)
+  // }
+
+  // deleteTaskRun(taskId: string, runId: string) {
+  //   const url = `${this._route}/${taskId}/runs/${runId}`
+  //   return apiMethods.delete(url)
+  // }
+
+  /* ----------------------- Convenience Functions  ----------------------- */
 
   addMapping(task: M) {
     task.mappings.push({
