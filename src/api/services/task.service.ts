@@ -13,6 +13,11 @@ export class TaskService extends HydroServerBaseService<typeof C, M> {
   static writableKeys = C.writableKeys
   static Model = M
 
+  runTask(taskId: string) {
+    const url = `${this._route}/${taskId}`
+    return apiMethods.post(url)
+  }
+
   /* ----------------------- Sub-resources: Task Runs ----------------------- */
 
   getTaskRuns(taskId: string, params?: RunContract.QueryParameters) {
