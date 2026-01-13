@@ -14,10 +14,13 @@ const resources = [
   'observed-properties',
   'processing-levels',
   'result-qualifiers',
-  'orchestration-systems',
-  'data-sources',
-  'data-archives',
   'observations',
+
+  // ETL
+  'etl-jobs',
+  'etl-tasks',
+  'runs',
+  'etl-orchestration-systems',
 ]
 
 generateContracts({

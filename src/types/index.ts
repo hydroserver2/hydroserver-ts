@@ -1,5 +1,3 @@
-import type { DataSource } from '../api/services/data-source.service'
-
 export type DataPoint = {
   date: Date
   value: number
@@ -140,7 +138,6 @@ export class Datastream {
   intendedTimeSpacingUnit?: TimeSpacingUnit | null
   timeAggregationInterval: number | null
   timeAggregationIntervalUnit: TimeSpacingUnit
-  dataSourceId?: string | null
   valueCount: number
 
   constructor(thingId?: string) {
@@ -184,7 +181,6 @@ export interface DatastreamExtended {
   intendedTimeSpacingUnit?: TimeSpacingUnit | null
   timeAggregationInterval: number | null
   timeAggregationIntervalUnit: TimeSpacingUnit
-  dataSourceId?: string | null
   valueCount: number
 
   thing: Thing
@@ -193,7 +189,6 @@ export interface DatastreamExtended {
   observedProperty: ObservedProperty
   sensor: Sensor
   processingLevel: ProcessingLevel
-  dataSource: DataSource
 }
 
 export class Unit {

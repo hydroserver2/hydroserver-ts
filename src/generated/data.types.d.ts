@@ -420,58 +420,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/data/things/{thing_id}/archive": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Thing Archive
-         * @description Get HydroShare archival details for a thing.
-         */
-        get: operations["etl_views_hydroshare_archival_get_thing_archive"];
-        put?: never;
-        /**
-         * Create Thing Archive
-         * @description Create a HydroShare data archive for a thing.
-         */
-        post: operations["etl_views_hydroshare_archival_create_thing_archive"];
-        /**
-         * Delete Archive
-         * @description Delete a HydroShare data archive for a thing. Note: This will not delete the HydroShare resource.
-         */
-        delete: operations["etl_views_hydroshare_archival_delete_archive"];
-        options?: never;
-        head?: never;
-        /**
-         * Update Archive
-         * @description Update HydroShare data archive details for a thing.
-         */
-        patch: operations["etl_views_hydroshare_archival_update_archive"];
-        trace?: never;
-    };
-    "/api/data/things/{thing_id}/archive/trigger": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Run Thing Archival
-         * @description Archive thing data to HydroShare.
-         */
-        post: operations["etl_views_hydroshare_archival_run_thing_archival"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/data/datastreams": {
         parameters: {
             query?: never;
@@ -1132,7 +1080,167 @@ export interface paths {
         patch: operations["sta_views_result_qualifier_update_result_qualifier"];
         trace?: never;
     };
-    "/api/data/orchestration-systems": {
+    "/api/data/etl-jobs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Jobs
+         * @description Get ETL Jobs associated with the authenticated user.
+         */
+        get: operations["etl_views_job_get_jobs"];
+        put?: never;
+        /**
+         * Create Job
+         * @description Create a new ETL Job.
+         */
+        post: operations["etl_views_job_create_job"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/data/etl-jobs/{job_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Job
+         * @description Get an ETL Job.
+         */
+        get: operations["etl_views_job_get_job"];
+        put?: never;
+        post?: never;
+        /**
+         * Delete Job
+         * @description Delete an ETL Job.
+         */
+        delete: operations["etl_views_job_delete_job"];
+        options?: never;
+        head?: never;
+        /**
+         * Update Job
+         * @description Update a ETL Job.
+         */
+        patch: operations["etl_views_job_update_job"];
+        trace?: never;
+    };
+    "/api/data/etl-tasks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Tasks
+         * @description Get ETL Tasks associated with the authenticated user.
+         */
+        get: operations["etl_views_task_get_tasks"];
+        put?: never;
+        /**
+         * Create Task
+         * @description Create a new ETL Task.
+         */
+        post: operations["etl_views_task_create_task"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/data/etl-tasks/{task_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Task
+         * @description Get an ETL Task.
+         */
+        get: operations["etl_views_task_get_task"];
+        put?: never;
+        /**
+         * Run Task
+         * @description Run an ETL Task.
+         */
+        post: operations["etl_views_task_run_task"];
+        /**
+         * Delete Task
+         * @description Delete an ETL Task.
+         */
+        delete: operations["etl_views_task_delete_task"];
+        options?: never;
+        head?: never;
+        /**
+         * Update Task
+         * @description Update an ETL Task.
+         */
+        patch: operations["etl_views_task_update_task"];
+        trace?: never;
+    };
+    "/api/data/etl-tasks/{task_id}/runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Task Runs
+         * @description Get all runs for an ETL Task.
+         */
+        get: operations["etl_views_run_get_task_runs"];
+        put?: never;
+        /**
+         * Create Task Run
+         * @description Create a new ETL Task run.
+         */
+        post: operations["etl_views_run_create_task_run"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/data/etl-tasks/{task_id}/runs/{run_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Task Run
+         * @description Get an ETL Job.
+         */
+        get: operations["etl_views_run_get_task_run"];
+        put?: never;
+        post?: never;
+        /**
+         * Delete Task Run
+         * @description Delete an ETL Task run.
+         */
+        delete: operations["etl_views_run_delete_task_run"];
+        options?: never;
+        head?: never;
+        /**
+         * Update Task Run
+         * @description Update an ETL Task run.
+         */
+        patch: operations["etl_views_run_update_task_run"];
+        trace?: never;
+    };
+    "/api/data/etl-orchestration-systems": {
         parameters: {
             query?: never;
             header?: never;
@@ -1141,13 +1249,13 @@ export interface paths {
         };
         /**
          * Get Orchestration Systems
-         * @description Get public Orchestration Systems and Orchestration Systems associated with the authenticated user.
+         * @description Get ETL Orchestration Systems associated with the authenticated user.
          */
         get: operations["etl_views_orchestration_system_get_orchestration_systems"];
         put?: never;
         /**
          * Create Orchestration System
-         * @description Create a new Orchestration System.
+         * @description Create a new ETL Orchestration System.
          */
         post: operations["etl_views_orchestration_system_create_orchestration_system"];
         delete?: never;
@@ -1156,7 +1264,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/data/orchestration-systems/{orchestration_system_id}": {
+    "/api/data/etl-orchestration-systems/{orchestration_system_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -1165,175 +1273,23 @@ export interface paths {
         };
         /**
          * Get Orchestration System
-         * @description Get an Orchestration System.
+         * @description Get an ETL Orchestration System.
          */
         get: operations["etl_views_orchestration_system_get_orchestration_system"];
         put?: never;
         post?: never;
         /**
          * Delete Orchestration System
-         * @description Delete an Orchestration System.
+         * @description Delete an ETL Orchestration System.
          */
         delete: operations["etl_views_orchestration_system_delete_orchestration_system"];
         options?: never;
         head?: never;
         /**
          * Update Orchestration System
-         * @description Update an Orchestration System.
+         * @description Update a ETL Orchestration System.
          */
         patch: operations["etl_views_orchestration_system_update_orchestration_system"];
-        trace?: never;
-    };
-    "/api/data/data-sources": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Data Sources
-         * @description Get public Data Sources and Data Sources associated with the authenticated user.
-         */
-        get: operations["etl_views_data_source_get_data_sources"];
-        put?: never;
-        /**
-         * Create Data Source
-         * @description Create a new Data Source.
-         */
-        post: operations["etl_views_data_source_create_data_source"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/data/data-sources/{data_source_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Data Source
-         * @description Get a Data Source.
-         */
-        get: operations["etl_views_data_source_get_data_source"];
-        put?: never;
-        post?: never;
-        /**
-         * Delete Data Source
-         * @description Delete a Data Source.
-         */
-        delete: operations["etl_views_data_source_delete_data_source"];
-        options?: never;
-        head?: never;
-        /**
-         * Update Data Source
-         * @description Update a Data Source.
-         */
-        patch: operations["etl_views_data_source_update_data_source"];
-        trace?: never;
-    };
-    "/api/data/data-sources/{data_source_id}/datastreams/{datastream_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Link Datastream
-         * @description Link a Datastream to a Data Source.
-         */
-        post: operations["etl_views_data_source_link_datastream"];
-        /**
-         * Unlink Datastream
-         * @description Unlink a Datastream from a Data Source.
-         */
-        delete: operations["etl_views_data_source_unlink_datastream"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/data/data-archives": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Data Archives
-         * @description Get public Data Archives and Data Archives associated with the authenticated user.
-         */
-        get: operations["etl_views_data_archive_get_data_archives"];
-        put?: never;
-        /**
-         * Create Data Archive
-         * @description Create a new Data Archive.
-         */
-        post: operations["etl_views_data_archive_create_data_archive"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/data/data-archives/{data_archive_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Data Archive
-         * @description Get a Data Archive.
-         */
-        get: operations["etl_views_data_archive_get_data_archive"];
-        put?: never;
-        post?: never;
-        /**
-         * Delete Data Archive
-         * @description Delete a Data Archive.
-         */
-        delete: operations["etl_views_data_archive_delete_data_archive"];
-        options?: never;
-        head?: never;
-        /**
-         * Update Data Archive
-         * @description Update a Data Archive.
-         */
-        patch: operations["etl_views_data_archive_update_data_archive"];
-        trace?: never;
-    };
-    "/api/data/data-archives/{data_archive_id}/datastreams/{datastream_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Link Datastream
-         * @description Link a Datastream to a Data Archive.
-         */
-        post: operations["etl_views_data_archive_link_datastream"];
-        /**
-         * Unlink Datastream
-         * @description Unlink a Datastream from a Data Archive.
-         */
-        delete: operations["etl_views_data_archive_unlink_datastream"];
-        options?: never;
-        head?: never;
-        patch?: never;
         trace?: never;
     };
 }
@@ -1397,7 +1353,7 @@ export interface components {
              * Resource
              * @enum {string}
              */
-            resource: "*" | "APIKey" | "Role" | "Collaborator" | "DataSource" | "DataArchive" | "OrchestrationSystem" | "Thing" | "Datastream" | "Observation" | "Sensor" | "ObservedProperty" | "ProcessingLevel" | "Unit" | "ResultQualifier";
+            resource: "*" | "APIKey" | "Role" | "Collaborator" | "Task" | "Job" | "OrchestrationSystem" | "Thing" | "Datastream" | "Observation" | "Sensor" | "ObservedProperty" | "ProcessingLevel" | "Unit" | "ResultQualifier";
             /**
              * Action
              * @enum {string}
@@ -2018,52 +1974,6 @@ export interface components {
             /** Name */
             name: string;
         };
-        /** HydroShareArchivalDetailResponse */
-        HydroShareArchivalDetailResponse: {
-            /** Link */
-            link?: string | null;
-            /** Frequency */
-            frequency?: ("daily" | "weekly" | "monthly") | null;
-            /** Path */
-            path: string;
-            /** Datastreamids */
-            datastreamIds: string[];
-            /** Thingid */
-            thingId: string | null;
-        };
-        /** HydroShareArchivalPostBody */
-        HydroShareArchivalPostBody: {
-            /** Link */
-            link?: string | null;
-            /** Frequency */
-            frequency?: ("daily" | "weekly" | "monthly") | null;
-            /** Path */
-            path: string;
-            /** Datastreamids */
-            datastreamIds: string[];
-            /** Resourcetitle */
-            resourceTitle?: string | null;
-            /** Resourceabstract */
-            resourceAbstract?: string | null;
-            /** Resourcekeywords */
-            resourceKeywords?: string[] | null;
-            /**
-             * Publicresource
-             * @default false
-             */
-            publicResource: boolean;
-        };
-        /** HydroShareArchivalPatchBody */
-        HydroShareArchivalPatchBody: {
-            /** Link */
-            link?: string | null;
-            /** Frequency */
-            frequency?: ("daily" | "weekly" | "monthly") | null;
-            /** Path */
-            path?: string;
-            /** Datastreamids */
-            datastreamIds?: string[];
-        };
         /** DatastreamQueryParameters */
         DatastreamQueryParameters: {
             /**
@@ -2126,18 +2036,6 @@ export interface components {
              * @default []
              */
             result_qualifier_id: string[];
-            /**
-             * Data Source Id
-             * @description Filter datastreams by data source ID.
-             * @default []
-             */
-            data_source_id: string[];
-            /**
-             * Data Archive Id
-             * @description Filter datastreams by data archive ID.
-             * @default []
-             */
-            data_archive_id: string[];
             /**
              * Observation Type
              * @description Filter things by observation type.
@@ -2218,30 +2116,6 @@ export interface components {
              */
             result_end_time_min?: string | null;
         };
-        /** DataSourceSummaryResponse */
-        DataSourceSummaryResponse: {
-            /** Name */
-            name: string;
-            /** Settings */
-            settings?: Record<string, never> | null;
-            /**
-             * Id
-             * Format: uuid
-             */
-            id: string;
-            /**
-             * Workspaceid
-             * Format: uuid
-             */
-            workspaceId: string;
-            /**
-             * Orchestrationsystemid
-             * Format: uuid
-             */
-            orchestrationSystemId: string;
-            schedule?: components["schemas"]["OrchestrationConfigurationScheduleDetailResponse"] | null;
-            status?: components["schemas"]["OrchestrationConfigurationStatusDetailResponse"] | null;
-        };
         /** DatastreamDetailResponse */
         DatastreamDetailResponse: {
             /** Name */
@@ -2296,7 +2170,6 @@ export interface components {
              * Format: uuid
              */
             id: string;
-            dataSource: components["schemas"]["DataSourceSummaryResponse"] | null;
             workspace: components["schemas"]["WorkspaceSummaryResponse"];
             thing: components["schemas"]["ThingSummaryResponse"];
             sensor: components["schemas"]["SensorSummaryResponse"];
@@ -2310,8 +2183,6 @@ export interface components {
         };
         /** DatastreamSummaryResponse */
         DatastreamSummaryResponse: {
-            /** Datasourceid */
-            dataSourceId?: string | null;
             /**
              * Thingid
              * Format: uuid
@@ -2419,35 +2290,6 @@ export interface components {
             /** Workspaceid */
             workspaceId?: string | null;
         };
-        /** OrchestrationConfigurationScheduleDetailResponse */
-        OrchestrationConfigurationScheduleDetailResponse: {
-            /** Interval */
-            interval?: number | null;
-            /** Intervalunits */
-            intervalUnits?: ("minutes" | "hours" | "days") | null;
-            /** Crontab */
-            crontab?: string | null;
-            /** Starttime */
-            startTime?: string | null;
-            /** Endtime */
-            endTime?: string | null;
-        };
-        /** OrchestrationConfigurationStatusDetailResponse */
-        OrchestrationConfigurationStatusDetailResponse: {
-            /** Lastrunsuccessful */
-            lastRunSuccessful?: boolean | null;
-            /** Lastrunmessage */
-            lastRunMessage?: string | null;
-            /** Lastrun */
-            lastRun?: string | null;
-            /** Nextrun */
-            nextRun?: string | null;
-            /**
-             * Paused
-             * @default false
-             */
-            paused: boolean;
-        };
         /** ProcessingLevelSummaryResponse */
         ProcessingLevelSummaryResponse: {
             /** Code */
@@ -2515,8 +2357,6 @@ export interface components {
         };
         /** DatastreamPostBody */
         DatastreamPostBody: {
-            /** Datasourceid */
-            dataSourceId?: string | null;
             /**
              * Thingid
              * Format: uuid
@@ -2592,8 +2432,6 @@ export interface components {
         };
         /** DatastreamPatchBody */
         DatastreamPatchBody: {
-            /** Datasourceid */
-            dataSourceId?: string | null;
             /**
              * Thingid
              * Format: uuid
@@ -3270,6 +3108,553 @@ export interface components {
             /** Description */
             description?: string;
         };
+        /** JobQueryParameters */
+        JobQueryParameters: {
+            /**
+             * Page
+             * @description Page number (1-based).
+             */
+            page?: number | null;
+            /**
+             * Page Size
+             * @description The number of items per page.
+             */
+            page_size?: number | null;
+            /**
+             * Order By
+             * @description Select one or more fields to order the response by.
+             * @default []
+             */
+            order_by: ("name" | "type" | "extractorType" | "transformerType" | "loaderType" | "-name" | "-type" | "-extractorType" | "-transformerType" | "-loaderType")[] | null;
+            /**
+             * Workspace Id
+             * @description Filter by workspace ID.
+             * @default []
+             */
+            workspace_id: string[];
+            /**
+             * Type
+             * @description Filters by the type of the job.
+             * @default []
+             */
+            type: string[];
+            /**
+             * Extractor Type
+             * @description Filters by the extractor type of the job.
+             * @default []
+             */
+            extractor_type: (string | "null")[];
+            /**
+             * Transformer Type
+             * @description Filters by the transformer type of the job.
+             * @default []
+             */
+            transformer_type: (string | "null")[];
+            /**
+             * Loader Type
+             * @description Filters by the loader type of the job.
+             * @default []
+             */
+            loader_type: (string | "null")[];
+            /** Expand Related */
+            expand_related?: boolean | null;
+        };
+        /** JobDetailResponse */
+        JobDetailResponse: {
+            /** Name */
+            name: string;
+            /** Type */
+            type: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            workspace: components["schemas"]["WorkspaceSummaryResponse"];
+            extractor?: components["schemas"]["JobSettingsResponse"] | null;
+            transformer?: components["schemas"]["JobSettingsResponse"] | null;
+            loader?: components["schemas"]["JobSettingsResponse"] | null;
+        };
+        /** JobSettingsResponse */
+        JobSettingsResponse: {
+            /** Type */
+            type: string;
+            /** Settings */
+            settings: Record<string, never>;
+        };
+        /** JobSummaryResponse */
+        JobSummaryResponse: {
+            /** Name */
+            name: string;
+            /** Type */
+            type: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Workspaceid
+             * Format: uuid
+             */
+            workspaceId: string;
+            extractor?: components["schemas"]["JobSettingsResponse"] | null;
+            transformer?: components["schemas"]["JobSettingsResponse"] | null;
+            loader?: components["schemas"]["JobSettingsResponse"] | null;
+        };
+        /** JobPostBody */
+        JobPostBody: {
+            /** Name */
+            name: string;
+            /** Type */
+            type: string;
+            /**
+             * Workspaceid
+             * Format: uuid
+             */
+            workspaceId: string;
+            extractor?: components["schemas"]["JobSettingsPostBody"] | null;
+            transformer?: components["schemas"]["JobSettingsPostBody"] | null;
+            loader?: components["schemas"]["JobSettingsPostBody"] | null;
+        };
+        /** JobSettingsPostBody */
+        JobSettingsPostBody: {
+            /** Type */
+            type: string;
+            /** Settings */
+            settings: Record<string, never>;
+        };
+        /** JobPatchBody */
+        JobPatchBody: {
+            /** Name */
+            name?: string;
+            /** Type */
+            type?: string;
+            extractor?: components["schemas"]["JobSettingsPatchBody"] | null;
+            transformer?: components["schemas"]["JobSettingsPatchBody"] | null;
+            loader?: components["schemas"]["JobSettingsPatchBody"] | null;
+        };
+        /** JobSettingsPatchBody */
+        JobSettingsPatchBody: {
+            /** Type */
+            type?: string;
+            /** Settings */
+            settings?: Record<string, never>;
+        };
+        /** TaskQueryParameters */
+        TaskQueryParameters: {
+            /**
+             * Page
+             * @description Page number (1-based).
+             */
+            page?: number | null;
+            /**
+             * Page Size
+             * @description The number of items per page.
+             */
+            page_size?: number | null;
+            /**
+             * Order By
+             * @description Select one or more fields to order the response by.
+             * @default []
+             */
+            order_by: ("name" | "orchestrationSystemType" | "latestRunStatus" | "latestRunStartedAt" | "latestRunFinishedAt" | "nextRunAt" | "paused" | "startTime" | "jobType" | "jobExtractorType" | "jobTransformerType" | "jobLoaderType" | "-name" | "-orchestrationSystemType" | "-latestRunStatus" | "-latestRunStartedAt" | "-latestRunFinishedAt" | "-nextRunAt" | "-paused" | "-startTime" | "-jobType" | "-jobExtractorType" | "-jobTransformerType" | "-jobLoaderType")[] | null;
+            /**
+             * Job Id
+             * @description Filter by job ID.
+             * @default []
+             */
+            job_id: string[];
+            /**
+             * Orchestration System Id
+             * @description Filter by orchestration system ID.
+             * @default []
+             */
+            orchestration_system_id: (string | "null")[];
+            /**
+             * Orchestration System  Type
+             * @description Filter by orchestration system type.
+             * @default []
+             */
+            orchestration_system__type: string[];
+            /**
+             * Workspace Id
+             * @description Filter by workspace ID.
+             * @default []
+             */
+            workspace_id: string[];
+            /**
+             * Latest Run Status
+             * @description Filters tasks by the status of their most recent run.
+             * @default []
+             */
+            latest_run_status: (string | "null")[];
+            /**
+             * Latest Run Started At Max
+             * @description Filters for tasks whose most recent run started on or before this date and time.
+             */
+            latest_run_started_at_max?: string | null;
+            /**
+             * Latest Run Started At Min
+             * @description Filters for tasks whose most recent run started on or after this date and time.
+             */
+            latest_run_started_at_min?: string | null;
+            /**
+             * Latest Run Finished At Max
+             * @description Filters for tasks whose most recent run finished on or before this date and time.
+             */
+            latest_run_finished_at_max?: string | null;
+            /**
+             * Latest Run Finished At Min
+             * @description Filters for tasks whose most recent run finished on or after this date and time.
+             */
+            latest_run_finished_at_min?: string | null;
+            /**
+             * Next Run At Max
+             * @description Filters for scheduled tasks with a next run on or before this value.
+             */
+            next_run_at_max?: string | null;
+            /**
+             * Next Run At Min
+             * @description Filters for scheduled tasks with a next run on or after this value.
+             */
+            next_run_at_min?: string | null;
+            /**
+             * Paused
+             * @description Filters by the paused status of the task.
+             */
+            paused?: boolean | null;
+            /**
+             * Start Time Max
+             * @description Filters for scheduled tasks with a start time on or before this value.
+             */
+            start_time_max?: string | null;
+            /**
+             * Start Time Min
+             * @description Filters for scheduled tasks with a start time on or after this value.
+             */
+            start_time_min?: string | null;
+            /**
+             * Job Type
+             * @description Filters by the type of the job.
+             * @default []
+             */
+            job_type: string[];
+            /**
+             * Extractor Type
+             * @description Filters by the extractor type of the job.
+             * @default []
+             */
+            extractor_type: (string | "null")[];
+            /**
+             * Transformer Type
+             * @description Filters by the transformer type of the job.
+             * @default []
+             */
+            transformer_type: (string | "null")[];
+            /**
+             * Loader Type
+             * @description Filters by the loader type of the job.
+             * @default []
+             */
+            loader_type: (string | "null")[];
+            /**
+             * Source Identifier
+             * @description Filters by source identifiers associated with the task.
+             * @default []
+             */
+            source_identifier: (string | "null")[];
+            /**
+             * Target Identifier
+             * @description Filters by target identifiers associated with the task.
+             * @default []
+             */
+            target_identifier: (string | "null")[];
+            /** Expand Related */
+            expand_related?: boolean | null;
+        };
+        /** OrchestrationSystemSummaryResponse */
+        OrchestrationSystemSummaryResponse: {
+            /** Name */
+            name: string;
+            /** Type */
+            type: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Workspaceid */
+            workspaceId: string | null;
+        };
+        /** TaskDetailResponse */
+        TaskDetailResponse: {
+            /** Name */
+            name: string;
+            /** Extractorvariables */
+            extractorVariables?: Record<string, never>;
+            /** Transformervariables */
+            transformerVariables?: Record<string, never>;
+            /** Loadervariables */
+            loaderVariables?: Record<string, never>;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            workspace: components["schemas"]["WorkspaceSummaryResponse"];
+            job: components["schemas"]["JobSummaryResponse"];
+            orchestrationSystem?: components["schemas"]["OrchestrationSystemSummaryResponse"] | null;
+            schedule?: components["schemas"]["TaskScheduleResponse"] | null;
+            latestRun?: components["schemas"]["TaskRunResponse"] | null;
+            /** Mappings */
+            mappings: components["schemas"]["TaskMappingResponse"][];
+        };
+        /** TaskMappingPathResponse */
+        TaskMappingPathResponse: {
+            /** Targetidentifier */
+            targetIdentifier: string;
+            /** Datatransformations */
+            dataTransformations?: Record<string, never> | unknown[];
+        };
+        /** TaskMappingResponse */
+        TaskMappingResponse: {
+            /** Sourceidentifier */
+            sourceIdentifier: string;
+            /** Paths */
+            paths: components["schemas"]["TaskMappingPathResponse"][];
+        };
+        /** TaskRunResponse */
+        TaskRunResponse: {
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "RUNNING" | "SUCCESS" | "FAILURE";
+            /** Result */
+            result?: Record<string, never> | null;
+            /**
+             * Startedat
+             * Format: date-time
+             */
+            startedAt: string;
+            /** Finishedat */
+            finishedAt?: string | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+        };
+        /** TaskScheduleResponse */
+        TaskScheduleResponse: {
+            /** Paused */
+            paused: boolean;
+            /** Starttime */
+            startTime?: string | null;
+            /** Nextrunat */
+            nextRunAt?: string | null;
+            /** Crontab */
+            crontab?: string | null;
+            /** Interval */
+            interval?: number | null;
+            /** Intervalperiod */
+            intervalPeriod?: ("minutes" | "hours" | "days") | null;
+        };
+        /** TaskSummaryResponse */
+        TaskSummaryResponse: {
+            /** Name */
+            name: string;
+            /** Extractorvariables */
+            extractorVariables?: Record<string, never>;
+            /** Transformervariables */
+            transformerVariables?: Record<string, never>;
+            /** Loadervariables */
+            loaderVariables?: Record<string, never>;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Workspace Id
+             * Format: uuid
+             */
+            workspace_id: string;
+            /**
+             * Jobid
+             * Format: uuid
+             */
+            jobId: string;
+            /** Orchestrationsystemid */
+            orchestrationSystemId?: string | null;
+            schedule?: components["schemas"]["TaskScheduleResponse"] | null;
+            latestRun?: components["schemas"]["TaskRunResponse"] | null;
+            /** Mappings */
+            mappings: components["schemas"]["TaskMappingResponse"][];
+        };
+        /** TaskMappingPathPostBody */
+        TaskMappingPathPostBody: {
+            /** Targetidentifier */
+            targetIdentifier: string;
+            /** Datatransformations */
+            dataTransformations?: Record<string, never> | unknown[];
+        };
+        /** TaskMappingPostBody */
+        TaskMappingPostBody: {
+            /** Sourceidentifier */
+            sourceIdentifier: string;
+            /** Paths */
+            paths: components["schemas"]["TaskMappingPathPostBody"][];
+        };
+        /** TaskPostBody */
+        TaskPostBody: {
+            /** Name */
+            name: string;
+            /** Extractorvariables */
+            extractorVariables?: Record<string, never>;
+            /** Transformervariables */
+            transformerVariables?: Record<string, never>;
+            /** Loadervariables */
+            loaderVariables?: Record<string, never>;
+            /**
+             * Jobid
+             * Format: uuid
+             */
+            jobId: string;
+            /** Orchestrationsystemid */
+            orchestrationSystemId?: string | null;
+            schedule?: components["schemas"]["TaskSchedulePostBody"] | null;
+            /** Mappings */
+            mappings: components["schemas"]["TaskMappingPostBody"][];
+        };
+        /** TaskSchedulePostBody */
+        TaskSchedulePostBody: {
+            /** Paused */
+            paused: boolean;
+            /** Starttime */
+            startTime?: string | null;
+            /** Nextrunat */
+            nextRunAt?: string | null;
+            /** Crontab */
+            crontab?: string | null;
+            /** Interval */
+            interval?: number | null;
+            /** Intervalperiod */
+            intervalPeriod?: ("minutes" | "hours" | "days") | null;
+        };
+        /** TaskPatchBody */
+        TaskPatchBody: {
+            /** Name */
+            name?: string;
+            /** Extractorvariables */
+            extractorVariables?: Record<string, never>;
+            /** Transformervariables */
+            transformerVariables?: Record<string, never>;
+            /** Loadervariables */
+            loaderVariables?: Record<string, never>;
+            /** Jobid */
+            jobId?: string | null;
+            /** Orchestrationsystemid */
+            orchestrationSystemId?: string | null;
+            schedule?: components["schemas"]["TaskSchedulePatchBody"] | null;
+            /** Mappings */
+            mappings?: components["schemas"]["TaskMappingPostBody"][] | null;
+        };
+        /** TaskSchedulePatchBody */
+        TaskSchedulePatchBody: {
+            /** Paused */
+            paused?: boolean;
+            /** Starttime */
+            startTime?: string | null;
+            /** Nextrunat */
+            nextRunAt?: string | null;
+            /** Crontab */
+            crontab?: string | null;
+            /** Interval */
+            interval?: number | null;
+            /** Intervalperiod */
+            intervalPeriod?: ("minutes" | "hours" | "days") | null;
+        };
+        /** TaskRunQueryParameters */
+        TaskRunQueryParameters: {
+            /**
+             * Page
+             * @description Page number (1-based).
+             */
+            page?: number | null;
+            /**
+             * Page Size
+             * @description The number of items per page.
+             */
+            page_size?: number | null;
+            /**
+             * Order By
+             * @description Select one or more fields to order the response by.
+             * @default []
+             */
+            order_by: ("status" | "startedAt" | "finishedAt" | "-status" | "-startedAt" | "-finishedAt")[] | null;
+            /**
+             * Status
+             * @description Filters task runs by their status.
+             * @default []
+             */
+            status: (string | "null")[];
+            /**
+             * Latest Run Started At Max
+             * @description Filters for task runs created on or before this date and time.
+             */
+            latest_run_started_at_max?: string | null;
+            /**
+             * Latest Run Started At Min
+             * @description Filters for task runs created on or after this date and time.
+             */
+            latest_run_started_at_min?: string | null;
+            /**
+             * Latest Run Finished At Max
+             * @description Filters for task runs finished on or before this date and time.
+             */
+            latest_run_finished_at_max?: string | null;
+            /**
+             * Latest Run Finished At Min
+             * @description Filters for task runs finished on or after this date and time.
+             */
+            latest_run_finished_at_min?: string | null;
+        };
+        /** TaskRunPostBody */
+        TaskRunPostBody: {
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "RUNNING" | "SUCCESS" | "FAILURE";
+            /** Result */
+            result?: Record<string, never> | null;
+            /**
+             * Startedat
+             * Format: date-time
+             */
+            startedAt: string;
+            /** Finishedat */
+            finishedAt?: string | null;
+        };
+        /** TaskRunPatchBody */
+        TaskRunPatchBody: {
+            /**
+             * Status
+             * @enum {string}
+             */
+            status?: "RUNNING" | "SUCCESS" | "FAILURE";
+            /** Result */
+            result?: Record<string, never> | null;
+            /**
+             * Startedat
+             * Format: date-time
+             */
+            startedAt?: string;
+            /** Finishedat */
+            finishedAt?: string | null;
+        };
         /** OrchestrationSystemQueryParameters */
         OrchestrationSystemQueryParameters: {
             /**
@@ -3316,20 +3701,6 @@ export interface components {
             id: string;
             workspace: components["schemas"]["WorkspaceSummaryResponse"] | null;
         };
-        /** OrchestrationSystemSummaryResponse */
-        OrchestrationSystemSummaryResponse: {
-            /** Name */
-            name: string;
-            /** Type */
-            type: string;
-            /**
-             * Id
-             * Format: uuid
-             */
-            id: string;
-            /** Workspaceid */
-            workspaceId: string | null;
-        };
         /** OrchestrationSystemPostBody */
         OrchestrationSystemPostBody: {
             /** Name */
@@ -3345,253 +3716,6 @@ export interface components {
             name?: string;
             /** Type */
             type?: string;
-        };
-        /** OrchestrationConfigurationQueryParameters */
-        OrchestrationConfigurationQueryParameters: {
-            /**
-             * Page
-             * @description Page number (1-based).
-             */
-            page?: number | null;
-            /**
-             * Page Size
-             * @description The number of items per page.
-             */
-            page_size?: number | null;
-            /** Expand Related */
-            expand_related?: boolean | null;
-            /**
-             * Order By
-             * @description Select one or more fields to order the response by.
-             * @default []
-             */
-            order_by: ("name" | "startTime" | "endTime" | "-name" | "-startTime" | "-endTime")[] | null;
-            /**
-             * Workspace Id
-             * @description Filter by workspace ID.
-             * @default []
-             */
-            workspace_id: string[];
-            /**
-             * Orchestration System Id
-             * @description Filter by orchestration system ID.
-             * @default []
-             */
-            orchestration_system_id: string[];
-            /**
-             * Datastream Id
-             * @description Filter by associated datastream ID.
-             * @default []
-             */
-            datastream_id: string[];
-            /**
-             * Last Run Successful
-             * @description Filters by whether the previous job ran successfully.
-             */
-            last_run_successful?: boolean | null;
-            /**
-             * Last Run Max
-             * @description Sets the maximum last run time of filtered datastreams.
-             */
-            last_run_max?: string | null;
-            /**
-             * Last Run Min
-             * @description Sets the minimum last run time of filtered datastreams.
-             */
-            last_run_min?: string | null;
-            /**
-             * Next Run Max
-             * @description Sets the maximum next run time of filtered datastreams.
-             */
-            next_run_max?: string | null;
-            /**
-             * Next Run Min
-             * @description Sets the minimum next run time of filtered datastreams.
-             */
-            next_run_min?: string | null;
-        };
-        /** DataSourceDetailResponse */
-        DataSourceDetailResponse: {
-            /** Name */
-            name: string;
-            /** Settings */
-            settings?: Record<string, never> | null;
-            /**
-             * Id
-             * Format: uuid
-             */
-            id: string;
-            /**
-             * Workspaceid
-             * Format: uuid
-             */
-            workspaceId: string;
-            orchestrationSystem: components["schemas"]["OrchestrationSystemSummaryResponse"];
-            schedule?: components["schemas"]["OrchestrationConfigurationScheduleDetailResponse"] | null;
-            status?: components["schemas"]["OrchestrationConfigurationStatusDetailResponse"] | null;
-            /** Datastreams */
-            datastreams?: components["schemas"]["DatastreamSummaryResponse"][] | null;
-        };
-        /** DataSourcePostBody */
-        DataSourcePostBody: {
-            /** Name */
-            name: string;
-            /** Settings */
-            settings?: Record<string, never> | null;
-            /**
-             * Workspaceid
-             * Format: uuid
-             */
-            workspaceId: string;
-            /**
-             * Orchestrationsystemid
-             * Format: uuid
-             */
-            orchestrationSystemId: string;
-            schedule?: components["schemas"]["OrchestrationConfigurationSchedulePostBody"] | null;
-            status?: components["schemas"]["OrchestrationConfigurationStatusPostBody"] | null;
-            /** Datastreamids */
-            datastreamIds?: string[] | null;
-        };
-        /** OrchestrationConfigurationSchedulePostBody */
-        OrchestrationConfigurationSchedulePostBody: {
-            /** Interval */
-            interval?: number | null;
-            /** Intervalunits */
-            intervalUnits?: ("minutes" | "hours" | "days") | null;
-            /** Crontab */
-            crontab?: string | null;
-            /** Starttime */
-            startTime?: string | null;
-            /** Endtime */
-            endTime?: string | null;
-        };
-        /** OrchestrationConfigurationStatusPostBody */
-        OrchestrationConfigurationStatusPostBody: {
-            /** Lastrunsuccessful */
-            lastRunSuccessful?: boolean | null;
-            /** Lastrunmessage */
-            lastRunMessage?: string | null;
-            /** Lastrun */
-            lastRun?: string | null;
-            /** Nextrun */
-            nextRun?: string | null;
-            /**
-             * Paused
-             * @default false
-             */
-            paused: boolean;
-        };
-        /** DataSourcePatchBody */
-        DataSourcePatchBody: {
-            /** Name */
-            name?: string;
-            /** Settings */
-            settings?: Record<string, never> | null;
-            /** Orchestrationsystemid */
-            orchestrationSystemId?: string | null;
-            schedule?: components["schemas"]["OrchestrationConfigurationSchedulePatchBody"] | null;
-            status?: components["schemas"]["OrchestrationConfigurationStatusPatchBody"] | null;
-        };
-        /** OrchestrationConfigurationSchedulePatchBody */
-        OrchestrationConfigurationSchedulePatchBody: {
-            /** Interval */
-            interval?: number | null;
-            /** Intervalunits */
-            intervalUnits?: ("minutes" | "hours" | "days") | null;
-            /** Crontab */
-            crontab?: string | null;
-            /** Starttime */
-            startTime?: string | null;
-            /** Endtime */
-            endTime?: string | null;
-        };
-        /** OrchestrationConfigurationStatusPatchBody */
-        OrchestrationConfigurationStatusPatchBody: {
-            /** Lastrunsuccessful */
-            lastRunSuccessful?: boolean | null;
-            /** Lastrunmessage */
-            lastRunMessage?: string | null;
-            /** Lastrun */
-            lastRun?: string | null;
-            /** Nextrun */
-            nextRun?: string | null;
-            /** Paused */
-            paused?: boolean;
-        };
-        /** DataArchiveDetailResponse */
-        DataArchiveDetailResponse: {
-            /** Name */
-            name: string;
-            /** Settings */
-            settings?: Record<string, never> | null;
-            /**
-             * Id
-             * Format: uuid
-             */
-            id: string;
-            workspace: components["schemas"]["WorkspaceSummaryResponse"];
-            orchestrationSystem: components["schemas"]["OrchestrationSystemSummaryResponse"];
-            schedule?: components["schemas"]["OrchestrationConfigurationScheduleDetailResponse"] | null;
-            status?: components["schemas"]["OrchestrationConfigurationStatusDetailResponse"] | null;
-            /** Datastreams */
-            datastreams?: components["schemas"]["DatastreamSummaryResponse"][] | null;
-        };
-        /** DataArchiveSummaryResponse */
-        DataArchiveSummaryResponse: {
-            /** Name */
-            name: string;
-            /** Settings */
-            settings?: Record<string, never> | null;
-            /**
-             * Id
-             * Format: uuid
-             */
-            id: string;
-            /**
-             * Workspaceid
-             * Format: uuid
-             */
-            workspaceId: string;
-            /**
-             * Orchestrationsystemid
-             * Format: uuid
-             */
-            orchestrationSystemId: string;
-            schedule?: components["schemas"]["OrchestrationConfigurationScheduleDetailResponse"] | null;
-            status?: components["schemas"]["OrchestrationConfigurationStatusDetailResponse"] | null;
-        };
-        /** DataArchivePostBody */
-        DataArchivePostBody: {
-            /** Name */
-            name: string;
-            /** Settings */
-            settings?: Record<string, never> | null;
-            /**
-             * Workspaceid
-             * Format: uuid
-             */
-            workspaceId: string;
-            /**
-             * Orchestrationsystemid
-             * Format: uuid
-             */
-            orchestrationSystemId: string;
-            schedule?: components["schemas"]["OrchestrationConfigurationSchedulePostBody"] | null;
-            status?: components["schemas"]["OrchestrationConfigurationStatusPostBody"] | null;
-            /** Datastreamids */
-            datastreamIds?: string[] | null;
-        };
-        /** DataArchivePatchBody */
-        DataArchivePatchBody: {
-            /** Name */
-            name?: string;
-            /** Settings */
-            settings?: Record<string, never> | null;
-            /** Orchestrationsystemid */
-            orchestrationSystemId?: string | null;
-            schedule?: components["schemas"]["OrchestrationConfigurationSchedulePatchBody"] | null;
-            status?: components["schemas"]["OrchestrationConfigurationStatusPatchBody"] | null;
         };
     };
     responses: never;
@@ -5327,248 +5451,6 @@ export interface operations {
             };
         };
     };
-    etl_views_hydroshare_archival_get_thing_archive: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                thing_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HydroShareArchivalDetailResponse"] | null;
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-        };
-    };
-    etl_views_hydroshare_archival_create_thing_archive: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                thing_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["HydroShareArchivalPostBody"];
-            };
-        };
-        responses: {
-            /** @description Created */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HydroShareArchivalDetailResponse"];
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Unprocessable Entity */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-        };
-    };
-    etl_views_hydroshare_archival_delete_archive: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                thing_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No Content */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-        };
-    };
-    etl_views_hydroshare_archival_update_archive: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                thing_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["HydroShareArchivalPatchBody"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HydroShareArchivalDetailResponse"];
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Unprocessable Entity */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-        };
-    };
-    etl_views_hydroshare_archival_run_thing_archival: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                thing_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HydroShareArchivalDetailResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-        };
-    };
     sta_views_datastream_get_datastreams: {
         parameters: {
             query?: {
@@ -5593,10 +5475,6 @@ export interface operations {
                 unit_id?: string[];
                 /** @description Filter datastreams by observation result qualifier ID. */
                 result_qualifier_id?: string[];
-                /** @description Filter datastreams by data source ID. */
-                data_source_id?: string[];
-                /** @description Filter datastreams by data archive ID. */
-                data_archive_id?: string[];
                 /** @description Filter things by observation type. */
                 observation_type?: string[];
                 /** @description Filter things by sampled medium. */
@@ -8113,6 +7991,888 @@ export interface operations {
             };
         };
     };
+    etl_views_job_get_jobs: {
+        parameters: {
+            query?: {
+                /** @description Page number (1-based). */
+                page?: number | null;
+                /** @description The number of items per page. */
+                page_size?: number | null;
+                /** @description Select one or more fields to order the response by. */
+                order_by?: ("name" | "type" | "extractorType" | "transformerType" | "loaderType" | "-name" | "-type" | "-extractorType" | "-transformerType" | "-loaderType")[] | null;
+                /** @description Filter by workspace ID. */
+                workspace_id?: string[];
+                /** @description Filters by the type of the job. */
+                type?: string[];
+                /** @description Filters by the extractor type of the job. */
+                extractor_type?: (string | "null")[];
+                /** @description Filters by the transformer type of the job. */
+                transformer_type?: (string | "null")[];
+                /** @description Filters by the loader type of the job. */
+                loader_type?: (string | "null")[];
+                expand_related?: boolean | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobSummaryResponse"][] | components["schemas"]["JobDetailResponse"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    etl_views_job_create_job: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["JobPostBody"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobDetailResponse"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    etl_views_job_get_job: {
+        parameters: {
+            query?: {
+                expand_related?: boolean | null;
+            };
+            header?: never;
+            path: {
+                job_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobSummaryResponse"] | components["schemas"]["JobDetailResponse"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    etl_views_job_delete_job: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                job_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    etl_views_job_update_job: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                job_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["JobPatchBody"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobDetailResponse"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    etl_views_task_get_tasks: {
+        parameters: {
+            query?: {
+                /** @description Page number (1-based). */
+                page?: number | null;
+                /** @description The number of items per page. */
+                page_size?: number | null;
+                /** @description Select one or more fields to order the response by. */
+                order_by?: ("name" | "orchestrationSystemType" | "latestRunStatus" | "latestRunStartedAt" | "latestRunFinishedAt" | "nextRunAt" | "paused" | "startTime" | "jobType" | "jobExtractorType" | "jobTransformerType" | "jobLoaderType" | "-name" | "-orchestrationSystemType" | "-latestRunStatus" | "-latestRunStartedAt" | "-latestRunFinishedAt" | "-nextRunAt" | "-paused" | "-startTime" | "-jobType" | "-jobExtractorType" | "-jobTransformerType" | "-jobLoaderType")[] | null;
+                /** @description Filter by job ID. */
+                job_id?: string[];
+                /** @description Filter by orchestration system ID. */
+                orchestration_system_id?: (string | "null")[];
+                /** @description Filter by orchestration system type. */
+                orchestration_system__type?: string[];
+                /** @description Filter by workspace ID. */
+                workspace_id?: string[];
+                /** @description Filters tasks by the status of their most recent run. */
+                latest_run_status?: (string | "null")[];
+                /** @description Filters for tasks whose most recent run started on or before this date and time. */
+                latest_run_started_at_max?: string | null;
+                /** @description Filters for tasks whose most recent run started on or after this date and time. */
+                latest_run_started_at_min?: string | null;
+                /** @description Filters for tasks whose most recent run finished on or before this date and time. */
+                latest_run_finished_at_max?: string | null;
+                /** @description Filters for tasks whose most recent run finished on or after this date and time. */
+                latest_run_finished_at_min?: string | null;
+                /** @description Filters for scheduled tasks with a next run on or before this value. */
+                next_run_at_max?: string | null;
+                /** @description Filters for scheduled tasks with a next run on or after this value. */
+                next_run_at_min?: string | null;
+                /** @description Filters by the paused status of the task. */
+                paused?: boolean | null;
+                /** @description Filters for scheduled tasks with a start time on or before this value. */
+                start_time_max?: string | null;
+                /** @description Filters for scheduled tasks with a start time on or after this value. */
+                start_time_min?: string | null;
+                /** @description Filters by the type of the job. */
+                job_type?: string[];
+                /** @description Filters by the extractor type of the job. */
+                extractor_type?: (string | "null")[];
+                /** @description Filters by the transformer type of the job. */
+                transformer_type?: (string | "null")[];
+                /** @description Filters by the loader type of the job. */
+                loader_type?: (string | "null")[];
+                /** @description Filters by source identifiers associated with the task. */
+                source_identifier?: (string | "null")[];
+                /** @description Filters by target identifiers associated with the task. */
+                target_identifier?: (string | "null")[];
+                expand_related?: boolean | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskSummaryResponse"][] | components["schemas"]["TaskDetailResponse"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    etl_views_task_create_task: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TaskPostBody"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskDetailResponse"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    etl_views_task_get_task: {
+        parameters: {
+            query?: {
+                expand_related?: boolean | null;
+            };
+            header?: never;
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskSummaryResponse"] | components["schemas"]["TaskDetailResponse"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    etl_views_task_run_task: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /** File */
+                    file?: string | null;
+                };
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskRunResponse"];
+                };
+            };
+            /** @description Accepted */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskRunResponse"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    etl_views_task_delete_task: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    etl_views_task_update_task: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TaskPatchBody"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskDetailResponse"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    etl_views_run_get_task_runs: {
+        parameters: {
+            query?: {
+                /** @description Page number (1-based). */
+                page?: number | null;
+                /** @description The number of items per page. */
+                page_size?: number | null;
+                /** @description Select one or more fields to order the response by. */
+                order_by?: ("status" | "startedAt" | "finishedAt" | "-status" | "-startedAt" | "-finishedAt")[] | null;
+                /** @description Filters task runs by their status. */
+                status?: (string | "null")[];
+                /** @description Filters for task runs created on or before this date and time. */
+                latest_run_started_at_max?: string | null;
+                /** @description Filters for task runs created on or after this date and time. */
+                latest_run_started_at_min?: string | null;
+                /** @description Filters for task runs finished on or before this date and time. */
+                latest_run_finished_at_max?: string | null;
+                /** @description Filters for task runs finished on or after this date and time. */
+                latest_run_finished_at_min?: string | null;
+            };
+            header?: never;
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskRunResponse"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    etl_views_run_create_task_run: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TaskRunPostBody"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskRunResponse"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    etl_views_run_get_task_run: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                task_id: string;
+                run_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskRunResponse"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    etl_views_run_delete_task_run: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                task_id: string;
+                run_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    etl_views_run_update_task_run: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                task_id: string;
+                run_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TaskRunPatchBody"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskRunResponse"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
     etl_views_orchestration_system_get_orchestration_systems: {
         parameters: {
             query?: {
@@ -8156,9 +8916,7 @@ export interface operations {
     };
     etl_views_orchestration_system_create_orchestration_system: {
         parameters: {
-            query?: {
-                expand_related?: boolean | null;
-            };
+            query?: never;
             header?: never;
             path?: never;
             cookie?: never;
@@ -8175,7 +8933,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["OrchestrationSystemSummaryResponse"] | components["schemas"]["OrchestrationSystemDetailResponse"];
+                    "application/json": components["schemas"]["OrchestrationSystemDetailResponse"];
                 };
             };
             /** @description Bad Request */
@@ -8307,9 +9065,7 @@ export interface operations {
     };
     etl_views_orchestration_system_update_orchestration_system: {
         parameters: {
-            query?: {
-                expand_related?: boolean | null;
-            };
+            query?: never;
             header?: never;
             path: {
                 orchestration_system_id: string;
@@ -8328,7 +9084,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["OrchestrationSystemSummaryResponse"] | components["schemas"]["OrchestrationSystemDetailResponse"];
+                    "application/json": components["schemas"]["OrchestrationSystemDetailResponse"];
                 };
             };
             /** @description Bad Request */
@@ -8360,756 +9116,6 @@ export interface operations {
             };
             /** @description Unprocessable Entity */
             422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-        };
-    };
-    etl_views_data_source_get_data_sources: {
-        parameters: {
-            query?: {
-                /** @description Page number (1-based). */
-                page?: number | null;
-                /** @description The number of items per page. */
-                page_size?: number | null;
-                expand_related?: boolean | null;
-                /** @description Select one or more fields to order the response by. */
-                order_by?: ("name" | "startTime" | "endTime" | "-name" | "-startTime" | "-endTime")[] | null;
-                /** @description Filter by workspace ID. */
-                workspace_id?: string[];
-                /** @description Filter by orchestration system ID. */
-                orchestration_system_id?: string[];
-                /** @description Filter by associated datastream ID. */
-                datastream_id?: string[];
-                /** @description Filters by whether the previous job ran successfully. */
-                last_run_successful?: boolean | null;
-                /** @description Sets the maximum last run time of filtered datastreams. */
-                last_run_max?: string | null;
-                /** @description Sets the minimum last run time of filtered datastreams. */
-                last_run_min?: string | null;
-                /** @description Sets the maximum next run time of filtered datastreams. */
-                next_run_max?: string | null;
-                /** @description Sets the minimum next run time of filtered datastreams. */
-                next_run_min?: string | null;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DataSourceSummaryResponse"][] | components["schemas"]["DataSourceDetailResponse"][];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-        };
-    };
-    etl_views_data_source_create_data_source: {
-        parameters: {
-            query?: {
-                expand_related?: boolean | null;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["DataSourcePostBody"];
-            };
-        };
-        responses: {
-            /** @description Created */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DataSourceSummaryResponse"] | components["schemas"]["DataSourceDetailResponse"];
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Unprocessable Entity */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-        };
-    };
-    etl_views_data_source_get_data_source: {
-        parameters: {
-            query?: {
-                expand_related?: boolean | null;
-            };
-            header?: never;
-            path: {
-                data_source_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DataSourceSummaryResponse"] | components["schemas"]["DataSourceDetailResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-        };
-    };
-    etl_views_data_source_delete_data_source: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                data_source_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No Content */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Conflict */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-        };
-    };
-    etl_views_data_source_update_data_source: {
-        parameters: {
-            query?: {
-                expand_related?: boolean | null;
-            };
-            header?: never;
-            path: {
-                data_source_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["DataSourcePatchBody"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DataSourceSummaryResponse"] | components["schemas"]["DataSourceDetailResponse"];
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Unprocessable Entity */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-        };
-    };
-    etl_views_data_source_link_datastream: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                data_source_id: string;
-                datastream_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Created */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Unprocessable Entity */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-        };
-    };
-    etl_views_data_source_unlink_datastream: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                data_source_id: string;
-                datastream_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No Content */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Conflict */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-        };
-    };
-    etl_views_data_archive_get_data_archives: {
-        parameters: {
-            query?: {
-                /** @description Page number (1-based). */
-                page?: number | null;
-                /** @description The number of items per page. */
-                page_size?: number | null;
-                expand_related?: boolean | null;
-                /** @description Select one or more fields to order the response by. */
-                order_by?: ("name" | "startTime" | "endTime" | "-name" | "-startTime" | "-endTime")[] | null;
-                /** @description Filter by workspace ID. */
-                workspace_id?: string[];
-                /** @description Filter by orchestration system ID. */
-                orchestration_system_id?: string[];
-                /** @description Filter by associated datastream ID. */
-                datastream_id?: string[];
-                /** @description Filters by whether the previous job ran successfully. */
-                last_run_successful?: boolean | null;
-                /** @description Sets the maximum last run time of filtered datastreams. */
-                last_run_max?: string | null;
-                /** @description Sets the minimum last run time of filtered datastreams. */
-                last_run_min?: string | null;
-                /** @description Sets the maximum next run time of filtered datastreams. */
-                next_run_max?: string | null;
-                /** @description Sets the minimum next run time of filtered datastreams. */
-                next_run_min?: string | null;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DataArchiveSummaryResponse"][] | components["schemas"]["DataArchiveDetailResponse"][];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-        };
-    };
-    etl_views_data_archive_create_data_archive: {
-        parameters: {
-            query?: {
-                expand_related?: boolean | null;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["DataArchivePostBody"];
-            };
-        };
-        responses: {
-            /** @description Created */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DataArchiveSummaryResponse"] | components["schemas"]["DataArchiveDetailResponse"];
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Unprocessable Entity */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-        };
-    };
-    etl_views_data_archive_get_data_archive: {
-        parameters: {
-            query?: {
-                expand_related?: boolean | null;
-            };
-            header?: never;
-            path: {
-                data_archive_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DataArchiveSummaryResponse"] | components["schemas"]["DataArchiveDetailResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-        };
-    };
-    etl_views_data_archive_delete_data_archive: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                data_archive_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No Content */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Conflict */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-        };
-    };
-    etl_views_data_archive_update_data_archive: {
-        parameters: {
-            query?: {
-                expand_related?: boolean | null;
-            };
-            header?: never;
-            path: {
-                data_archive_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["DataArchivePatchBody"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DataArchiveSummaryResponse"] | components["schemas"]["DataArchiveDetailResponse"];
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Unprocessable Entity */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-        };
-    };
-    etl_views_data_archive_link_datastream: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                data_archive_id: string;
-                datastream_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Created */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Unprocessable Entity */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-        };
-    };
-    etl_views_data_archive_unlink_datastream: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                data_archive_id: string;
-                datastream_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No Content */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-            /** @description Conflict */
-            409: {
                 headers: {
                     [name: string]: unknown;
                 };

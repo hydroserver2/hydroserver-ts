@@ -42,11 +42,15 @@ export abstract class HydroServerBaseService<
   constructor(client: HydroServer) {
     this._client = client
     const ctor = this.constructor as ServiceClass<C, M>
-    this._route = `${client.baseRoute}/${ctor.route}`
+    this._route = `${this.getBaseUrl()}/${ctor.route}`
     this._writableKeys = (ctor.writableKeys ?? []) as readonly string[]
     this._ModelCtor = ctor.Model
   }
 
+  /**  Not all resources are at api/data/ so provide this function to allow a service to override  */
+  protected getBaseUrl(): string {
+    return this._client.baseRoute
+  }
   async list(
     params: Partial<QueryParamsOf<C>> & {
       fetch_all?: boolean
