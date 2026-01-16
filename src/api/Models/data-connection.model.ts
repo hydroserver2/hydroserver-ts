@@ -1,7 +1,7 @@
 import { Timestamp } from '../../types/timestamp'
 import type { Datastream, Workspace } from '../../types'
 
-export class Job {
+export class DataConnection {
   name = ''
   id = ''
   type = 'ETL'
@@ -16,7 +16,7 @@ export class Job {
     JSON.stringify(loaderDefaults['HydroServer'])
   )
 
-  constructor(init?: Partial<Job>) {
+  constructor(init?: Partial<DataConnection>) {
     Object.assign(this, init)
     this.id ||= crypto.randomUUID()
   }
@@ -198,14 +198,17 @@ export interface Schedule {
   endTime?: string
 }
 
-export function switchExtractor(ds: Job, newType: ExtractorType) {
+export function switchExtractor(ds: DataConnection, newType: ExtractorType) {
   ds.extractor = JSON.parse(JSON.stringify(extractorDefaults[newType]))
 }
 
-export function switchTransformer(ds: Job, newType: TransformerType) {
+export function switchTransformer(
+  ds: DataConnection,
+  newType: TransformerType
+) {
   ds.transformer = JSON.parse(JSON.stringify(transformerDefaults[newType]))
 }
 
-export function switchLoader(ds: Job, newType: LoaderType) {
+export function switchLoader(ds: DataConnection, newType: LoaderType) {
   ds.loader = JSON.parse(JSON.stringify(loaderDefaults[newType]))
 }

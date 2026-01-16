@@ -17,7 +17,7 @@ const resources = [
   'observations',
 
   // ETL
-  'etl-jobs',
+  'etl-data-connections',
   'etl-tasks',
   'runs',
   'etl-orchestration-systems',

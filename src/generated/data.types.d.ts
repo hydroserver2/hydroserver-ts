@@ -1080,7 +1080,7 @@ export interface paths {
         patch: operations["sta_views_result_qualifier_update_result_qualifier"];
         trace?: never;
     };
-    "/api/data/etl-jobs": {
+    "/api/data/etl-data-connections": {
         parameters: {
             query?: never;
             header?: never;
@@ -1088,23 +1088,23 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Get Jobs
-         * @description Get ETL Jobs associated with the authenticated user.
+         * Get Data Connections
+         * @description Get ETL Data Connections associated with the authenticated user.
          */
-        get: operations["etl_views_job_get_jobs"];
+        get: operations["etl_views_data_connection_get_data_connections"];
         put?: never;
         /**
-         * Create Job
-         * @description Create a new ETL Job.
+         * Create Data Connection
+         * @description Create a new ETL Data Connection.
          */
-        post: operations["etl_views_job_create_job"];
+        post: operations["etl_views_data_connection_create_data_connection"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/data/etl-jobs/{job_id}": {
+    "/api/data/etl-data-connections/{data_connection_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -1112,24 +1112,24 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Get Job
-         * @description Get an ETL Job.
+         * Get Data Connection
+         * @description Get an ETL Data Connection.
          */
-        get: operations["etl_views_job_get_job"];
+        get: operations["etl_views_data_connection_get_data_connection"];
         put?: never;
         post?: never;
         /**
-         * Delete Job
-         * @description Delete an ETL Job.
+         * Delete Data Connection
+         * @description Delete an ETL Data Connection.
          */
-        delete: operations["etl_views_job_delete_job"];
+        delete: operations["etl_views_data_connection_delete_data_connection"];
         options?: never;
         head?: never;
         /**
-         * Update Job
-         * @description Update a ETL Job.
+         * Update Data Connection
+         * @description Update a ETL Data Connection.
          */
-        patch: operations["etl_views_job_update_job"];
+        patch: operations["etl_views_data_connection_update_data_connection"];
         trace?: never;
     };
     "/api/data/etl-tasks": {
@@ -1221,7 +1221,7 @@ export interface paths {
         };
         /**
          * Get Task Run
-         * @description Get an ETL Job.
+         * @description Get an ETL Task Run.
          */
         get: operations["etl_views_run_get_task_run"];
         put?: never;
@@ -1249,13 +1249,13 @@ export interface paths {
         };
         /**
          * Get Orchestration Systems
-         * @description Get ETL Orchestration Systems associated with the authenticated user.
+         * @description Get public Orchestration Systems and Orchestration Systems associated with the authenticated user.
          */
         get: operations["etl_views_orchestration_system_get_orchestration_systems"];
         put?: never;
         /**
          * Create Orchestration System
-         * @description Create a new ETL Orchestration System.
+         * @description Create a new Orchestration System.
          */
         post: operations["etl_views_orchestration_system_create_orchestration_system"];
         delete?: never;
@@ -1273,7 +1273,7 @@ export interface paths {
         };
         /**
          * Get Orchestration System
-         * @description Get an ETL Orchestration System.
+         * @description Get an Orchestration System.
          */
         get: operations["etl_views_orchestration_system_get_orchestration_system"];
         put?: never;
@@ -1287,7 +1287,7 @@ export interface paths {
         head?: never;
         /**
          * Update Orchestration System
-         * @description Update a ETL Orchestration System.
+         * @description Update an Orchestration System.
          */
         patch: operations["etl_views_orchestration_system_update_orchestration_system"];
         trace?: never;
@@ -1353,7 +1353,7 @@ export interface components {
              * Resource
              * @enum {string}
              */
-            resource: "*" | "APIKey" | "Role" | "Collaborator" | "Task" | "Job" | "OrchestrationSystem" | "Thing" | "Datastream" | "Observation" | "Sensor" | "ObservedProperty" | "ProcessingLevel" | "Unit" | "ResultQualifier";
+            resource: "*" | "APIKey" | "Role" | "Collaborator" | "Task" | "DataConnection" | "OrchestrationSystem" | "Thing" | "Datastream" | "Observation" | "Sensor" | "ObservedProperty" | "ProcessingLevel" | "Unit" | "ResultQualifier";
             /**
              * Action
              * @enum {string}
@@ -2261,10 +2261,10 @@ export interface components {
              */
             id: string;
             /**
-             * Workspace Id
+             * Workspaceid
              * Format: uuid
              */
-            workspace_id: string;
+            workspaceId: string;
             /** Tags */
             tags: components["schemas"]["TagGetResponse"][];
             /** Fileattachments */
@@ -3108,8 +3108,8 @@ export interface components {
             /** Description */
             description?: string;
         };
-        /** JobQueryParameters */
-        JobQueryParameters: {
+        /** DataConnectionQueryParameters */
+        DataConnectionQueryParameters: {
             /**
              * Page
              * @description Page number (1-based).
@@ -3128,39 +3128,39 @@ export interface components {
             order_by: ("name" | "type" | "extractorType" | "transformerType" | "loaderType" | "-name" | "-type" | "-extractorType" | "-transformerType" | "-loaderType")[] | null;
             /**
              * Workspace Id
-             * @description Filter by workspace ID.
+             * @description Filter data connections by workspace ID.
              * @default []
              */
-            workspace_id: string[];
+            workspace_id: (string | "null")[];
             /**
              * Type
-             * @description Filters by the type of the job.
+             * @description Filters by the type of the data connection.
              * @default []
              */
             type: string[];
             /**
              * Extractor Type
-             * @description Filters by the extractor type of the job.
+             * @description Filters by the extractor type of the data connection.
              * @default []
              */
             extractor_type: (string | "null")[];
             /**
              * Transformer Type
-             * @description Filters by the transformer type of the job.
+             * @description Filters by the transformer type of the data connection.
              * @default []
              */
             transformer_type: (string | "null")[];
             /**
              * Loader Type
-             * @description Filters by the loader type of the job.
+             * @description Filters by the loader type of the data connection.
              * @default []
              */
             loader_type: (string | "null")[];
             /** Expand Related */
             expand_related?: boolean | null;
         };
-        /** JobDetailResponse */
-        JobDetailResponse: {
+        /** DataConnectionDetailResponse */
+        DataConnectionDetailResponse: {
             /** Name */
             name: string;
             /** Type */
@@ -3170,20 +3170,20 @@ export interface components {
              * Format: uuid
              */
             id: string;
-            workspace: components["schemas"]["WorkspaceSummaryResponse"];
-            extractor?: components["schemas"]["JobSettingsResponse"] | null;
-            transformer?: components["schemas"]["JobSettingsResponse"] | null;
-            loader?: components["schemas"]["JobSettingsResponse"] | null;
+            workspace?: components["schemas"]["WorkspaceSummaryResponse"] | null;
+            extractor?: components["schemas"]["DataConnectionSettingsResponse"] | null;
+            transformer?: components["schemas"]["DataConnectionSettingsResponse"] | null;
+            loader?: components["schemas"]["DataConnectionSettingsResponse"] | null;
         };
-        /** JobSettingsResponse */
-        JobSettingsResponse: {
+        /** DataConnectionSettingsResponse */
+        DataConnectionSettingsResponse: {
             /** Type */
             type: string;
             /** Settings */
             settings: Record<string, never>;
         };
-        /** JobSummaryResponse */
-        JobSummaryResponse: {
+        /** DataConnectionSummaryResponse */
+        DataConnectionSummaryResponse: {
             /** Name */
             name: string;
             /** Type */
@@ -3193,49 +3193,43 @@ export interface components {
              * Format: uuid
              */
             id: string;
-            /**
-             * Workspaceid
-             * Format: uuid
-             */
-            workspaceId: string;
-            extractor?: components["schemas"]["JobSettingsResponse"] | null;
-            transformer?: components["schemas"]["JobSettingsResponse"] | null;
-            loader?: components["schemas"]["JobSettingsResponse"] | null;
+            /** Workspaceid */
+            workspaceId?: string | null;
+            extractor?: components["schemas"]["DataConnectionSettingsResponse"] | null;
+            transformer?: components["schemas"]["DataConnectionSettingsResponse"] | null;
+            loader?: components["schemas"]["DataConnectionSettingsResponse"] | null;
         };
-        /** JobPostBody */
-        JobPostBody: {
+        /** DataConnectionPostBody */
+        DataConnectionPostBody: {
             /** Name */
             name: string;
             /** Type */
             type: string;
-            /**
-             * Workspaceid
-             * Format: uuid
-             */
-            workspaceId: string;
-            extractor?: components["schemas"]["JobSettingsPostBody"] | null;
-            transformer?: components["schemas"]["JobSettingsPostBody"] | null;
-            loader?: components["schemas"]["JobSettingsPostBody"] | null;
+            /** Workspaceid */
+            workspaceId?: string | null;
+            extractor?: components["schemas"]["DataConnectionSettingsPostBody"] | null;
+            transformer?: components["schemas"]["DataConnectionSettingsPostBody"] | null;
+            loader?: components["schemas"]["DataConnectionSettingsPostBody"] | null;
         };
-        /** JobSettingsPostBody */
-        JobSettingsPostBody: {
+        /** DataConnectionSettingsPostBody */
+        DataConnectionSettingsPostBody: {
             /** Type */
             type: string;
             /** Settings */
             settings: Record<string, never>;
         };
-        /** JobPatchBody */
-        JobPatchBody: {
+        /** DataConnectionPatchBody */
+        DataConnectionPatchBody: {
             /** Name */
             name?: string;
             /** Type */
             type?: string;
-            extractor?: components["schemas"]["JobSettingsPatchBody"] | null;
-            transformer?: components["schemas"]["JobSettingsPatchBody"] | null;
-            loader?: components["schemas"]["JobSettingsPatchBody"] | null;
+            extractor?: components["schemas"]["DataConnectionSettingsPatchBody"] | null;
+            transformer?: components["schemas"]["DataConnectionSettingsPatchBody"] | null;
+            loader?: components["schemas"]["DataConnectionSettingsPatchBody"] | null;
         };
-        /** JobSettingsPatchBody */
-        JobSettingsPatchBody: {
+        /** DataConnectionSettingsPatchBody */
+        DataConnectionSettingsPatchBody: {
             /** Type */
             type?: string;
             /** Settings */
@@ -3258,13 +3252,19 @@ export interface components {
              * @description Select one or more fields to order the response by.
              * @default []
              */
-            order_by: ("name" | "orchestrationSystemType" | "latestRunStatus" | "latestRunStartedAt" | "latestRunFinishedAt" | "nextRunAt" | "paused" | "startTime" | "jobType" | "jobExtractorType" | "jobTransformerType" | "jobLoaderType" | "-name" | "-orchestrationSystemType" | "-latestRunStatus" | "-latestRunStartedAt" | "-latestRunFinishedAt" | "-nextRunAt" | "-paused" | "-startTime" | "-jobType" | "-jobExtractorType" | "-jobTransformerType" | "-jobLoaderType")[] | null;
+            order_by: ("name" | "orchestrationSystemType" | "latestRunStatus" | "latestRunStartedAt" | "latestRunFinishedAt" | "nextRunAt" | "paused" | "startTime" | "dataConnectionType" | "dataConnectionExtractorType" | "dataConnectionTransformerType" | "dataConnectionLoaderType" | "-name" | "-orchestrationSystemType" | "-latestRunStatus" | "-latestRunStartedAt" | "-latestRunFinishedAt" | "-nextRunAt" | "-paused" | "-startTime" | "-dataConnectionType" | "-dataConnectionExtractorType" | "-dataConnectionTransformerType" | "-dataConnectionLoaderType")[] | null;
             /**
-             * Job Id
-             * @description Filter by job ID.
+             * Workspace Id
+             * @description Filter by workspace ID.
              * @default []
              */
-            job_id: string[];
+            workspace_id: string[];
+            /**
+             * Data Connection Id
+             * @description Filter by data connection ID.
+             * @default []
+             */
+            data_connection_id: string[];
             /**
              * Orchestration System Id
              * @description Filter by orchestration system ID.
@@ -3277,12 +3277,6 @@ export interface components {
              * @default []
              */
             orchestration_system__type: string[];
-            /**
-             * Workspace Id
-             * @description Filter by workspace ID.
-             * @default []
-             */
-            workspace_id: string[];
             /**
              * Latest Run Status
              * @description Filters tasks by the status of their most recent run.
@@ -3335,26 +3329,26 @@ export interface components {
              */
             start_time_min?: string | null;
             /**
-             * Job Type
-             * @description Filters by the type of the job.
+             * Data Connection Type
+             * @description Filters by the type of the data connection.
              * @default []
              */
-            job_type: string[];
+            data_connection_type: string[];
             /**
              * Extractor Type
-             * @description Filters by the extractor type of the job.
+             * @description Filters by the extractor type of the data connection.
              * @default []
              */
             extractor_type: (string | "null")[];
             /**
              * Transformer Type
-             * @description Filters by the transformer type of the job.
+             * @description Filters by the transformer type of the data connection.
              * @default []
              */
             transformer_type: (string | "null")[];
             /**
              * Loader Type
-             * @description Filters by the loader type of the job.
+             * @description Filters by the loader type of the data connection.
              * @default []
              */
             loader_type: (string | "null")[];
@@ -3385,7 +3379,7 @@ export interface components {
              */
             id: string;
             /** Workspaceid */
-            workspaceId: string | null;
+            workspaceId?: string | null;
         };
         /** TaskDetailResponse */
         TaskDetailResponse: {
@@ -3403,8 +3397,8 @@ export interface components {
              */
             id: string;
             workspace: components["schemas"]["WorkspaceSummaryResponse"];
-            job: components["schemas"]["JobSummaryResponse"];
-            orchestrationSystem?: components["schemas"]["OrchestrationSystemSummaryResponse"] | null;
+            dataConnection: components["schemas"]["DataConnectionSummaryResponse"];
+            orchestrationSystem: components["schemas"]["OrchestrationSystemSummaryResponse"];
             schedule?: components["schemas"]["TaskScheduleResponse"] | null;
             latestRun?: components["schemas"]["TaskRunResponse"] | null;
             /** Mappings */
@@ -3477,17 +3471,20 @@ export interface components {
              */
             id: string;
             /**
-             * Workspace Id
+             * Workspaceid
              * Format: uuid
              */
-            workspace_id: string;
+            workspaceId: string;
             /**
-             * Jobid
+             * Dataconnectionid
              * Format: uuid
              */
-            jobId: string;
-            /** Orchestrationsystemid */
-            orchestrationSystemId?: string | null;
+            dataConnectionId: string;
+            /**
+             * Orchestrationsystemid
+             * Format: uuid
+             */
+            orchestrationSystemId: string;
             schedule?: components["schemas"]["TaskScheduleResponse"] | null;
             latestRun?: components["schemas"]["TaskRunResponse"] | null;
             /** Mappings */
@@ -3518,12 +3515,20 @@ export interface components {
             /** Loadervariables */
             loaderVariables?: Record<string, never>;
             /**
-             * Jobid
+             * Workspaceid
              * Format: uuid
              */
-            jobId: string;
-            /** Orchestrationsystemid */
-            orchestrationSystemId?: string | null;
+            workspaceId: string;
+            /**
+             * Dataconnectionid
+             * Format: uuid
+             */
+            dataConnectionId: string;
+            /**
+             * Orchestrationsystemid
+             * Format: uuid
+             */
+            orchestrationSystemId: string;
             schedule?: components["schemas"]["TaskSchedulePostBody"] | null;
             /** Mappings */
             mappings: components["schemas"]["TaskMappingPostBody"][];
@@ -3553,8 +3558,8 @@ export interface components {
             transformerVariables?: Record<string, never>;
             /** Loadervariables */
             loaderVariables?: Record<string, never>;
-            /** Jobid */
-            jobId?: string | null;
+            /** Dataconnectionid */
+            dataConnectionId?: string | null;
             /** Orchestrationsystemid */
             orchestrationSystemId?: string | null;
             schedule?: components["schemas"]["TaskSchedulePatchBody"] | null;
@@ -3601,25 +3606,25 @@ export interface components {
              */
             status: (string | "null")[];
             /**
-             * Latest Run Started At Max
+             * Started At Max
              * @description Filters for task runs created on or before this date and time.
              */
-            latest_run_started_at_max?: string | null;
+            started_at_max?: string | null;
             /**
-             * Latest Run Started At Min
+             * Started At Min
              * @description Filters for task runs created on or after this date and time.
              */
-            latest_run_started_at_min?: string | null;
+            started_at_min?: string | null;
             /**
-             * Latest Run Finished At Max
+             * Finished At Max
              * @description Filters for task runs finished on or before this date and time.
              */
-            latest_run_finished_at_max?: string | null;
+            finished_at_max?: string | null;
             /**
-             * Latest Run Finished At Min
+             * Finished At Min
              * @description Filters for task runs finished on or after this date and time.
              */
-            latest_run_finished_at_min?: string | null;
+            finished_at_min?: string | null;
         };
         /** TaskRunPostBody */
         TaskRunPostBody: {
@@ -3677,7 +3682,7 @@ export interface components {
             order_by: ("name" | "type" | "-name" | "-type")[] | null;
             /**
              * Workspace Id
-             * @description Filter sensors by workspace ID.
+             * @description Filter orchestration systems by workspace ID.
              * @default []
              */
             workspace_id: (string | "null")[];
@@ -3699,7 +3704,7 @@ export interface components {
              * Format: uuid
              */
             id: string;
-            workspace: components["schemas"]["WorkspaceSummaryResponse"] | null;
+            workspace?: components["schemas"]["WorkspaceSummaryResponse"] | null;
         };
         /** OrchestrationSystemPostBody */
         OrchestrationSystemPostBody: {
@@ -7991,7 +7996,7 @@ export interface operations {
             };
         };
     };
-    etl_views_job_get_jobs: {
+    etl_views_data_connection_get_data_connections: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -8000,15 +8005,15 @@ export interface operations {
                 page_size?: number | null;
                 /** @description Select one or more fields to order the response by. */
                 order_by?: ("name" | "type" | "extractorType" | "transformerType" | "loaderType" | "-name" | "-type" | "-extractorType" | "-transformerType" | "-loaderType")[] | null;
-                /** @description Filter by workspace ID. */
-                workspace_id?: string[];
-                /** @description Filters by the type of the job. */
+                /** @description Filter data connections by workspace ID. */
+                workspace_id?: (string | "null")[];
+                /** @description Filters by the type of the data connection. */
                 type?: string[];
-                /** @description Filters by the extractor type of the job. */
+                /** @description Filters by the extractor type of the data connection. */
                 extractor_type?: (string | "null")[];
-                /** @description Filters by the transformer type of the job. */
+                /** @description Filters by the transformer type of the data connection. */
                 transformer_type?: (string | "null")[];
-                /** @description Filters by the loader type of the job. */
+                /** @description Filters by the loader type of the data connection. */
                 loader_type?: (string | "null")[];
                 expand_related?: boolean | null;
             };
@@ -8024,7 +8029,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["JobSummaryResponse"][] | components["schemas"]["JobDetailResponse"][];
+                    "application/json": components["schemas"]["DataConnectionSummaryResponse"][] | components["schemas"]["DataConnectionDetailResponse"][];
                 };
             };
             /** @description Unauthorized */
@@ -8038,7 +8043,7 @@ export interface operations {
             };
         };
     };
-    etl_views_job_create_job: {
+    etl_views_data_connection_create_data_connection: {
         parameters: {
             query?: never;
             header?: never;
@@ -8047,7 +8052,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["JobPostBody"];
+                "application/json": components["schemas"]["DataConnectionPostBody"];
             };
         };
         responses: {
@@ -8057,7 +8062,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["JobDetailResponse"];
+                    "application/json": components["schemas"]["DataConnectionDetailResponse"];
                 };
             };
             /** @description Bad Request */
@@ -8098,14 +8103,14 @@ export interface operations {
             };
         };
     };
-    etl_views_job_get_job: {
+    etl_views_data_connection_get_data_connection: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
             };
             header?: never;
             path: {
-                job_id: string;
+                data_connection_id: string;
             };
             cookie?: never;
         };
@@ -8117,7 +8122,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["JobSummaryResponse"] | components["schemas"]["JobDetailResponse"];
+                    "application/json": components["schemas"]["DataConnectionSummaryResponse"] | components["schemas"]["DataConnectionDetailResponse"];
                 };
             };
             /** @description Unauthorized */
@@ -8140,12 +8145,12 @@ export interface operations {
             };
         };
     };
-    etl_views_job_delete_job: {
+    etl_views_data_connection_delete_data_connection: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                job_id: string;
+                data_connection_id: string;
             };
             cookie?: never;
         };
@@ -8187,18 +8192,18 @@ export interface operations {
             };
         };
     };
-    etl_views_job_update_job: {
+    etl_views_data_connection_update_data_connection: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                job_id: string;
+                data_connection_id: string;
             };
             cookie?: never;
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["JobPatchBody"];
+                "application/json": components["schemas"]["DataConnectionPatchBody"];
             };
         };
         responses: {
@@ -8208,7 +8213,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["JobDetailResponse"];
+                    "application/json": components["schemas"]["DataConnectionDetailResponse"];
                 };
             };
             /** @description Bad Request */
@@ -8257,15 +8262,15 @@ export interface operations {
                 /** @description The number of items per page. */
                 page_size?: number | null;
                 /** @description Select one or more fields to order the response by. */
-                order_by?: ("name" | "orchestrationSystemType" | "latestRunStatus" | "latestRunStartedAt" | "latestRunFinishedAt" | "nextRunAt" | "paused" | "startTime" | "jobType" | "jobExtractorType" | "jobTransformerType" | "jobLoaderType" | "-name" | "-orchestrationSystemType" | "-latestRunStatus" | "-latestRunStartedAt" | "-latestRunFinishedAt" | "-nextRunAt" | "-paused" | "-startTime" | "-jobType" | "-jobExtractorType" | "-jobTransformerType" | "-jobLoaderType")[] | null;
-                /** @description Filter by job ID. */
-                job_id?: string[];
+                order_by?: ("name" | "orchestrationSystemType" | "latestRunStatus" | "latestRunStartedAt" | "latestRunFinishedAt" | "nextRunAt" | "paused" | "startTime" | "dataConnectionType" | "dataConnectionExtractorType" | "dataConnectionTransformerType" | "dataConnectionLoaderType" | "-name" | "-orchestrationSystemType" | "-latestRunStatus" | "-latestRunStartedAt" | "-latestRunFinishedAt" | "-nextRunAt" | "-paused" | "-startTime" | "-dataConnectionType" | "-dataConnectionExtractorType" | "-dataConnectionTransformerType" | "-dataConnectionLoaderType")[] | null;
+                /** @description Filter by workspace ID. */
+                workspace_id?: string[];
+                /** @description Filter by data connection ID. */
+                data_connection_id?: string[];
                 /** @description Filter by orchestration system ID. */
                 orchestration_system_id?: (string | "null")[];
                 /** @description Filter by orchestration system type. */
                 orchestration_system__type?: string[];
-                /** @description Filter by workspace ID. */
-                workspace_id?: string[];
                 /** @description Filters tasks by the status of their most recent run. */
                 latest_run_status?: (string | "null")[];
                 /** @description Filters for tasks whose most recent run started on or before this date and time. */
@@ -8286,13 +8291,13 @@ export interface operations {
                 start_time_max?: string | null;
                 /** @description Filters for scheduled tasks with a start time on or after this value. */
                 start_time_min?: string | null;
-                /** @description Filters by the type of the job. */
-                job_type?: string[];
-                /** @description Filters by the extractor type of the job. */
+                /** @description Filters by the type of the data connection. */
+                data_connection_type?: string[];
+                /** @description Filters by the extractor type of the data connection. */
                 extractor_type?: (string | "null")[];
-                /** @description Filters by the transformer type of the job. */
+                /** @description Filters by the transformer type of the data connection. */
                 transformer_type?: (string | "null")[];
-                /** @description Filters by the loader type of the job. */
+                /** @description Filters by the loader type of the data connection. */
                 loader_type?: (string | "null")[];
                 /** @description Filters by source identifiers associated with the task. */
                 source_identifier?: (string | "null")[];
@@ -8437,14 +8442,7 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody: {
-            content: {
-                "multipart/form-data": {
-                    /** File */
-                    file?: string | null;
-                };
-            };
-        };
+        requestBody?: never;
         responses: {
             /** @description OK */
             200: {
@@ -8623,13 +8621,13 @@ export interface operations {
                 /** @description Filters task runs by their status. */
                 status?: (string | "null")[];
                 /** @description Filters for task runs created on or before this date and time. */
-                latest_run_started_at_max?: string | null;
+                started_at_max?: string | null;
                 /** @description Filters for task runs created on or after this date and time. */
-                latest_run_started_at_min?: string | null;
+                started_at_min?: string | null;
                 /** @description Filters for task runs finished on or before this date and time. */
-                latest_run_finished_at_max?: string | null;
+                finished_at_max?: string | null;
                 /** @description Filters for task runs finished on or after this date and time. */
-                latest_run_finished_at_min?: string | null;
+                finished_at_min?: string | null;
             };
             header?: never;
             path: {
@@ -8883,7 +8881,7 @@ export interface operations {
                 expand_related?: boolean | null;
                 /** @description Select one or more fields to order the response by. */
                 order_by?: ("name" | "type" | "-name" | "-type")[] | null;
-                /** @description Filter sensors by workspace ID. */
+                /** @description Filter orchestration systems by workspace ID. */
                 workspace_id?: (string | "null")[];
                 /** @description Filter orchestration systems by type. */
                 type?: string[];
@@ -8916,7 +8914,9 @@ export interface operations {
     };
     etl_views_orchestration_system_create_orchestration_system: {
         parameters: {
-            query?: never;
+            query?: {
+                expand_related?: boolean | null;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -8933,7 +8933,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["OrchestrationSystemDetailResponse"];
+                    "application/json": components["schemas"]["OrchestrationSystemSummaryResponse"] | components["schemas"]["OrchestrationSystemDetailResponse"];
                 };
             };
             /** @description Bad Request */
@@ -9065,7 +9065,9 @@ export interface operations {
     };
     etl_views_orchestration_system_update_orchestration_system: {
         parameters: {
-            query?: never;
+            query?: {
+                expand_related?: boolean | null;
+            };
             header?: never;
             path: {
                 orchestration_system_id: string;
@@ -9084,7 +9086,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["OrchestrationSystemDetailResponse"];
+                    "application/json": components["schemas"]["OrchestrationSystemSummaryResponse"] | components["schemas"]["OrchestrationSystemDetailResponse"];
                 };
             };
             /** @description Bad Request */

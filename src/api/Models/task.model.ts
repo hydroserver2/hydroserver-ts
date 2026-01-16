@@ -1,6 +1,6 @@
 import type { Workspace } from '../../types'
 import type { OrchestrationSystem } from '../services'
-import type { Job } from './job.model'
+import type { DataConnection } from './data-connection.model'
 
 export class Task {
   id = ''
@@ -13,7 +13,7 @@ export class Task {
   loaderVariables = {}
   mappings: Mapping[] = []
   workspaceId = ''
-  jobId = ''
+  dataConnectionId = ''
   orchestrationSystemId = ''
   schedule: TaskSchedule | null = null
 
@@ -32,7 +32,7 @@ export interface TaskExpanded {
   mappings: Mapping[]
   latestRun?: TaskRun
   workspace: Workspace
-  job: Job
+  dataConnection: DataConnection
   orchestrationSystem: OrchestrationSystem
   schedule: TaskSchedule | null
 }

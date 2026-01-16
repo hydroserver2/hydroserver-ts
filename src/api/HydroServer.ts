@@ -7,7 +7,7 @@ import { ResultQualifierService } from './services/result-qualifier.service'
 import { DatastreamService } from './services/datastream.service'
 import { SensorService } from './services/sensor.service'
 import { OrchestrationSystemService } from './services/orchestration-system.service'
-import { JobService } from './services/job.service'
+import { DataConnectionService } from './services/data-connection.service'
 import { TaskService } from './services/task.service'
 
 export type AuthTuple = [string, string]
@@ -35,7 +35,7 @@ export class HydroServer {
   private _session?: SessionService
   private _user?: UserService
 
-  private _jobs?: JobService
+  private _dataConnections?: DataConnectionService
   private _tasks?: TaskService
 
   constructor(opts: HydroServerOptions) {
@@ -92,8 +92,8 @@ export class HydroServer {
   get orchestrationSystems(): OrchestrationSystemService {
     return (this._orchestrationSystems ??= new OrchestrationSystemService(this))
   }
-  get jobs(): JobService {
-    return (this._jobs ??= new JobService(this))
+  get dataConnections(): DataConnectionService {
+    return (this._dataConnections ??= new DataConnectionService(this))
   }
   get tasks(): TaskService {
     return (this._tasks ??= new TaskService(this))

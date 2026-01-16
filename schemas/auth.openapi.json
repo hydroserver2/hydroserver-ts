@@ -234,7 +234,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -298,7 +298,7 @@
             "name": "page_size",
             "schema": {
               "anyOf": [
-                { "maximum": 100000, "minimum": 1, "type": "integer" },
+                { "maximum": 100000, "minimum": 0, "type": "integer" },
                 { "type": "null" }
               ],
               "description": "The number of items per page.",
@@ -1107,7 +1107,7 @@
           },
           "page_size": {
             "anyOf": [
-              { "maximum": 100000, "minimum": 1, "type": "integer" },
+              { "maximum": 100000, "minimum": 0, "type": "integer" },
               { "type": "null" }
             ],
             "description": "The number of items per page.",

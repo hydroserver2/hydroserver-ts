@@ -1,10 +1,10 @@
 import { HydroServerBaseService } from './base'
 import { apiMethods } from '../apiMethods'
-import { EtlJobContract as C } from '../../generated/contracts'
+import { EtlDataConnectionContract as C } from '../../generated/contracts'
 import { ApiResponse } from '../../index'
-import { Job as M } from '../Models/job.model'
+import { DataConnection as M } from '../Models/data-connection.model'
 
-export class JobService extends HydroServerBaseService<typeof C, M> {
+export class DataConnectionService extends HydroServerBaseService<typeof C, M> {
   static route = C.route
   static writableKeys = C.writableKeys
   static Model = M
