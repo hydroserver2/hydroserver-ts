@@ -71,11 +71,17 @@ export class TaskService extends HydroServerBaseService<typeof C, M> {
 
   getStatusText(task: TaskExpanded): StatusType {
     const { latestRun, schedule } = task
-    if (schedule?.paused) return 'Loading paused'
+    // Don't crash the UI if a task isn't scheduled.
+    if (!schedule) {
+      if (!latestRun) return 'Pending'
+      return latestRun.status === 'FAILURE' ? 'Needs attention' : 'OK'
+    }
+
+    if (schedule.paused) return 'Loading paused'
     if (!latestRun) return 'Pending'
     if (latestRun.status === 'FAILURE') return 'Needs attention'
 
-    const { nextRunAt } = schedule!
+    const { nextRunAt } = schedule
     const next = nextRunAt ? new Date(nextRunAt) : undefined
     if (next && !Number.isNaN(next.valueOf())) {
       return next.getTime() < Date.now() ? 'Behind schedule' : 'OK'
