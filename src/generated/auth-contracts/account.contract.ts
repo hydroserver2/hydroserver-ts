@@ -10,7 +10,7 @@ export namespace AccountContract {
   export type PostBody        = Data.components['schemas']['AccountPostBody']
   export type PatchBody       = Data.components['schemas']['AccountPatchBody']
   export type DeleteBody      = never
-  export const writableKeys = ["phone","address","link","type","firstName","middleName","lastName","organization"] as const
+  export const writableKeys = ["firstName","middleName","lastName","phone","address","link","type","organization"] as const
   export declare const __types: {
     SummaryResponse: SummaryResponse
     DetailResponse: DetailResponse

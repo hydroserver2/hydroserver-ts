@@ -9,6 +9,7 @@ import { SensorService } from './services/sensor.service'
 import { OrchestrationSystemService } from './services/orchestration-system.service'
 import { DataConnectionService } from './services/data-connection.service'
 import { TaskService } from './services/task.service'
+import { WorkspaceFileAttachmentService } from './services/workspace-file-attachment.service'
 
 export type AuthTuple = [string, string]
 
@@ -37,6 +38,7 @@ export class HydroServer {
 
   private _dataConnections?: DataConnectionService
   private _tasks?: TaskService
+  private _workspaceFileAttachments?: WorkspaceFileAttachmentService
 
   constructor(opts: HydroServerOptions) {
     const { host } = opts
@@ -97,6 +99,10 @@ export class HydroServer {
   }
   get tasks(): TaskService {
     return (this._tasks ??= new TaskService(this))
+  }
+  get workspaceFileAttachments(): WorkspaceFileAttachmentService {
+    return (this._workspaceFileAttachments ??=
+      new WorkspaceFileAttachmentService(this))
   }
   get session(): SessionService {
     return (this._session ??= new SessionService(this))
