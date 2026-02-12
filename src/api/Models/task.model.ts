@@ -63,7 +63,7 @@ export interface ExpressionDataTransformation {
 
 export interface RatingCurveDataTransformation {
   ratingCurveUrl: string
-  type: 'lookup'
+  type: 'rating_curve'
 }
 
 export type DataTransformation =
