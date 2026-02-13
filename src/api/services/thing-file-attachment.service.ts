@@ -114,10 +114,20 @@ export class ThingFileAttachmentService {
     fileAttachmentId: string | number,
     file: File | Blob
   ) {
-    const data = new FormData()
-    data.append('file', file, file instanceof File ? file.name : 'attachment.csv')
     const url = `${this.baseAttachmentRoute(thingId)}/${fileAttachmentId}/file`
-    const res = (await apiMethods.put(url, data)) as ApiResponse<ThingFileAttachment>
+    const makeData = () => {
+      const data = new FormData()
+      data.append('file', file, file instanceof File ? file.name : 'attachment.csv')
+      return data
+    }
+
+    // Prefer POST for multipart file replace; some backend stacks do not
+    // reliably parse multipart payloads on PUT.
+    let res = (await apiMethods.post(url, makeData())) as ApiResponse<ThingFileAttachment>
+    if (!res.ok && (res.status === 404 || res.status === 405)) {
+      res = (await apiMethods.put(url, makeData())) as ApiResponse<ThingFileAttachment>
+    }
+
     return {
       ...res,
       data: normalizeAttachmentRecord(
