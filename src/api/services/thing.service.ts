@@ -4,6 +4,7 @@ import { ThingContract as C } from '../../generated/contracts'
 import type * as Data from '../../generated/data.types'
 import { Thing, PostHydroShareArchive, HydroShareArchive } from '../../types'
 import { ApiResponse } from '../responseInterceptor'
+import { normalizeAttachmentCollection } from './attachment-link'
 
 type TagPostBody = Data.components['schemas']['TagPostBody']
 type TagDeleteBody = Data.components['schemas']['TagDeleteBody']
@@ -55,14 +56,22 @@ export class ThingService extends HydroServerBaseService<typeof C, Thing> {
   getFileAttachmentTypes = () =>
     apiMethods.fetch(`${this._route}/file-attachment-types`)
 
-  uploadAttachments(thingId: string, data: FormData) {
+  async uploadAttachments(thingId: string, data: FormData) {
     const url = `${this._route}/${thingId}/file-attachments`
-    return apiMethods.post(url, data)
+    const res = await apiMethods.post(url, data)
+    return {
+      ...res,
+      data: normalizeAttachmentCollection(res.data as any, this._client.host),
+    } as ApiResponse
   }
 
-  getAttachments(thingId: string) {
+  async getAttachments(thingId: string) {
     const url = `${this._route}/${thingId}/file-attachments`
-    return apiMethods.paginatedFetch(url)
+    const res = await apiMethods.paginatedFetch(url)
+    return {
+      ...res,
+      data: normalizeAttachmentCollection(res.data as any, this._client.host),
+    } as ApiResponse
   }
 
   deleteAttachment(thingId: string, name: string) {

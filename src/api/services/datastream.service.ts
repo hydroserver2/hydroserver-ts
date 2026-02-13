@@ -8,6 +8,7 @@ import type * as Data from '../../generated/data.types'
 import type { ApiResponse } from '../responseInterceptor'
 import { Datastream as M } from '../../types'
 import JSZip from 'jszip'
+import { normalizeAttachmentCollection } from './attachment-link'
 
 type WithId = { id: string }
 
@@ -80,14 +81,22 @@ export class DatastreamService extends HydroServerBaseService<typeof C, M> {
   getFileAttachmentTypes = () =>
     apiMethods.fetch(`${this._route}/file-attachment-types`)
 
-  uploadAttachments(datastreamId: string, data: FormData) {
+  async uploadAttachments(datastreamId: string, data: FormData) {
     const url = `${this._route}/${datastreamId}/file-attachments`
-    return apiMethods.post(url, data)
+    const res = await apiMethods.post(url, data)
+    return {
+      ...res,
+      data: normalizeAttachmentCollection(res.data as any, this._client.host),
+    } as ApiResponse
   }
 
-  getAttachments(datastreamId: string) {
+  async getAttachments(datastreamId: string) {
     const url = `${this._route}/${datastreamId}/file-attachments`
-    return apiMethods.paginatedFetch(url)
+    const res = await apiMethods.paginatedFetch(url)
+    return {
+      ...res,
+      data: normalizeAttachmentCollection(res.data as any, this._client.host),
+    } as ApiResponse
   }
 
   deleteAttachment(datastreamId: string, name: string) {
