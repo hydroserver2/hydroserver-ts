@@ -3,8 +3,7 @@ import { getCSRFToken } from './getCSRFToken'
 /**
  * Intercepts and enhances a request options object.
  *
- * - Adds Django AllAuth 'sessionid' to all requests
- * - Adds CSRF Token to non-GET requests
+ * - Adds CSRF Token header when available
  * - If a body is present and it's an object, the body is stringified.
  *
  * @param {any} options - The original request options object.

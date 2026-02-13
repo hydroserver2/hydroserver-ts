@@ -1,31 +1,25 @@
-import { beforeEach, afterEach, describe, it, expect, vi } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { responseInterceptor } from '../responseInterceptor'
-
-const originalConsoleError = console.error
-
-beforeEach(() => {
-  // Override console.error with a mock function so console doesn't get cluttered
-  console.error = vi.fn()
-})
-
-afterEach(() => {
-  // Restore the original console.error after each test
-  console.error = originalConsoleError
-})
 
 describe('responseInterceptor', () => {
   it('processes a 200 status code response correctly', async () => {
-    const mockJsonResponse = { success: true, data: 'Some data' }
+    const mockJsonResponse = { data: 'Some data' }
     const mockResponse = new Response(JSON.stringify(mockJsonResponse), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     })
 
     const result = await responseInterceptor(mockResponse)
-    expect(result).toEqual(mockJsonResponse)
+    expect(result).toEqual({
+      data: 'Some data',
+      status: 200,
+      message: 'OK',
+      meta: undefined,
+      ok: true,
+    })
   })
 
-  it('returns null if the Content-Length is 0', async () => {
+  it('returns an envelope with null data if the Content-Length is 0', async () => {
     const mockResponse = new Response('', {
       status: 200,
       headers: {
@@ -35,7 +29,13 @@ describe('responseInterceptor', () => {
     })
 
     const result = await responseInterceptor(mockResponse)
-    expect(result).toBeNull()
+    expect(result).toEqual({
+      data: null,
+      status: 200,
+      message: 'OK',
+      meta: undefined,
+      ok: true,
+    })
   })
 
   it('returns a Blob for CSV content', async () => {
@@ -58,25 +58,27 @@ describe('responseInterceptor', () => {
     })
 
     const result = await responseInterceptor(mockResponse)
-    expect(result).toEqual(errorJson)
-    expect(console.error).not.toHaveBeenCalled()
+    expect(result).toEqual({
+      data: errorJson,
+      status: 401,
+      message: 'OK',
+      meta: undefined,
+      ok: true,
+    })
   })
 
-  it('throws an ApiError for non-401 status codes', async () => {
+  it('returns an error envelope for non-401 status codes', async () => {
     const mockErrorBody = { detail: 'Bad response' }
     const mockResponse = new Response(JSON.stringify(mockErrorBody), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     })
 
-    await expect(responseInterceptor(mockResponse)).rejects.toEqual({
+    await expect(responseInterceptor(mockResponse)).resolves.toEqual({
+      data: mockErrorBody,
       status: 500,
       message: 'Bad response',
+      ok: false,
     })
-
-    expect(console.error).toHaveBeenCalledWith(
-      'API response not OK:',
-      'Bad response'
-    )
   })
 })
