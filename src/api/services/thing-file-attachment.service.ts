@@ -136,6 +136,15 @@ export class ThingFileAttachmentService {
     link: string,
     maxRows = 20
   ): Promise<ApiResponse<RatingCurvePreviewRow[]>> {
+    if (!`${link ?? ''}`.trim()) {
+      return {
+        data: [],
+        status: 0,
+        message: 'Missing rating curve file link.',
+        ok: false,
+      }
+    }
+
     const fetchOptions = {
       headers: {
         Accept: 'text/csv, text/plain, application/octet-stream, application/json',
@@ -143,56 +152,99 @@ export class ThingFileAttachmentService {
     }
 
     const previewUrls = this.resolveAttachmentPreviewUrls(link)
-    let response: ApiResponse | null = null
+    let firstNonOkResponse: ApiResponse | null = null
+    let fallbackOkResponse: ApiResponse | null = null
+    let fallbackRows: RatingCurvePreviewRow[] = []
+    let onlyHtmlLikePayloads = true
 
     for (const previewUrl of previewUrls) {
       try {
         const candidate = await apiMethods.fetch(previewUrl, fetchOptions)
-        response = candidate
-        if (candidate.ok) break
+        if (!candidate.ok) {
+          firstNonOkResponse ??= candidate
+          continue
+        }
+
+        const csvText = await this.resolveCsvText(candidate.data, fetchOptions)
+        const rows = parsePreviewRows(csvText, maxRows)
+        const isHtmlPayload = looksLikeHtmlPayload(csvText)
+        if (!isHtmlPayload) {
+          onlyHtmlLikePayloads = false
+        }
+
+        if (rows.length > 0) {
+          return {
+            data: rows,
+            status: candidate.status,
+            message: candidate.message,
+            meta: candidate.meta,
+            ok: true,
+          }
+        }
+
+        if (!isHtmlPayload && rows.length >= fallbackRows.length) {
+          fallbackRows = rows
+          fallbackOkResponse = candidate
+        }
       } catch {
         // try the next URL candidate
       }
     }
 
-    if (!response) {
+    if (fallbackOkResponse) {
+      return {
+        data: fallbackRows,
+        status: fallbackOkResponse.status,
+        message: fallbackOkResponse.message,
+        meta: fallbackOkResponse.meta,
+        ok: true,
+      }
+    }
+
+    if (onlyHtmlLikePayloads && previewUrls.length > 0) {
       return {
         data: [],
         status: 0,
-        message: 'Unable to load preview.',
+        message: 'Unable to load rating curve preview.',
         ok: false,
       }
     }
 
-    if (!response.ok) {
-      return { ...response, data: [] }
-    }
-
-    const raw = response.data
-    let csvText = await normalizeCsvText(raw)
-    const followupUrl = extractFollowupUrl(raw)
-
-    if (followupUrl) {
-      for (const candidateUrl of this.resolveAttachmentPreviewUrls(followupUrl)) {
-        try {
-          const followedResponse = await apiMethods.fetch(candidateUrl, fetchOptions)
-          if (followedResponse.ok) {
-            csvText = await normalizeCsvText(followedResponse.data)
-            break
-          }
-        } catch {
-          // keep trying candidate URLs
-        }
-      }
+    if (firstNonOkResponse) {
+      return { ...firstNonOkResponse, data: [] }
     }
 
     return {
-      data: parsePreviewRows(csvText, maxRows),
-      status: response.status,
-      message: response.message,
-      meta: response.meta,
-      ok: true,
+      data: [],
+      status: 0,
+      message: 'Unable to load preview.',
+      ok: false,
     }
+  }
+
+  private async resolveCsvText(
+    raw: unknown,
+    fetchOptions: { headers: { Accept: string } }
+  ) {
+    let csvText = await normalizeCsvText(raw)
+    const followupUrl = extractFollowupUrl(raw)
+    if (!followupUrl) {
+      return csvText
+    }
+
+    for (const candidateUrl of this.resolveAttachmentPreviewUrls(followupUrl)) {
+      try {
+        const followedResponse = await apiMethods.fetch(candidateUrl, fetchOptions)
+        if (followedResponse.ok) {
+          csvText = await normalizeCsvText(followedResponse.data)
+          if (csvText.trim()) break
+        }
+      } catch {
+        // keep trying candidate URLs
+      }
+    }
+
+    return csvText
   }
 
   private baseAttachmentRoute(thingId: string) {
@@ -203,20 +255,23 @@ export class ThingFileAttachmentService {
     const urls: string[] = []
     try {
       const parsed = new URL(link, globalThis.location?.origin ?? undefined)
-      urls.push(parsed.toString())
 
       if (isThingAttachmentDownloadPath(parsed.pathname)) {
         const pathAndQuery = `${parsed.pathname}${parsed.search}`
-
-        const locationOrigin = this.locationOrigin()
-        if (locationOrigin) {
-          urls.push(new URL(pathAndQuery, locationOrigin).toString())
-        }
 
         const hostOrigin = this.hostOrigin()
         if (hostOrigin) {
           urls.push(new URL(pathAndQuery, hostOrigin).toString())
         }
+
+        urls.push(parsed.toString())
+
+        const locationOrigin = this.locationOrigin()
+        if (locationOrigin) {
+          urls.push(new URL(pathAndQuery, locationOrigin).toString())
+        }
+      } else {
+        urls.push(parsed.toString())
       }
     } catch {
       urls.push(link)
@@ -432,6 +487,17 @@ function scoreCsvLikeText(text: string) {
 
 function dedupe(values: string[]) {
   return [...new Set(values.filter((value) => !!value))]
+}
+
+function looksLikeHtmlPayload(text: string) {
+  const normalized = `${text ?? ''}`.trim().toLowerCase()
+  if (!normalized) return false
+
+  return (
+    normalized.startsWith('<!doctype html') ||
+    normalized.startsWith('<html') ||
+    (normalized.includes('<head') && normalized.includes('<body'))
+  )
 }
 
 function extractFollowupUrl(raw: unknown) {
