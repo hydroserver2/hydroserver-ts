@@ -1,6 +1,6 @@
 {
   "name": "@hydroserver/client",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "HydroServer TypeScript client",
   "type": "module",
   "main": "dist/@hydroserver-client.umd.cjs",
@@ -23,11 +23,11 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && tsc -p tsconfig.build.json",
     "test": "vitest",
     "coverage": "vitest run --coverage --environment jsdom",
-    "gen:data-types": "openapi-typescript ./schemas/data.openapi.json --output ./src/generated/data.types.d.ts",
-    "gen:auth-types": "openapi-typescript ./schemas/auth.openapi.json --output ./src/generated/auth.types.d.ts",
+    "gen:data-types": "npx --yes openapi-typescript@7.13.0 ./schemas/data.openapi.json --output ./src/generated/data.types.d.ts",
+    "gen:auth-types": "npx --yes openapi-typescript@7.13.0 ./schemas/auth.openapi.json --output ./src/generated/auth.types.d.ts",
     "gen:types": "npm run gen:data-types && npm run gen:auth-types",
     "gen:data-contracts": "tsx ./scripts/generate-contracts.data.ts",
     "gen:auth-contracts": "tsx ./scripts/generate-contracts.auth.ts",
@@ -46,12 +46,10 @@
   },
   "devDependencies": {
     "@types/node": "^24.1.0",
-    "openapi-typescript": "^7.9.1",
     "openapi-zod-client": "^1.18.3",
     "tsx": "^4.16.2",
     "typescript": "^5.8.3",
-    "vite": "^7.0.5",
-    "vite-plugin-dts": "^4.5.4",
-    "vitest": "^3.2.4"
+    "vite": "^7.3.1",
+    "vitest": "^4.0.18"
   }
 }
