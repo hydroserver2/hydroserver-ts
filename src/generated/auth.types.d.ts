@@ -15,25 +15,25 @@ export interface paths {
          * Get Account
          * @description Get user account details.
          */
-        get: operations["iam_views_account_get_account"];
+        get: operations["interfaces_auth_views_account_get_account"];
         put?: never;
         /**
          * Create Account
          * @description Create a new user account.
          */
-        post: operations["iam_views_account_create_account"];
+        post: operations["interfaces_auth_views_account_create_account"];
         /**
          * Delete Account
          * @description Delete a user account.
          */
-        delete: operations["iam_views_account_delete_account"];
+        delete: operations["interfaces_auth_views_account_delete_account"];
         options?: never;
         head?: never;
         /**
          * Update Account
          * @description Update user account details.
          */
-        patch: operations["iam_views_account_update_account"];
+        patch: operations["interfaces_auth_views_account_update_account"];
         trace?: never;
     };
     "/api/auth/{client}/account/user-types": {
@@ -47,7 +47,7 @@ export interface paths {
          * Get User Types
          * @description Get user types.
          */
-        get: operations["iam_views_account_get_user_types"];
+        get: operations["interfaces_auth_views_account_get_user_types"];
         put?: never;
         post?: never;
         delete?: never;
@@ -67,7 +67,7 @@ export interface paths {
          * Get User Types
          * @description Get organization types.
          */
-        get: operations["iam_views_account_get_user_types"];
+        get: operations["interfaces_auth_views_account_get_user_types"];
         put?: never;
         post?: never;
         delete?: never;
@@ -88,12 +88,12 @@ export interface paths {
          * Send Verification Email
          * @description Send an account verification email.
          */
-        put: operations["iam_views_email_send_verification_email"];
+        put: operations["interfaces_auth_views_email_send_verification_email"];
         /**
          * Verify Email
          * @description Verify an account email.
          */
-        post: operations["iam_views_email_verify_email"];
+        post: operations["interfaces_auth_views_email_verify_email"];
         delete?: never;
         options?: never;
         head?: never;
@@ -113,7 +113,7 @@ export interface paths {
          * Request Password Reset
          * @description Request password reset email.
          */
-        post: operations["iam_views_password_request_password_reset"];
+        post: operations["interfaces_auth_views_password_request_password_reset"];
         delete?: never;
         options?: never;
         head?: never;
@@ -133,7 +133,7 @@ export interface paths {
          * Reset Password
          * @description Reset account password.
          */
-        post: operations["iam_views_password_reset_password"];
+        post: operations["interfaces_auth_views_password_reset_password"];
         delete?: never;
         options?: never;
         head?: never;
@@ -151,18 +151,18 @@ export interface paths {
          * Get Session
          * @description Get an active user session.
          */
-        get: operations["iam_views_session_get_session"];
+        get: operations["interfaces_auth_views_session_get_session"];
         put?: never;
         /**
          * Create Session
          * @description Create a new user session.
          */
-        post: operations["iam_views_session_create_session"];
+        post: operations["interfaces_auth_views_session_create_session"];
         /**
          * Delete Session
          * @description Delete an active user session.
          */
-        delete: operations["iam_views_session_delete_session"];
+        delete: operations["interfaces_auth_views_session_delete_session"];
         options?: never;
         head?: never;
         patch?: never;
@@ -179,14 +179,14 @@ export interface paths {
          * Get Providers
          * @description Get connected provider accounts.
          */
-        get: operations["iam_views_provider_get_providers"];
+        get: operations["interfaces_auth_views_provider_get_providers"];
         put?: never;
         post?: never;
         /**
          * Delete Provider
          * @description Disconnect a provider account.
          */
-        delete: operations["iam_views_provider_delete_provider"];
+        delete: operations["interfaces_auth_views_provider_delete_provider"];
         options?: never;
         head?: never;
         patch?: never;
@@ -205,7 +205,7 @@ export interface paths {
          * Redirect To Provider
          * @description Redirect to provider login window.
          */
-        post: operations["iam_views_provider_redirect_to_provider"];
+        post: operations["interfaces_auth_views_provider_redirect_to_provider"];
         delete?: never;
         options?: never;
         head?: never;
@@ -225,7 +225,7 @@ export interface paths {
          * Provider Signup
          * @description Finish signing up with a provider account.
          */
-        post: operations["iam_views_provider_provider_signup"];
+        post: operations["interfaces_auth_views_provider_provider_signup"];
         delete?: never;
         options?: never;
         head?: never;
@@ -238,6 +238,12 @@ export interface components {
     schemas: {
         /** AccountDetailResponse */
         AccountDetailResponse: {
+            /** Firstname */
+            firstName: string;
+            /** Middlename */
+            middleName?: string | null;
+            /** Lastname */
+            lastName: string;
             /** Phone */
             phone?: string | null;
             /** Address */
@@ -246,12 +252,6 @@ export interface components {
             link?: string | null;
             /** Type */
             type: string;
-            /** Firstname */
-            firstName: string;
-            /** Middlename */
-            middleName?: string | null;
-            /** Lastname */
-            lastName: string;
             organization?: components["schemas"]["OrganizationDetailResponse"] | null;
             /**
              * Email
@@ -279,6 +279,12 @@ export interface components {
         };
         /** AccountPostBody */
         AccountPostBody: {
+            /** Firstname */
+            firstName: string;
+            /** Middlename */
+            middleName?: string | null;
+            /** Lastname */
+            lastName: string;
             /** Phone */
             phone?: string | null;
             /** Address */
@@ -287,12 +293,6 @@ export interface components {
             link?: string | null;
             /** Type */
             type: string;
-            /** Firstname */
-            firstName: string;
-            /** Middlename */
-            middleName?: string | null;
-            /** Lastname */
-            lastName: string;
             organization?: components["schemas"]["OrganizationPostBody"] | null;
             /**
              * Email
@@ -317,6 +317,12 @@ export interface components {
         };
         /** AccountPatchBody */
         AccountPatchBody: {
+            /** Firstname */
+            firstName?: string;
+            /** Middlename */
+            middleName?: string | null;
+            /** Lastname */
+            lastName?: string;
             /** Phone */
             phone?: string | null;
             /** Address */
@@ -325,12 +331,6 @@ export interface components {
             link?: string | null;
             /** Type */
             type?: string;
-            /** Firstname */
-            firstName?: string;
-            /** Middlename */
-            middleName?: string | null;
-            /** Lastname */
-            lastName?: string;
             organization?: components["schemas"]["OrganizationPatchBody"] | null;
         };
         /** OrganizationPatchBody */
@@ -417,6 +417,12 @@ export interface components {
         };
         /** ProviderSignupPostBody */
         ProviderSignupPostBody: {
+            /** Firstname */
+            firstName?: string;
+            /** Middlename */
+            middleName?: string | null;
+            /** Lastname */
+            lastName?: string;
             /** Phone */
             phone?: string | null;
             /** Address */
@@ -425,12 +431,6 @@ export interface components {
             link?: string | null;
             /** Type */
             type?: string;
-            /** Firstname */
-            firstName?: string;
-            /** Middlename */
-            middleName?: string | null;
-            /** Lastname */
-            lastName?: string;
             organization: components["schemas"]["OrganizationPostBody"] | null;
             /**
              * Email
@@ -447,7 +447,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    iam_views_account_get_account: {
+    interfaces_auth_views_account_get_account: {
         parameters: {
             query?: never;
             header?: never;
@@ -478,7 +478,7 @@ export interface operations {
             };
         };
     };
-    iam_views_account_create_account: {
+    interfaces_auth_views_account_create_account: {
         parameters: {
             query?: never;
             header?: never;
@@ -549,7 +549,7 @@ export interface operations {
             };
         };
     };
-    iam_views_account_delete_account: {
+    interfaces_auth_views_account_delete_account: {
         parameters: {
             query?: never;
             header?: never;
@@ -578,7 +578,7 @@ export interface operations {
             };
         };
     };
-    iam_views_account_update_account: {
+    interfaces_auth_views_account_update_account: {
         parameters: {
             query?: never;
             header?: never;
@@ -622,7 +622,7 @@ export interface operations {
             };
         };
     };
-    iam_views_account_get_user_types: {
+    interfaces_auth_views_account_get_user_types: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -649,7 +649,7 @@ export interface operations {
             };
         };
     };
-    iam_views_account_get_user_types: {
+    interfaces_auth_views_account_get_user_types: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -676,7 +676,7 @@ export interface operations {
             };
         };
     };
-    iam_views_email_send_verification_email: {
+    interfaces_auth_views_email_send_verification_email: {
         parameters: {
             query?: never;
             header?: never;
@@ -711,7 +711,7 @@ export interface operations {
             };
         };
     };
-    iam_views_email_verify_email: {
+    interfaces_auth_views_email_verify_email: {
         parameters: {
             query?: never;
             header?: never;
@@ -764,7 +764,7 @@ export interface operations {
             };
         };
     };
-    iam_views_password_request_password_reset: {
+    interfaces_auth_views_password_request_password_reset: {
         parameters: {
             query?: never;
             header?: never;
@@ -799,7 +799,7 @@ export interface operations {
             };
         };
     };
-    iam_views_password_reset_password: {
+    interfaces_auth_views_password_reset_password: {
         parameters: {
             query?: never;
             header?: never;
@@ -843,7 +843,7 @@ export interface operations {
             };
         };
     };
-    iam_views_session_get_session: {
+    interfaces_auth_views_session_get_session: {
         parameters: {
             query?: never;
             header?: never;
@@ -883,7 +883,7 @@ export interface operations {
             };
         };
     };
-    iam_views_session_create_session: {
+    interfaces_auth_views_session_create_session: {
         parameters: {
             query?: never;
             header?: never;
@@ -936,7 +936,7 @@ export interface operations {
             };
         };
     };
-    iam_views_session_delete_session: {
+    interfaces_auth_views_session_delete_session: {
         parameters: {
             query?: never;
             header?: never;
@@ -976,7 +976,7 @@ export interface operations {
             };
         };
     };
-    iam_views_provider_get_providers: {
+    interfaces_auth_views_provider_get_providers: {
         parameters: {
             query?: never;
             header?: never;
@@ -998,7 +998,7 @@ export interface operations {
             };
         };
     };
-    iam_views_provider_delete_provider: {
+    interfaces_auth_views_provider_delete_provider: {
         parameters: {
             query?: never;
             header?: never;
@@ -1020,7 +1020,7 @@ export interface operations {
             };
         };
     };
-    iam_views_provider_redirect_to_provider: {
+    interfaces_auth_views_provider_redirect_to_provider: {
         parameters: {
             query?: never;
             header?: never;
@@ -1054,7 +1054,7 @@ export interface operations {
             };
         };
     };
-    iam_views_provider_provider_signup: {
+    interfaces_auth_views_provider_provider_signup: {
         parameters: {
             query?: never;
             header?: never;

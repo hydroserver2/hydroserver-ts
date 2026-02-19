@@ -61,14 +61,14 @@ export interface ExpressionDataTransformation {
   expression: string
 }
 
-export interface LookupTableDataTransformation {
-  lookupTableId: string
-  type: 'lookup'
+export interface RatingCurveDataTransformation {
+  ratingCurveUrl: string
+  type: 'rating_curve'
 }
 
 export type DataTransformation =
   | ExpressionDataTransformation
-  | LookupTableDataTransformation
+  | RatingCurveDataTransformation
 
 export interface MappingPath {
   targetIdentifier: string | number

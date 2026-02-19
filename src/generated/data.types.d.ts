@@ -15,13 +15,13 @@ export interface paths {
          * Get Workspaces
          * @description Get public workspaces and workspaces associated with the authenticated user.
          */
-        get: operations["iam_views_workspace_get_workspaces"];
+        get: operations["interfaces_api_views_workspace_get_workspaces"];
         put?: never;
         /**
          * Create Workspace
          * @description Create a new workspace owned by the authenticated user.
          */
-        post: operations["iam_views_workspace_create_workspace"];
+        post: operations["interfaces_api_views_workspace_create_workspace"];
         delete?: never;
         options?: never;
         head?: never;
@@ -39,21 +39,21 @@ export interface paths {
          * Get Workspace
          * @description Get workspace details.
          */
-        get: operations["iam_views_workspace_get_workspace"];
+        get: operations["interfaces_api_views_workspace_get_workspace"];
         put?: never;
         post?: never;
         /**
          * Delete Workspace
          * @description Delete a workspace owned by the authenticated user.
          */
-        delete: operations["iam_views_workspace_delete_workspace"];
+        delete: operations["interfaces_api_views_workspace_delete_workspace"];
         options?: never;
         head?: never;
         /**
          * Update Workspace
          * @description Update a workspace owned by the authenticated user.
          */
-        patch: operations["iam_views_workspace_update_workspace"];
+        patch: operations["interfaces_api_views_workspace_update_workspace"];
         trace?: never;
     };
     "/api/data/workspaces/{workspace_id}/transfer": {
@@ -68,17 +68,17 @@ export interface paths {
          * Accept Workspace Transfer
          * @description Accept a pending workspace transfer.
          */
-        put: operations["iam_views_workspace_accept_workspace_transfer"];
+        put: operations["interfaces_api_views_workspace_accept_workspace_transfer"];
         /**
          * Transfer Workspace
          * @description Transfer a workspace owned by the authenticated user to another HydroServer user.
          */
-        post: operations["iam_views_workspace_transfer_workspace"];
+        post: operations["interfaces_api_views_workspace_transfer_workspace"];
         /**
          * Reject Workspace Transfer
          * @description Reject a pending workspace transfer.
          */
-        delete: operations["iam_views_workspace_reject_workspace_transfer"];
+        delete: operations["interfaces_api_views_workspace_reject_workspace_transfer"];
         options?: never;
         head?: never;
         patch?: never;
@@ -95,22 +95,22 @@ export interface paths {
          * Get Collaborators
          * @description Get all collaborators associated with a workspace.
          */
-        get: operations["iam_views_collaborator_get_collaborators"];
+        get: operations["interfaces_api_views_collaborator_get_collaborators"];
         /**
          * Edit Collaborator Role
          * @description Edit a collaborator's role in a workspace.
          */
-        put: operations["iam_views_collaborator_edit_collaborator_role"];
+        put: operations["interfaces_api_views_collaborator_edit_collaborator_role"];
         /**
          * Add Collaborator
          * @description Add a collaborator to a workspace.
          */
-        post: operations["iam_views_collaborator_add_collaborator"];
+        post: operations["interfaces_api_views_collaborator_add_collaborator"];
         /**
          * Remove Collaborator
          * @description Remove a collaborator from a workspace.
          */
-        delete: operations["iam_views_collaborator_remove_collaborator"];
+        delete: operations["interfaces_api_views_collaborator_remove_collaborator"];
         options?: never;
         head?: never;
         patch?: never;
@@ -127,13 +127,13 @@ export interface paths {
          * Get Api Keys
          * @description Get API keys associated with the authenticated user.
          */
-        get: operations["iam_views_api_key_get_api_keys"];
+        get: operations["interfaces_api_views_api_key_get_api_keys"];
         put?: never;
         /**
          * Create Api Key
          * @description Create a new API key for the workspace.
          */
-        post: operations["iam_views_api_key_create_api_key"];
+        post: operations["interfaces_api_views_api_key_create_api_key"];
         delete?: never;
         options?: never;
         head?: never;
@@ -151,21 +151,21 @@ export interface paths {
          * Get Api Key
          * @description Get API key details.
          */
-        get: operations["iam_views_api_key_get_api_key"];
+        get: operations["interfaces_api_views_api_key_get_api_key"];
         put?: never;
         post?: never;
         /**
          * Delete Api Key
          * @description Delete an API key.
          */
-        delete: operations["iam_views_api_key_delete_api_key"];
+        delete: operations["interfaces_api_views_api_key_delete_api_key"];
         options?: never;
         head?: never;
         /**
          * Update Api Key
          * @description Update an API key.
          */
-        patch: operations["iam_views_api_key_update_api_key"];
+        patch: operations["interfaces_api_views_api_key_update_api_key"];
         trace?: never;
     };
     "/api/data/workspaces/{workspace_id}/api-keys/{api_key_id}/regenerate": {
@@ -180,7 +180,75 @@ export interface paths {
          * Regenerate Api Key
          * @description Regenerate an API key using existing settings.
          */
-        put: operations["iam_views_api_key_regenerate_api_key"];
+        put: operations["interfaces_api_views_api_key_regenerate_api_key"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/data/workspaces/{workspace_id}/file-attachments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Workspace File Attachments
+         * @description Get file attachments associated with a workspace.
+         */
+        get: operations["interfaces_api_views_workspace_file_attachment_get_workspace_file_attachments"];
+        put?: never;
+        /**
+         * Add Workspace File Attachment
+         * @description Add a file attachment to a workspace.
+         */
+        post: operations["interfaces_api_views_workspace_file_attachment_add_workspace_file_attachment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/data/workspaces/{workspace_id}/file-attachments/{file_attachment_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Remove Workspace File Attachment
+         * @description Remove a file attachment from a workspace.
+         */
+        delete: operations["interfaces_api_views_workspace_file_attachment_remove_workspace_file_attachment"];
+        options?: never;
+        head?: never;
+        /**
+         * Update Workspace File Attachment
+         * @description Update a workspace file attachment's metadata.
+         */
+        patch: operations["interfaces_api_views_workspace_file_attachment_update_workspace_file_attachment"];
+        trace?: never;
+    };
+    "/api/data/workspaces/{workspace_id}/file-attachments/{file_attachment_id}/download": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Workspace File Attachment Download
+         * @description Download a workspace file attachment.
+         */
+        get: operations["interfaces_api_views_workspace_file_attachment_get_workspace_file_attachment_download"];
+        put?: never;
         post?: never;
         delete?: never;
         options?: never;
@@ -199,7 +267,7 @@ export interface paths {
          * Get Roles
          * @description Get public Roles and Roles associated with the authenticated user.
          */
-        get: operations["iam_views_role_get_roles"];
+        get: operations["interfaces_api_views_role_get_roles"];
         put?: never;
         post?: never;
         delete?: never;
@@ -219,7 +287,7 @@ export interface paths {
          * Get Role
          * @description Get a Role.
          */
-        get: operations["iam_views_role_get_role"];
+        get: operations["interfaces_api_views_role_get_role"];
         put?: never;
         post?: never;
         delete?: never;
@@ -239,13 +307,13 @@ export interface paths {
          * Get Things
          * @description Get public Things and Things associated with the authenticated user.
          */
-        get: operations["sta_views_thing_get_things"];
+        get: operations["interfaces_api_views_thing_get_things"];
         put?: never;
         /**
          * Create Thing
          * @description Create a new Thing.
          */
-        post: operations["sta_views_thing_create_thing"];
+        post: operations["interfaces_api_views_thing_create_thing"];
         delete?: never;
         options?: never;
         head?: never;
@@ -263,7 +331,7 @@ export interface paths {
          * Get Thing Tag Keys
          * @description Get all existing unique thing tag keys.
          */
-        get: operations["sta_views_thing_get_thing_tag_keys"];
+        get: operations["interfaces_api_views_thing_get_thing_tag_keys"];
         put?: never;
         post?: never;
         delete?: never;
@@ -283,7 +351,7 @@ export interface paths {
          * Get Site Types
          * @description Get site types.
          */
-        get: operations["sta_views_thing_get_site_types"];
+        get: operations["interfaces_api_views_thing_get_site_types"];
         put?: never;
         post?: never;
         delete?: never;
@@ -303,7 +371,7 @@ export interface paths {
          * Get Sampling Feature Types
          * @description Get sampling feature types.
          */
-        get: operations["sta_views_thing_get_sampling_feature_types"];
+        get: operations["interfaces_api_views_thing_get_sampling_feature_types"];
         put?: never;
         post?: never;
         delete?: never;
@@ -323,7 +391,7 @@ export interface paths {
          * Get File Attachment Types
          * @description Get file attachment types.
          */
-        get: operations["sta_views_thing_get_file_attachment_types"];
+        get: operations["interfaces_api_views_thing_get_file_attachment_types"];
         put?: never;
         post?: never;
         delete?: never;
@@ -343,21 +411,21 @@ export interface paths {
          * Get Thing
          * @description Get a Thing.
          */
-        get: operations["sta_views_thing_get_thing"];
+        get: operations["interfaces_api_views_thing_get_thing"];
         put?: never;
         post?: never;
         /**
          * Delete Thing
          * @description Delete a Thing.
          */
-        delete: operations["sta_views_thing_delete_thing"];
+        delete: operations["interfaces_api_views_thing_delete_thing"];
         options?: never;
         head?: never;
         /**
          * Update Thing
          * @description Update a Thing.
          */
-        patch: operations["sta_views_thing_update_thing"];
+        patch: operations["interfaces_api_views_thing_update_thing"];
         trace?: never;
     };
     "/api/data/things/{thing_id}/tags": {
@@ -371,22 +439,22 @@ export interface paths {
          * Get Thing Tags
          * @description Get all tags associated with a Thing.
          */
-        get: operations["sta_views_thing_get_thing_tags"];
+        get: operations["interfaces_api_views_thing_get_thing_tags"];
         /**
          * Edit Thing Tag
          * @description Edit a tag of a Thing.
          */
-        put: operations["sta_views_thing_edit_thing_tag"];
+        put: operations["interfaces_api_views_thing_edit_thing_tag"];
         /**
          * Add Thing Tag
          * @description Add a tag to a Thing.
          */
-        post: operations["sta_views_thing_add_thing_tag"];
+        post: operations["interfaces_api_views_thing_add_thing_tag"];
         /**
          * Remove Thing Tag
          * @description Remove a tag from a Thing.
          */
-        delete: operations["sta_views_thing_remove_thing_tag"];
+        delete: operations["interfaces_api_views_thing_remove_thing_tag"];
         options?: never;
         head?: never;
         patch?: never;
@@ -403,18 +471,18 @@ export interface paths {
          * Get Thing File Attachments
          * @description Get all file attachments associated with a Thing.
          */
-        get: operations["sta_views_thing_get_thing_file_attachments"];
+        get: operations["interfaces_api_views_thing_get_thing_file_attachments"];
         put?: never;
         /**
          * Add Thing File Attachment
          * @description Add a file attachment to a thing.
          */
-        post: operations["sta_views_thing_add_thing_file_attachment"];
+        post: operations["interfaces_api_views_thing_add_thing_file_attachment"];
         /**
          * Remove Thing File Attachment
          * @description Remove a file attachment from a thing.
          */
-        delete: operations["sta_views_thing_remove_thing_file_attachment"];
+        delete: operations["interfaces_api_views_thing_remove_thing_file_attachment"];
         options?: never;
         head?: never;
         patch?: never;
@@ -431,13 +499,13 @@ export interface paths {
          * Get Datastreams
          * @description Get public Datastreams and Datastreams associated with the authenticated user.
          */
-        get: operations["sta_views_datastream_get_datastreams"];
+        get: operations["interfaces_api_views_datastream_get_datastreams"];
         put?: never;
         /**
          * Create Datastream
          * @description Create a new Datastream.
          */
-        post: operations["sta_views_datastream_create_datastream"];
+        post: operations["interfaces_api_views_datastream_create_datastream"];
         delete?: never;
         options?: never;
         head?: never;
@@ -455,7 +523,7 @@ export interface paths {
          * Get Datastream Tag Keys
          * @description Get all existing unique datastream tag keys.
          */
-        get: operations["sta_views_datastream_get_datastream_tag_keys"];
+        get: operations["interfaces_api_views_datastream_get_datastream_tag_keys"];
         put?: never;
         post?: never;
         delete?: never;
@@ -475,7 +543,7 @@ export interface paths {
          * Get Datastream Aggregation Statistics
          * @description Get datastream aggregation statistics.
          */
-        get: operations["sta_views_datastream_get_datastream_aggregation_statistics"];
+        get: operations["interfaces_api_views_datastream_get_datastream_aggregation_statistics"];
         put?: never;
         post?: never;
         delete?: never;
@@ -495,7 +563,7 @@ export interface paths {
          * Get Datastream Statuses
          * @description Get datastream statuses.
          */
-        get: operations["sta_views_datastream_get_datastream_statuses"];
+        get: operations["interfaces_api_views_datastream_get_datastream_statuses"];
         put?: never;
         post?: never;
         delete?: never;
@@ -515,7 +583,7 @@ export interface paths {
          * Get Datastream Sampled Mediums
          * @description Get datastream sampled mediums.
          */
-        get: operations["sta_views_datastream_get_datastream_sampled_mediums"];
+        get: operations["interfaces_api_views_datastream_get_datastream_sampled_mediums"];
         put?: never;
         post?: never;
         delete?: never;
@@ -535,7 +603,7 @@ export interface paths {
          * Get File Attachment Types
          * @description Get file attachment types.
          */
-        get: operations["sta_views_datastream_get_file_attachment_types"];
+        get: operations["interfaces_api_views_datastream_get_file_attachment_types"];
         put?: never;
         post?: never;
         delete?: never;
@@ -555,21 +623,21 @@ export interface paths {
          * Get Datastream
          * @description Get a Datastream.
          */
-        get: operations["sta_views_datastream_get_datastream"];
+        get: operations["interfaces_api_views_datastream_get_datastream"];
         put?: never;
         post?: never;
         /**
          * Delete Datastream
          * @description Delete a Datastream.
          */
-        delete: operations["sta_views_datastream_delete_datastream"];
+        delete: operations["interfaces_api_views_datastream_delete_datastream"];
         options?: never;
         head?: never;
         /**
          * Update Datastream
          * @description Update a Datastream.
          */
-        patch: operations["sta_views_datastream_update_datastream"];
+        patch: operations["interfaces_api_views_datastream_update_datastream"];
         trace?: never;
     };
     "/api/data/datastreams/{datastream_id}/tags": {
@@ -583,22 +651,22 @@ export interface paths {
          * Get Datastream Tags
          * @description Get all tags associated with a Datastream.
          */
-        get: operations["sta_views_datastream_get_datastream_tags"];
+        get: operations["interfaces_api_views_datastream_get_datastream_tags"];
         /**
          * Edit Datastream Tag
          * @description Edit a tag of a Datastream.
          */
-        put: operations["sta_views_datastream_edit_datastream_tag"];
+        put: operations["interfaces_api_views_datastream_edit_datastream_tag"];
         /**
          * Add Datastream Tag
          * @description Add a tag to a Datastream.
          */
-        post: operations["sta_views_datastream_add_datastream_tag"];
+        post: operations["interfaces_api_views_datastream_add_datastream_tag"];
         /**
          * Remove Datastream Tag
          * @description Remove a tag from a Datastream.
          */
-        delete: operations["sta_views_datastream_remove_datastream_tag"];
+        delete: operations["interfaces_api_views_datastream_remove_datastream_tag"];
         options?: never;
         head?: never;
         patch?: never;
@@ -615,18 +683,18 @@ export interface paths {
          * Get Datastream File Attachments
          * @description Get all file attachments associated with a Datastream.
          */
-        get: operations["sta_views_datastream_get_datastream_file_attachments"];
+        get: operations["interfaces_api_views_datastream_get_datastream_file_attachments"];
         put?: never;
         /**
          * Add Datastream File Attachment
          * @description Add a file attachment to a datastream.
          */
-        post: operations["sta_views_datastream_add_datastream_file_attachment"];
+        post: operations["interfaces_api_views_datastream_add_datastream_file_attachment"];
         /**
          * Remove Datastream File Attachment
          * @description Remove a file attachment from a datastream.
          */
-        delete: operations["sta_views_datastream_remove_datastream_file_attachment"];
+        delete: operations["interfaces_api_views_datastream_remove_datastream_file_attachment"];
         options?: never;
         head?: never;
         patch?: never;
@@ -643,7 +711,7 @@ export interface paths {
          * Get Datastream Csv
          * @description Get a CSV representation of the Datastream.
          */
-        get: operations["sta_views_datastream_get_datastream_csv"];
+        get: operations["interfaces_api_views_datastream_get_datastream_csv"];
         put?: never;
         post?: never;
         delete?: never;
@@ -663,13 +731,13 @@ export interface paths {
          * Get Observations
          * @description Get Datastream Observations.
          */
-        get: operations["sta_views_observation_get_observations"];
+        get: operations["interfaces_api_views_observation_get_observations"];
         put?: never;
         /**
          * Create Observation
          * @description Create a new Observation.
          */
-        post: operations["sta_views_observation_create_observation"];
+        post: operations["interfaces_api_views_observation_create_observation"];
         delete?: never;
         options?: never;
         head?: never;
@@ -689,7 +757,7 @@ export interface paths {
          * Insert Observations
          * @description Insert Datastream Observations.
          */
-        post: operations["sta_views_observation_insert_observations"];
+        post: operations["interfaces_api_views_observation_insert_observations"];
         delete?: never;
         options?: never;
         head?: never;
@@ -709,7 +777,7 @@ export interface paths {
          * Delete Observations
          * @description Delete Datastream Observations between the given phenomenon start and end times.
          */
-        post: operations["sta_views_observation_delete_observations"];
+        post: operations["interfaces_api_views_observation_delete_observations"];
         delete?: never;
         options?: never;
         head?: never;
@@ -727,14 +795,14 @@ export interface paths {
          * Get Observation
          * @description Get an Observation.
          */
-        get: operations["sta_views_observation_get_observation"];
+        get: operations["interfaces_api_views_observation_get_observation"];
         put?: never;
         post?: never;
         /**
          * Delete Observation
          * @description Delete an Observation.
          */
-        delete: operations["sta_views_observation_delete_observation"];
+        delete: operations["interfaces_api_views_observation_delete_observation"];
         options?: never;
         head?: never;
         patch?: never;
@@ -751,13 +819,13 @@ export interface paths {
          * Get Observed Properties
          * @description Get public Observed Properties and Observed Properties associated with the authenticated user.
          */
-        get: operations["sta_views_observed_property_get_observed_properties"];
+        get: operations["interfaces_api_views_observed_property_get_observed_properties"];
         put?: never;
         /**
          * Create Observed Property
          * @description Create a new Observed Property.
          */
-        post: operations["sta_views_observed_property_create_observed_property"];
+        post: operations["interfaces_api_views_observed_property_create_observed_property"];
         delete?: never;
         options?: never;
         head?: never;
@@ -775,7 +843,7 @@ export interface paths {
          * Get Datastream Aggregation Statistics
          * @description Get variable types.
          */
-        get: operations["sta_views_observed_property_get_datastream_aggregation_statistics"];
+        get: operations["interfaces_api_views_observed_property_get_datastream_aggregation_statistics"];
         put?: never;
         post?: never;
         delete?: never;
@@ -795,21 +863,21 @@ export interface paths {
          * Get Observed Property
          * @description Get an Observed Property.
          */
-        get: operations["sta_views_observed_property_get_observed_property"];
+        get: operations["interfaces_api_views_observed_property_get_observed_property"];
         put?: never;
         post?: never;
         /**
          * Delete Observed Property
          * @description Delete an Observed Property.
          */
-        delete: operations["sta_views_observed_property_delete_observed_property"];
+        delete: operations["interfaces_api_views_observed_property_delete_observed_property"];
         options?: never;
         head?: never;
         /**
          * Update Observed Property
          * @description Update an Observed Property.
          */
-        patch: operations["sta_views_observed_property_update_observed_property"];
+        patch: operations["interfaces_api_views_observed_property_update_observed_property"];
         trace?: never;
     };
     "/api/data/units": {
@@ -823,13 +891,13 @@ export interface paths {
          * Get Units
          * @description Get public Units and Units associated with the authenticated user.
          */
-        get: operations["sta_views_unit_get_units"];
+        get: operations["interfaces_api_views_unit_get_units"];
         put?: never;
         /**
          * Create Unit
          * @description Create a new Unit.
          */
-        post: operations["sta_views_unit_create_unit"];
+        post: operations["interfaces_api_views_unit_create_unit"];
         delete?: never;
         options?: never;
         head?: never;
@@ -847,7 +915,7 @@ export interface paths {
          * Get Unit Types
          * @description Get unit types.
          */
-        get: operations["sta_views_unit_get_unit_types"];
+        get: operations["interfaces_api_views_unit_get_unit_types"];
         put?: never;
         post?: never;
         delete?: never;
@@ -867,21 +935,21 @@ export interface paths {
          * Get Unit
          * @description Get a Unit.
          */
-        get: operations["sta_views_unit_get_unit"];
+        get: operations["interfaces_api_views_unit_get_unit"];
         put?: never;
         post?: never;
         /**
          * Delete Unit
          * @description Delete a Unit.
          */
-        delete: operations["sta_views_unit_delete_unit"];
+        delete: operations["interfaces_api_views_unit_delete_unit"];
         options?: never;
         head?: never;
         /**
          * Update Unit
          * @description Update a Unit.
          */
-        patch: operations["sta_views_unit_update_unit"];
+        patch: operations["interfaces_api_views_unit_update_unit"];
         trace?: never;
     };
     "/api/data/sensors": {
@@ -895,13 +963,13 @@ export interface paths {
          * Get Sensors
          * @description Get public Sensors and Sensors associated with the authenticated user.
          */
-        get: operations["sta_views_sensor_get_sensors"];
+        get: operations["interfaces_api_views_sensor_get_sensors"];
         put?: never;
         /**
          * Create Sensor
          * @description Create a new Sensor.
          */
-        post: operations["sta_views_sensor_create_sensor"];
+        post: operations["interfaces_api_views_sensor_create_sensor"];
         delete?: never;
         options?: never;
         head?: never;
@@ -919,7 +987,7 @@ export interface paths {
          * Get Sensor Encoding Types
          * @description Get sensor encoding types.
          */
-        get: operations["sta_views_sensor_get_sensor_encoding_types"];
+        get: operations["interfaces_api_views_sensor_get_sensor_encoding_types"];
         put?: never;
         post?: never;
         delete?: never;
@@ -939,7 +1007,7 @@ export interface paths {
          * Get Method Types
          * @description Get method types.
          */
-        get: operations["sta_views_sensor_get_method_types"];
+        get: operations["interfaces_api_views_sensor_get_method_types"];
         put?: never;
         post?: never;
         delete?: never;
@@ -959,21 +1027,21 @@ export interface paths {
          * Get Sensor
          * @description Get a Sensor.
          */
-        get: operations["sta_views_sensor_get_sensor"];
+        get: operations["interfaces_api_views_sensor_get_sensor"];
         put?: never;
         post?: never;
         /**
          * Delete Sensor
          * @description Delete a Sensor.
          */
-        delete: operations["sta_views_sensor_delete_sensor"];
+        delete: operations["interfaces_api_views_sensor_delete_sensor"];
         options?: never;
         head?: never;
         /**
          * Update Sensor
          * @description Update a Sensor.
          */
-        patch: operations["sta_views_sensor_update_sensor"];
+        patch: operations["interfaces_api_views_sensor_update_sensor"];
         trace?: never;
     };
     "/api/data/processing-levels": {
@@ -987,13 +1055,13 @@ export interface paths {
          * Get Processing Levels
          * @description Get public Processing Levels and Processing Levels associated with the authenticated user.
          */
-        get: operations["sta_views_processing_level_get_processing_levels"];
+        get: operations["interfaces_api_views_processing_level_get_processing_levels"];
         put?: never;
         /**
          * Create Processing Level
          * @description Create a new Processing Level.
          */
-        post: operations["sta_views_processing_level_create_processing_level"];
+        post: operations["interfaces_api_views_processing_level_create_processing_level"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1011,21 +1079,21 @@ export interface paths {
          * Get Processing Level
          * @description Get a Processing Level.
          */
-        get: operations["sta_views_processing_level_get_processing_level"];
+        get: operations["interfaces_api_views_processing_level_get_processing_level"];
         put?: never;
         post?: never;
         /**
          * Delete Processing Level
          * @description Delete a Processing Level.
          */
-        delete: operations["sta_views_processing_level_delete_processing_level"];
+        delete: operations["interfaces_api_views_processing_level_delete_processing_level"];
         options?: never;
         head?: never;
         /**
          * Update Processing Level
          * @description Update a Processing Level.
          */
-        patch: operations["sta_views_processing_level_update_processing_level"];
+        patch: operations["interfaces_api_views_processing_level_update_processing_level"];
         trace?: never;
     };
     "/api/data/result-qualifiers": {
@@ -1039,13 +1107,13 @@ export interface paths {
          * Get Result Qualifiers
          * @description Get public Result Qualifiers and Result Qualifiers associated with the authenticated user.
          */
-        get: operations["sta_views_result_qualifier_get_result_qualifiers"];
+        get: operations["interfaces_api_views_result_qualifier_get_result_qualifiers"];
         put?: never;
         /**
          * Create Result Qualifier
          * @description Create a new Result Qualifier.
          */
-        post: operations["sta_views_result_qualifier_create_result_qualifier"];
+        post: operations["interfaces_api_views_result_qualifier_create_result_qualifier"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1063,21 +1131,21 @@ export interface paths {
          * Get Result Qualifier
          * @description Get a Result Qualifier.
          */
-        get: operations["sta_views_result_qualifier_get_result_qualifier"];
+        get: operations["interfaces_api_views_result_qualifier_get_result_qualifier"];
         put?: never;
         post?: never;
         /**
          * Delete Result Qualifier
          * @description Delete a Result Qualifier.
          */
-        delete: operations["sta_views_result_qualifier_delete_result_qualifier"];
+        delete: operations["interfaces_api_views_result_qualifier_delete_result_qualifier"];
         options?: never;
         head?: never;
         /**
          * Update Result Qualifier
          * @description Update a Result Qualifier.
          */
-        patch: operations["sta_views_result_qualifier_update_result_qualifier"];
+        patch: operations["interfaces_api_views_result_qualifier_update_result_qualifier"];
         trace?: never;
     };
     "/api/data/etl-data-connections": {
@@ -1091,13 +1159,13 @@ export interface paths {
          * Get Data Connections
          * @description Get ETL Data Connections associated with the authenticated user.
          */
-        get: operations["etl_views_data_connection_get_data_connections"];
+        get: operations["interfaces_api_views_data_connection_get_data_connections"];
         put?: never;
         /**
          * Create Data Connection
          * @description Create a new ETL Data Connection.
          */
-        post: operations["etl_views_data_connection_create_data_connection"];
+        post: operations["interfaces_api_views_data_connection_create_data_connection"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1115,21 +1183,21 @@ export interface paths {
          * Get Data Connection
          * @description Get an ETL Data Connection.
          */
-        get: operations["etl_views_data_connection_get_data_connection"];
+        get: operations["interfaces_api_views_data_connection_get_data_connection"];
         put?: never;
         post?: never;
         /**
          * Delete Data Connection
          * @description Delete an ETL Data Connection.
          */
-        delete: operations["etl_views_data_connection_delete_data_connection"];
+        delete: operations["interfaces_api_views_data_connection_delete_data_connection"];
         options?: never;
         head?: never;
         /**
          * Update Data Connection
          * @description Update a ETL Data Connection.
          */
-        patch: operations["etl_views_data_connection_update_data_connection"];
+        patch: operations["interfaces_api_views_data_connection_update_data_connection"];
         trace?: never;
     };
     "/api/data/etl-tasks": {
@@ -1143,13 +1211,13 @@ export interface paths {
          * Get Tasks
          * @description Get ETL Tasks associated with the authenticated user.
          */
-        get: operations["etl_views_task_get_tasks"];
+        get: operations["interfaces_api_views_task_get_tasks"];
         put?: never;
         /**
          * Create Task
          * @description Create a new ETL Task.
          */
-        post: operations["etl_views_task_create_task"];
+        post: operations["interfaces_api_views_task_create_task"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1167,25 +1235,25 @@ export interface paths {
          * Get Task
          * @description Get an ETL Task.
          */
-        get: operations["etl_views_task_get_task"];
+        get: operations["interfaces_api_views_task_get_task"];
         put?: never;
         /**
          * Run Task
          * @description Run an ETL Task.
          */
-        post: operations["etl_views_task_run_task"];
+        post: operations["interfaces_api_views_task_run_task"];
         /**
          * Delete Task
          * @description Delete an ETL Task.
          */
-        delete: operations["etl_views_task_delete_task"];
+        delete: operations["interfaces_api_views_task_delete_task"];
         options?: never;
         head?: never;
         /**
          * Update Task
          * @description Update an ETL Task.
          */
-        patch: operations["etl_views_task_update_task"];
+        patch: operations["interfaces_api_views_task_update_task"];
         trace?: never;
     };
     "/api/data/etl-tasks/{task_id}/runs": {
@@ -1199,13 +1267,13 @@ export interface paths {
          * Get Task Runs
          * @description Get all runs for an ETL Task.
          */
-        get: operations["etl_views_run_get_task_runs"];
+        get: operations["interfaces_api_views_run_get_task_runs"];
         put?: never;
         /**
          * Create Task Run
          * @description Create a new ETL Task run.
          */
-        post: operations["etl_views_run_create_task_run"];
+        post: operations["interfaces_api_views_run_create_task_run"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1223,21 +1291,21 @@ export interface paths {
          * Get Task Run
          * @description Get an ETL Task Run.
          */
-        get: operations["etl_views_run_get_task_run"];
+        get: operations["interfaces_api_views_run_get_task_run"];
         put?: never;
         post?: never;
         /**
          * Delete Task Run
          * @description Delete an ETL Task run.
          */
-        delete: operations["etl_views_run_delete_task_run"];
+        delete: operations["interfaces_api_views_run_delete_task_run"];
         options?: never;
         head?: never;
         /**
          * Update Task Run
          * @description Update an ETL Task run.
          */
-        patch: operations["etl_views_run_update_task_run"];
+        patch: operations["interfaces_api_views_run_update_task_run"];
         trace?: never;
     };
     "/api/data/etl-orchestration-systems": {
@@ -1251,13 +1319,13 @@ export interface paths {
          * Get Orchestration Systems
          * @description Get public Orchestration Systems and Orchestration Systems associated with the authenticated user.
          */
-        get: operations["etl_views_orchestration_system_get_orchestration_systems"];
+        get: operations["interfaces_api_views_orchestration_system_get_orchestration_systems"];
         put?: never;
         /**
          * Create Orchestration System
          * @description Create a new Orchestration System.
          */
-        post: operations["etl_views_orchestration_system_create_orchestration_system"];
+        post: operations["interfaces_api_views_orchestration_system_create_orchestration_system"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1275,21 +1343,21 @@ export interface paths {
          * Get Orchestration System
          * @description Get an Orchestration System.
          */
-        get: operations["etl_views_orchestration_system_get_orchestration_system"];
+        get: operations["interfaces_api_views_orchestration_system_get_orchestration_system"];
         put?: never;
         post?: never;
         /**
          * Delete Orchestration System
          * @description Delete an ETL Orchestration System.
          */
-        delete: operations["etl_views_orchestration_system_delete_orchestration_system"];
+        delete: operations["interfaces_api_views_orchestration_system_delete_orchestration_system"];
         options?: never;
         head?: never;
         /**
          * Update Orchestration System
          * @description Update an Orchestration System.
          */
-        patch: operations["etl_views_orchestration_system_update_orchestration_system"];
+        patch: operations["interfaces_api_views_orchestration_system_update_orchestration_system"];
         trace?: never;
     };
 }
@@ -1656,6 +1724,64 @@ export interface components {
             expiresAt?: string | null;
             /** Roleid */
             roleId?: string | null;
+        };
+        /** WorkspaceFileAttachmentQueryParameters */
+        WorkspaceFileAttachmentQueryParameters: {
+            /**
+             * Page
+             * @description Page number (1-based).
+             */
+            page?: number | null;
+            /**
+             * Page Size
+             * @description The number of items per page.
+             */
+            page_size?: number | null;
+            /**
+             * Type
+             * @description Filter by file attachment type.
+             * @default []
+             */
+            type: string[];
+        };
+        /** WorkspaceFileAttachmentGetResponse */
+        WorkspaceFileAttachmentGetResponse: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Type */
+            type: string;
+            /** Name */
+            name: string;
+            /** Description */
+            description: string;
+            /** Contenttype */
+            contentType: string;
+            /** Sizebytes */
+            sizeBytes: number;
+            /** Link */
+            link: string;
+            /**
+             * Createdat
+             * Format: date-time
+             */
+            createdAt: string;
+            /**
+             * Updatedat
+             * Format: date-time
+             */
+            updatedAt: string;
+        };
+        /** WorkspaceFileAttachmentPatchBody */
+        WorkspaceFileAttachmentPatchBody: {
+            /** Type */
+            type?: string | null;
+            /** Name */
+            name?: string | null;
+            /** Description */
+            description?: string | null;
         };
         /** RoleQueryParameters */
         RoleQueryParameters: {
@@ -2061,6 +2187,12 @@ export interface components {
              */
             result_type: string[];
             /**
+             * Tag
+             * @description Filter datastreams by tag. Format tag filters as {key}:{value}
+             * @default []
+             */
+            tag: string[];
+            /**
              * Is Private
              * @description Controls whether the datastreams should be private or public.
              */
@@ -2316,7 +2448,7 @@ export interface components {
              * Encodingtype
              * @enum {string}
              */
-            encodingType: "application/pdf" | "http://www.opengis.net/doc/IS/SensorML/2.0" | "text/html" | "application/json";
+            encodingType: "application/pdf" | "http://www.opengis.net/doc/IS/SensorML/2.0" | "text/html" | "text/plain" | "application/json";
             /** Manufacturer */
             manufacturer?: string | null;
             /** Model */
@@ -2882,7 +3014,7 @@ export interface components {
              * Encodingtype
              * @enum {string}
              */
-            encodingType: "application/pdf" | "http://www.opengis.net/doc/IS/SensorML/2.0" | "text/html" | "application/json";
+            encodingType: "application/pdf" | "http://www.opengis.net/doc/IS/SensorML/2.0" | "text/html" | "text/plain" | "application/json";
             /** Manufacturer */
             manufacturer?: string | null;
             /** Model */
@@ -2912,7 +3044,7 @@ export interface components {
              * Encodingtype
              * @enum {string}
              */
-            encodingType: "application/pdf" | "http://www.opengis.net/doc/IS/SensorML/2.0" | "text/html" | "application/json";
+            encodingType: "application/pdf" | "http://www.opengis.net/doc/IS/SensorML/2.0" | "text/html" | "text/plain" | "application/json";
             /** Manufacturer */
             manufacturer?: string | null;
             /** Model */
@@ -2938,7 +3070,7 @@ export interface components {
              * Encodingtype
              * @enum {string}
              */
-            encodingType?: "application/pdf" | "http://www.opengis.net/doc/IS/SensorML/2.0" | "text/html" | "application/json";
+            encodingType?: "application/pdf" | "http://www.opengis.net/doc/IS/SensorML/2.0" | "text/html" | "text/plain" | "application/json";
             /** Manufacturer */
             manufacturer?: string | null;
             /** Model */
@@ -3409,7 +3541,7 @@ export interface components {
             /** Targetidentifier */
             targetIdentifier: string;
             /** Datatransformations */
-            dataTransformations?: Record<string, never> | unknown[];
+            dataTransformations?: unknown[];
         };
         /** TaskMappingResponse */
         TaskMappingResponse: {
@@ -3495,7 +3627,7 @@ export interface components {
             /** Targetidentifier */
             targetIdentifier: string;
             /** Datatransformations */
-            dataTransformations?: Record<string, never> | unknown[];
+            dataTransformations?: unknown[];
         };
         /** TaskMappingPostBody */
         TaskMappingPostBody: {
@@ -3731,7 +3863,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    iam_views_workspace_get_workspaces: {
+    interfaces_api_views_workspace_get_workspaces: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -3772,7 +3904,7 @@ export interface operations {
             };
         };
     };
-    iam_views_workspace_create_workspace: {
+    interfaces_api_views_workspace_create_workspace: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -3816,7 +3948,7 @@ export interface operations {
             };
         };
     };
-    iam_views_workspace_get_workspace: {
+    interfaces_api_views_workspace_get_workspace: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -3858,7 +3990,7 @@ export interface operations {
             };
         };
     };
-    iam_views_workspace_delete_workspace: {
+    interfaces_api_views_workspace_delete_workspace: {
         parameters: {
             query?: never;
             header?: never;
@@ -3896,7 +4028,7 @@ export interface operations {
             };
         };
     };
-    iam_views_workspace_update_workspace: {
+    interfaces_api_views_workspace_update_workspace: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -3951,7 +4083,7 @@ export interface operations {
             };
         };
     };
-    iam_views_workspace_accept_workspace_transfer: {
+    interfaces_api_views_workspace_accept_workspace_transfer: {
         parameters: {
             query?: never;
             header?: never;
@@ -4000,7 +4132,7 @@ export interface operations {
             };
         };
     };
-    iam_views_workspace_transfer_workspace: {
+    interfaces_api_views_workspace_transfer_workspace: {
         parameters: {
             query?: never;
             header?: never;
@@ -4062,7 +4194,7 @@ export interface operations {
             };
         };
     };
-    iam_views_workspace_reject_workspace_transfer: {
+    interfaces_api_views_workspace_reject_workspace_transfer: {
         parameters: {
             query?: never;
             header?: never;
@@ -4111,7 +4243,7 @@ export interface operations {
             };
         };
     };
-    iam_views_collaborator_get_collaborators: {
+    interfaces_api_views_collaborator_get_collaborators: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -4158,7 +4290,7 @@ export interface operations {
             };
         };
     };
-    iam_views_collaborator_edit_collaborator_role: {
+    interfaces_api_views_collaborator_edit_collaborator_role: {
         parameters: {
             query?: never;
             header?: never;
@@ -4211,7 +4343,7 @@ export interface operations {
             };
         };
     };
-    iam_views_collaborator_add_collaborator: {
+    interfaces_api_views_collaborator_add_collaborator: {
         parameters: {
             query?: never;
             header?: never;
@@ -4264,7 +4396,7 @@ export interface operations {
             };
         };
     };
-    iam_views_collaborator_remove_collaborator: {
+    interfaces_api_views_collaborator_remove_collaborator: {
         parameters: {
             query?: never;
             header?: never;
@@ -4315,7 +4447,7 @@ export interface operations {
             };
         };
     };
-    iam_views_api_key_get_api_keys: {
+    interfaces_api_views_api_key_get_api_keys: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -4356,7 +4488,7 @@ export interface operations {
             };
         };
     };
-    iam_views_api_key_create_api_key: {
+    interfaces_api_views_api_key_create_api_key: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -4402,7 +4534,7 @@ export interface operations {
             };
         };
     };
-    iam_views_api_key_get_api_key: {
+    interfaces_api_views_api_key_get_api_key: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -4445,7 +4577,7 @@ export interface operations {
             };
         };
     };
-    iam_views_api_key_delete_api_key: {
+    interfaces_api_views_api_key_delete_api_key: {
         parameters: {
             query?: never;
             header?: never;
@@ -4484,7 +4616,7 @@ export interface operations {
             };
         };
     };
-    iam_views_api_key_update_api_key: {
+    interfaces_api_views_api_key_update_api_key: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -4540,7 +4672,7 @@ export interface operations {
             };
         };
     };
-    iam_views_api_key_regenerate_api_key: {
+    interfaces_api_views_api_key_regenerate_api_key: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -4601,7 +4733,307 @@ export interface operations {
             };
         };
     };
-    iam_views_role_get_roles: {
+    interfaces_api_views_workspace_file_attachment_get_workspace_file_attachments: {
+        parameters: {
+            query?: {
+                /** @description Page number (1-based). */
+                page?: number | null;
+                /** @description The number of items per page. */
+                page_size?: number | null;
+                /** @description Filter by file attachment type. */
+                type?: string[];
+            };
+            header?: never;
+            path: {
+                workspace_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceFileAttachmentGetResponse"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    interfaces_api_views_workspace_file_attachment_add_workspace_file_attachment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspace_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /** Type */
+                    type: string;
+                    /** Name */
+                    name?: string | null;
+                    /** Description */
+                    description?: string | null;
+                    /**
+                     * File
+                     * Format: binary
+                     */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceFileAttachmentGetResponse"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Request Entity Too Large */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    interfaces_api_views_workspace_file_attachment_remove_workspace_file_attachment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspace_id: string;
+                file_attachment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    interfaces_api_views_workspace_file_attachment_update_workspace_file_attachment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspace_id: string;
+                file_attachment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WorkspaceFileAttachmentPatchBody"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceFileAttachmentGetResponse"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    interfaces_api_views_workspace_file_attachment_get_workspace_file_attachment_download: {
+        parameters: {
+            query?: {
+                token?: string | null;
+            };
+            header?: never;
+            path: {
+                workspace_id: string;
+                file_attachment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    interfaces_api_views_role_get_roles: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -4644,7 +5076,7 @@ export interface operations {
             };
         };
     };
-    iam_views_role_get_role: {
+    interfaces_api_views_role_get_role: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -4686,7 +5118,7 @@ export interface operations {
             };
         };
     };
-    sta_views_thing_get_things: {
+    interfaces_api_views_thing_get_things: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -4741,7 +5173,7 @@ export interface operations {
             };
         };
     };
-    sta_views_thing_create_thing: {
+    interfaces_api_views_thing_create_thing: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -4794,7 +5226,7 @@ export interface operations {
             };
         };
     };
-    sta_views_thing_get_thing_tag_keys: {
+    interfaces_api_views_thing_get_thing_tag_keys: {
         parameters: {
             query?: {
                 workspace_id?: string | null;
@@ -4828,7 +5260,7 @@ export interface operations {
             };
         };
     };
-    sta_views_thing_get_site_types: {
+    interfaces_api_views_thing_get_site_types: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -4855,7 +5287,7 @@ export interface operations {
             };
         };
     };
-    sta_views_thing_get_sampling_feature_types: {
+    interfaces_api_views_thing_get_sampling_feature_types: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -4882,7 +5314,7 @@ export interface operations {
             };
         };
     };
-    sta_views_thing_get_file_attachment_types: {
+    interfaces_api_views_thing_get_file_attachment_types: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -4909,7 +5341,7 @@ export interface operations {
             };
         };
     };
-    sta_views_thing_get_thing: {
+    interfaces_api_views_thing_get_thing: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -4951,7 +5383,7 @@ export interface operations {
             };
         };
     };
-    sta_views_thing_delete_thing: {
+    interfaces_api_views_thing_delete_thing: {
         parameters: {
             query?: never;
             header?: never;
@@ -4989,7 +5421,7 @@ export interface operations {
             };
         };
     };
-    sta_views_thing_update_thing: {
+    interfaces_api_views_thing_update_thing: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -5053,7 +5485,7 @@ export interface operations {
             };
         };
     };
-    sta_views_thing_get_thing_tags: {
+    interfaces_api_views_thing_get_thing_tags: {
         parameters: {
             query?: never;
             header?: never;
@@ -5093,7 +5525,7 @@ export interface operations {
             };
         };
     };
-    sta_views_thing_edit_thing_tag: {
+    interfaces_api_views_thing_edit_thing_tag: {
         parameters: {
             query?: never;
             header?: never;
@@ -5155,7 +5587,7 @@ export interface operations {
             };
         };
     };
-    sta_views_thing_add_thing_tag: {
+    interfaces_api_views_thing_add_thing_tag: {
         parameters: {
             query?: never;
             header?: never;
@@ -5217,7 +5649,7 @@ export interface operations {
             };
         };
     };
-    sta_views_thing_remove_thing_tag: {
+    interfaces_api_views_thing_remove_thing_tag: {
         parameters: {
             query?: never;
             header?: never;
@@ -5277,7 +5709,7 @@ export interface operations {
             };
         };
     };
-    sta_views_thing_get_thing_file_attachments: {
+    interfaces_api_views_thing_get_thing_file_attachments: {
         parameters: {
             query?: never;
             header?: never;
@@ -5317,7 +5749,7 @@ export interface operations {
             };
         };
     };
-    sta_views_thing_add_thing_file_attachment: {
+    interfaces_api_views_thing_add_thing_file_attachment: {
         parameters: {
             query?: never;
             header?: never;
@@ -5396,7 +5828,7 @@ export interface operations {
             };
         };
     };
-    sta_views_thing_remove_thing_file_attachment: {
+    interfaces_api_views_thing_remove_thing_file_attachment: {
         parameters: {
             query?: never;
             header?: never;
@@ -5456,7 +5888,7 @@ export interface operations {
             };
         };
     };
-    sta_views_datastream_get_datastreams: {
+    interfaces_api_views_datastream_get_datastreams: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -5488,6 +5920,8 @@ export interface operations {
                 status?: string[];
                 /** @description Filter things by result type. */
                 result_type?: string[];
+                /** @description Filter datastreams by tag. Format tag filters as {key}:{value} */
+                tag?: string[];
                 /** @description Controls whether the datastreams should be private or public. */
                 is_private?: boolean | null;
                 /** @description Sets the maximum value count of filtered datastreams. */
@@ -5537,7 +5971,7 @@ export interface operations {
             };
         };
     };
-    sta_views_datastream_create_datastream: {
+    interfaces_api_views_datastream_create_datastream: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -5599,7 +6033,7 @@ export interface operations {
             };
         };
     };
-    sta_views_datastream_get_datastream_tag_keys: {
+    interfaces_api_views_datastream_get_datastream_tag_keys: {
         parameters: {
             query?: {
                 workspace_id?: string | null;
@@ -5633,7 +6067,7 @@ export interface operations {
             };
         };
     };
-    sta_views_datastream_get_datastream_aggregation_statistics: {
+    interfaces_api_views_datastream_get_datastream_aggregation_statistics: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -5660,7 +6094,7 @@ export interface operations {
             };
         };
     };
-    sta_views_datastream_get_datastream_statuses: {
+    interfaces_api_views_datastream_get_datastream_statuses: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -5687,7 +6121,7 @@ export interface operations {
             };
         };
     };
-    sta_views_datastream_get_datastream_sampled_mediums: {
+    interfaces_api_views_datastream_get_datastream_sampled_mediums: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -5714,7 +6148,7 @@ export interface operations {
             };
         };
     };
-    sta_views_datastream_get_file_attachment_types: {
+    interfaces_api_views_datastream_get_file_attachment_types: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -5741,7 +6175,7 @@ export interface operations {
             };
         };
     };
-    sta_views_datastream_get_datastream: {
+    interfaces_api_views_datastream_get_datastream: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -5783,7 +6217,7 @@ export interface operations {
             };
         };
     };
-    sta_views_datastream_delete_datastream: {
+    interfaces_api_views_datastream_delete_datastream: {
         parameters: {
             query?: never;
             header?: never;
@@ -5821,7 +6255,7 @@ export interface operations {
             };
         };
     };
-    sta_views_datastream_update_datastream: {
+    interfaces_api_views_datastream_update_datastream: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -5885,7 +6319,7 @@ export interface operations {
             };
         };
     };
-    sta_views_datastream_get_datastream_tags: {
+    interfaces_api_views_datastream_get_datastream_tags: {
         parameters: {
             query?: never;
             header?: never;
@@ -5925,7 +6359,7 @@ export interface operations {
             };
         };
     };
-    sta_views_datastream_edit_datastream_tag: {
+    interfaces_api_views_datastream_edit_datastream_tag: {
         parameters: {
             query?: never;
             header?: never;
@@ -5987,7 +6421,7 @@ export interface operations {
             };
         };
     };
-    sta_views_datastream_add_datastream_tag: {
+    interfaces_api_views_datastream_add_datastream_tag: {
         parameters: {
             query?: never;
             header?: never;
@@ -6049,7 +6483,7 @@ export interface operations {
             };
         };
     };
-    sta_views_datastream_remove_datastream_tag: {
+    interfaces_api_views_datastream_remove_datastream_tag: {
         parameters: {
             query?: never;
             header?: never;
@@ -6109,7 +6543,7 @@ export interface operations {
             };
         };
     };
-    sta_views_datastream_get_datastream_file_attachments: {
+    interfaces_api_views_datastream_get_datastream_file_attachments: {
         parameters: {
             query?: never;
             header?: never;
@@ -6149,7 +6583,7 @@ export interface operations {
             };
         };
     };
-    sta_views_datastream_add_datastream_file_attachment: {
+    interfaces_api_views_datastream_add_datastream_file_attachment: {
         parameters: {
             query?: never;
             header?: never;
@@ -6228,7 +6662,7 @@ export interface operations {
             };
         };
     };
-    sta_views_datastream_remove_datastream_file_attachment: {
+    interfaces_api_views_datastream_remove_datastream_file_attachment: {
         parameters: {
             query?: never;
             header?: never;
@@ -6288,7 +6722,7 @@ export interface operations {
             };
         };
     };
-    sta_views_datastream_get_datastream_csv: {
+    interfaces_api_views_datastream_get_datastream_csv: {
         parameters: {
             query?: never;
             header?: never;
@@ -6326,7 +6760,7 @@ export interface operations {
             };
         };
     };
-    sta_views_observation_get_observations: {
+    interfaces_api_views_observation_get_observations: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -6382,7 +6816,7 @@ export interface operations {
             };
         };
     };
-    sta_views_observation_create_observation: {
+    interfaces_api_views_observation_create_observation: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -6446,7 +6880,7 @@ export interface operations {
             };
         };
     };
-    sta_views_observation_insert_observations: {
+    interfaces_api_views_observation_insert_observations: {
         parameters: {
             query?: {
                 /** @description Specifies how new observations are added to the datastream. `insert` allows observations at any timestamp. `append` adds only future observations (after the latest existing timestamp). `backfill` adds only historical observations (before the earliest existing timestamp). `replace` deletes all observations in the range of provided observations before inserting new ones. */
@@ -6491,7 +6925,7 @@ export interface operations {
             };
         };
     };
-    sta_views_observation_delete_observations: {
+    interfaces_api_views_observation_delete_observations: {
         parameters: {
             query?: never;
             header?: never;
@@ -6533,7 +6967,7 @@ export interface operations {
             };
         };
     };
-    sta_views_observation_get_observation: {
+    interfaces_api_views_observation_get_observation: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -6576,7 +7010,7 @@ export interface operations {
             };
         };
     };
-    sta_views_observation_delete_observation: {
+    interfaces_api_views_observation_delete_observation: {
         parameters: {
             query?: never;
             header?: never;
@@ -6624,7 +7058,7 @@ export interface operations {
             };
         };
     };
-    sta_views_observed_property_get_observed_properties: {
+    interfaces_api_views_observed_property_get_observed_properties: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -6669,7 +7103,7 @@ export interface operations {
             };
         };
     };
-    sta_views_observed_property_create_observed_property: {
+    interfaces_api_views_observed_property_create_observed_property: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -6731,7 +7165,7 @@ export interface operations {
             };
         };
     };
-    sta_views_observed_property_get_datastream_aggregation_statistics: {
+    interfaces_api_views_observed_property_get_datastream_aggregation_statistics: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -6758,7 +7192,7 @@ export interface operations {
             };
         };
     };
-    sta_views_observed_property_get_observed_property: {
+    interfaces_api_views_observed_property_get_observed_property: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -6800,7 +7234,7 @@ export interface operations {
             };
         };
     };
-    sta_views_observed_property_delete_observed_property: {
+    interfaces_api_views_observed_property_delete_observed_property: {
         parameters: {
             query?: never;
             header?: never;
@@ -6847,7 +7281,7 @@ export interface operations {
             };
         };
     };
-    sta_views_observed_property_update_observed_property: {
+    interfaces_api_views_observed_property_update_observed_property: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -6911,7 +7345,7 @@ export interface operations {
             };
         };
     };
-    sta_views_unit_get_units: {
+    interfaces_api_views_unit_get_units: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -6956,7 +7390,7 @@ export interface operations {
             };
         };
     };
-    sta_views_unit_create_unit: {
+    interfaces_api_views_unit_create_unit: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -7009,7 +7443,7 @@ export interface operations {
             };
         };
     };
-    sta_views_unit_get_unit_types: {
+    interfaces_api_views_unit_get_unit_types: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -7036,7 +7470,7 @@ export interface operations {
             };
         };
     };
-    sta_views_unit_get_unit: {
+    interfaces_api_views_unit_get_unit: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -7078,7 +7512,7 @@ export interface operations {
             };
         };
     };
-    sta_views_unit_delete_unit: {
+    interfaces_api_views_unit_delete_unit: {
         parameters: {
             query?: never;
             header?: never;
@@ -7125,7 +7559,7 @@ export interface operations {
             };
         };
     };
-    sta_views_unit_update_unit: {
+    interfaces_api_views_unit_update_unit: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -7189,7 +7623,7 @@ export interface operations {
             };
         };
     };
-    sta_views_sensor_get_sensors: {
+    interfaces_api_views_sensor_get_sensors: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -7238,7 +7672,7 @@ export interface operations {
             };
         };
     };
-    sta_views_sensor_create_sensor: {
+    interfaces_api_views_sensor_create_sensor: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -7300,7 +7734,7 @@ export interface operations {
             };
         };
     };
-    sta_views_sensor_get_sensor_encoding_types: {
+    interfaces_api_views_sensor_get_sensor_encoding_types: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -7327,7 +7761,7 @@ export interface operations {
             };
         };
     };
-    sta_views_sensor_get_method_types: {
+    interfaces_api_views_sensor_get_method_types: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -7354,7 +7788,7 @@ export interface operations {
             };
         };
     };
-    sta_views_sensor_get_sensor: {
+    interfaces_api_views_sensor_get_sensor: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -7396,7 +7830,7 @@ export interface operations {
             };
         };
     };
-    sta_views_sensor_delete_sensor: {
+    interfaces_api_views_sensor_delete_sensor: {
         parameters: {
             query?: never;
             header?: never;
@@ -7443,7 +7877,7 @@ export interface operations {
             };
         };
     };
-    sta_views_sensor_update_sensor: {
+    interfaces_api_views_sensor_update_sensor: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -7507,7 +7941,7 @@ export interface operations {
             };
         };
     };
-    sta_views_processing_level_get_processing_levels: {
+    interfaces_api_views_processing_level_get_processing_levels: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -7550,7 +7984,7 @@ export interface operations {
             };
         };
     };
-    sta_views_processing_level_create_processing_level: {
+    interfaces_api_views_processing_level_create_processing_level: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -7612,7 +8046,7 @@ export interface operations {
             };
         };
     };
-    sta_views_processing_level_get_processing_level: {
+    interfaces_api_views_processing_level_get_processing_level: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -7654,7 +8088,7 @@ export interface operations {
             };
         };
     };
-    sta_views_processing_level_delete_processing_level: {
+    interfaces_api_views_processing_level_delete_processing_level: {
         parameters: {
             query?: never;
             header?: never;
@@ -7701,7 +8135,7 @@ export interface operations {
             };
         };
     };
-    sta_views_processing_level_update_processing_level: {
+    interfaces_api_views_processing_level_update_processing_level: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -7765,7 +8199,7 @@ export interface operations {
             };
         };
     };
-    sta_views_result_qualifier_get_result_qualifiers: {
+    interfaces_api_views_result_qualifier_get_result_qualifiers: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -7808,7 +8242,7 @@ export interface operations {
             };
         };
     };
-    sta_views_result_qualifier_create_result_qualifier: {
+    interfaces_api_views_result_qualifier_create_result_qualifier: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -7852,7 +8286,7 @@ export interface operations {
             };
         };
     };
-    sta_views_result_qualifier_get_result_qualifier: {
+    interfaces_api_views_result_qualifier_get_result_qualifier: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -7894,7 +8328,7 @@ export interface operations {
             };
         };
     };
-    sta_views_result_qualifier_delete_result_qualifier: {
+    interfaces_api_views_result_qualifier_delete_result_qualifier: {
         parameters: {
             query?: never;
             header?: never;
@@ -7941,7 +8375,7 @@ export interface operations {
             };
         };
     };
-    sta_views_result_qualifier_update_result_qualifier: {
+    interfaces_api_views_result_qualifier_update_result_qualifier: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -7996,7 +8430,7 @@ export interface operations {
             };
         };
     };
-    etl_views_data_connection_get_data_connections: {
+    interfaces_api_views_data_connection_get_data_connections: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -8043,7 +8477,7 @@ export interface operations {
             };
         };
     };
-    etl_views_data_connection_create_data_connection: {
+    interfaces_api_views_data_connection_create_data_connection: {
         parameters: {
             query?: never;
             header?: never;
@@ -8103,7 +8537,7 @@ export interface operations {
             };
         };
     };
-    etl_views_data_connection_get_data_connection: {
+    interfaces_api_views_data_connection_get_data_connection: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -8145,7 +8579,7 @@ export interface operations {
             };
         };
     };
-    etl_views_data_connection_delete_data_connection: {
+    interfaces_api_views_data_connection_delete_data_connection: {
         parameters: {
             query?: never;
             header?: never;
@@ -8192,7 +8626,7 @@ export interface operations {
             };
         };
     };
-    etl_views_data_connection_update_data_connection: {
+    interfaces_api_views_data_connection_update_data_connection: {
         parameters: {
             query?: never;
             header?: never;
@@ -8254,7 +8688,7 @@ export interface operations {
             };
         };
     };
-    etl_views_task_get_tasks: {
+    interfaces_api_views_task_get_tasks: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -8331,7 +8765,7 @@ export interface operations {
             };
         };
     };
-    etl_views_task_create_task: {
+    interfaces_api_views_task_create_task: {
         parameters: {
             query?: never;
             header?: never;
@@ -8391,7 +8825,7 @@ export interface operations {
             };
         };
     };
-    etl_views_task_get_task: {
+    interfaces_api_views_task_get_task: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -8433,7 +8867,7 @@ export interface operations {
             };
         };
     };
-    etl_views_task_run_task: {
+    interfaces_api_views_task_run_task: {
         parameters: {
             query?: never;
             header?: never;
@@ -8500,7 +8934,7 @@ export interface operations {
             };
         };
     };
-    etl_views_task_delete_task: {
+    interfaces_api_views_task_delete_task: {
         parameters: {
             query?: never;
             header?: never;
@@ -8547,7 +8981,7 @@ export interface operations {
             };
         };
     };
-    etl_views_task_update_task: {
+    interfaces_api_views_task_update_task: {
         parameters: {
             query?: never;
             header?: never;
@@ -8609,7 +9043,7 @@ export interface operations {
             };
         };
     };
-    etl_views_run_get_task_runs: {
+    interfaces_api_views_run_get_task_runs: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -8657,7 +9091,7 @@ export interface operations {
             };
         };
     };
-    etl_views_run_create_task_run: {
+    interfaces_api_views_run_create_task_run: {
         parameters: {
             query?: never;
             header?: never;
@@ -8719,7 +9153,7 @@ export interface operations {
             };
         };
     };
-    etl_views_run_get_task_run: {
+    interfaces_api_views_run_get_task_run: {
         parameters: {
             query?: never;
             header?: never;
@@ -8760,7 +9194,7 @@ export interface operations {
             };
         };
     };
-    etl_views_run_delete_task_run: {
+    interfaces_api_views_run_delete_task_run: {
         parameters: {
             query?: never;
             header?: never;
@@ -8808,7 +9242,7 @@ export interface operations {
             };
         };
     };
-    etl_views_run_update_task_run: {
+    interfaces_api_views_run_update_task_run: {
         parameters: {
             query?: never;
             header?: never;
@@ -8871,7 +9305,7 @@ export interface operations {
             };
         };
     };
-    etl_views_orchestration_system_get_orchestration_systems: {
+    interfaces_api_views_orchestration_system_get_orchestration_systems: {
         parameters: {
             query?: {
                 /** @description Page number (1-based). */
@@ -8912,7 +9346,7 @@ export interface operations {
             };
         };
     };
-    etl_views_orchestration_system_create_orchestration_system: {
+    interfaces_api_views_orchestration_system_create_orchestration_system: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -8974,7 +9408,7 @@ export interface operations {
             };
         };
     };
-    etl_views_orchestration_system_get_orchestration_system: {
+    interfaces_api_views_orchestration_system_get_orchestration_system: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;
@@ -9016,7 +9450,7 @@ export interface operations {
             };
         };
     };
-    etl_views_orchestration_system_delete_orchestration_system: {
+    interfaces_api_views_orchestration_system_delete_orchestration_system: {
         parameters: {
             query?: never;
             header?: never;
@@ -9063,7 +9497,7 @@ export interface operations {
             };
         };
     };
-    etl_views_orchestration_system_update_orchestration_system: {
+    interfaces_api_views_orchestration_system_update_orchestration_system: {
         parameters: {
             query?: {
                 expand_related?: boolean | null;

@@ -50,7 +50,10 @@ export async function responseInterceptor<T = any>(
     try {
       if (contentType.includes('application/json')) {
         body = await response.json()
-      } else if (contentType.includes('text/csv')) {
+      } else if (
+        contentType.includes('text/csv') ||
+        contentType.includes('application/octet-stream')
+      ) {
         body = await response.blob()
       } else {
         body = await response.text().catch(() => null)

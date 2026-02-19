@@ -9,6 +9,7 @@ import { SensorService } from './services/sensor.service'
 import { OrchestrationSystemService } from './services/orchestration-system.service'
 import { DataConnectionService } from './services/data-connection.service'
 import { TaskService } from './services/task.service'
+import { ThingFileAttachmentService } from './services/thing-file-attachment.service'
 
 export type AuthTuple = [string, string]
 
@@ -37,6 +38,7 @@ export class HydroServer {
 
   private _dataConnections?: DataConnectionService
   private _tasks?: TaskService
+  private _thingFileAttachments?: ThingFileAttachmentService
 
   constructor(opts: HydroServerOptions) {
     const { host } = opts
@@ -97,6 +99,9 @@ export class HydroServer {
   }
   get tasks(): TaskService {
     return (this._tasks ??= new TaskService(this))
+  }
+  get thingFileAttachments(): ThingFileAttachmentService {
+    return (this._thingFileAttachments ??= new ThingFileAttachmentService(this))
   }
   get session(): SessionService {
     return (this._session ??= new SessionService(this))
