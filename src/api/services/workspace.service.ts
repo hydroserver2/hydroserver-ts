@@ -5,7 +5,10 @@ import { ApiKey, Workspace as M } from '../../types'
 import type * as Data from '../../generated/data.types'
 import { ApiResponse } from '../responseInterceptor'
 
-type RoleQueryParameters = Data.components['schemas']['RoleQueryParameters']
+type RoleQueryParameters =
+  NonNullable<
+    Data.operations['interfaces_api_views_role_get_roles']['parameters']['query']
+  >
 
 /**
  * Transport layer for /workspaces routes. Builds URLs, handles pagination,

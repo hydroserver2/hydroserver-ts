@@ -92,6 +92,15 @@ function getRequestSchema(spec: OAS, op: any) {
   return findJsonSchemaFromContent(rb?.content)
 }
 
+function getOperationQueryType(op: any): string | null {
+  const operationId = op?.operationId
+  if (typeof operationId !== 'string' || operationId.trim().length === 0) {
+    return null
+  }
+
+  return `([Data.operations['${operationId}']['parameters']['query']] extends [never] ? {} : NonNullable<Data.operations['${operationId}']['parameters']['query']>)`
+}
+
 /* ---------------------- deep ref discovery ---------------------- */
 
 function derefSchema(spec: OAS, schema: any, seen = new Set<any>()) {
@@ -264,9 +273,14 @@ function analyzeResource(spec: OAS, resource: string) {
   const candidateForWritable = patchReqSchema ?? postReqSchema ?? null
   const writableKeys = extractWritableKeys(spec, candidateForWritable)
 
-  // QueryParameters → <Singular>QueryParameters if present
+  // Prefer operation-level query type to preserve true optionality from the endpoint.
+  const operationQueryType = getOperationQueryType(colPathObj.get)
+
+  // Fallback: QueryParameters → <Singular>QueryParameters if present
   const qpName = `${pascalSingular}QueryParameters`
-  const queryType = schemaExists(spec, qpName) ? toDataRef(qpName) : `{}`
+  const queryType =
+    operationQueryType ??
+    (schemaExists(spec, qpName) ? toDataRef(qpName) : `{}`)
 
   return {
     summaryRef,

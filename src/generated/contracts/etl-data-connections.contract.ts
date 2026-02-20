@@ -4,7 +4,7 @@ import type * as Data from '../data.types'
 
 export namespace EtlDataConnectionContract {
   export const route = 'etl-data-connections' as const
-  export type QueryParameters = {}
+  export type QueryParameters = ([Data.operations['interfaces_api_views_data_connection_get_data_connections']['parameters']['query']] extends [never] ? {} : NonNullable<Data.operations['interfaces_api_views_data_connection_get_data_connections']['parameters']['query']>)
   export type SummaryResponse = never
   export type DetailResponse  = never
   export type PostBody        = Data.components['schemas']['DataConnectionPostBody']

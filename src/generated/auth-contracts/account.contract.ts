@@ -4,7 +4,7 @@ import type * as Data from '../auth.types'
 
 export namespace AccountContract {
   export const route = 'account' as const
-  export type QueryParameters = {}
+  export type QueryParameters = ([Data.operations['interfaces_auth_views_account_get_account']['parameters']['query']] extends [never] ? {} : NonNullable<Data.operations['interfaces_auth_views_account_get_account']['parameters']['query']>)
   export type SummaryResponse = never
   export type DetailResponse  = Data.components['schemas']['AccountDetailResponse']
   export type PostBody        = Data.components['schemas']['AccountPostBody']

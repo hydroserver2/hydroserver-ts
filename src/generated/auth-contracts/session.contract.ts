@@ -4,7 +4,7 @@ import type * as Data from '../auth.types'
 
 export namespace SessionContract {
   export const route = 'session' as const
-  export type QueryParameters = {}
+  export type QueryParameters = ([Data.operations['interfaces_auth_views_session_get_session']['parameters']['query']] extends [never] ? {} : NonNullable<Data.operations['interfaces_auth_views_session_get_session']['parameters']['query']>)
   export type SummaryResponse = never
   export type DetailResponse  = never
   export type PostBody        = Data.components['schemas']['SessionPostBody']

@@ -4,7 +4,7 @@ import type * as Data from '../data.types'
 
 export namespace EtlTaskContract {
   export const route = 'etl-tasks' as const
-  export type QueryParameters = {}
+  export type QueryParameters = ([Data.operations['interfaces_api_views_task_get_tasks']['parameters']['query']] extends [never] ? {} : NonNullable<Data.operations['interfaces_api_views_task_get_tasks']['parameters']['query']>)
   export type SummaryResponse = Data.components['schemas']['TaskMappingPathResponse']
   export type DetailResponse  = Data.components['schemas']['TaskMappingPathResponse']
   export type PostBody        = Data.components['schemas']['TaskPostBody']
